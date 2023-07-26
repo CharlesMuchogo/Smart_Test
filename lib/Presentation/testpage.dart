@@ -31,7 +31,9 @@ class _TestPageState extends State<TestPage> {
 
   bool hasImage = false;
   bool showError = false;
+
   //partner
+  TestResults _selectedPartnerResult = TestResults.Negative;
 
   var partnerImageFile;
   var partnerImageUrl;
@@ -83,6 +85,56 @@ class _TestPageState extends State<TestPage> {
       var downloadUrl = await snapshot.ref.getDownloadURL();
       setState(() {
         imageUrl = downloadUrl;
+      });
+
+
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  _pickPartnerImage() async {
+    var pictureFile =
+    await ImagePicker.platform.getImageFromSource(source: ImageSource.camera);
+
+    final firebasestorage = FirebaseStorage.instance;
+
+    if (pictureFile!.path.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+      var croppedImage = await ImageCropper.platform.cropImage(
+        sourcePath: pictureFile.path,
+        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarColor: Colors.purple,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false)
+        ],
+        compressQuality: 100,
+        maxHeight: 700,
+        maxWidth: 700,
+        compressFormat: ImageCompressFormat.jpg,
+      );
+      setState(() {
+        partnerImageFile = File(croppedImage!.path);
+        hasPartnerImage = true;
+      });
+      //Upload to Firebase
+      var snapshot = await firebasestorage
+          .ref()
+          .child('images/${DateTime.now()}')
+          .putFile(partnerImageFile);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        partnerImageUrl = downloadUrl;
       });
 
 
@@ -182,30 +234,30 @@ class _TestPageState extends State<TestPage> {
                           children: [
                             RadioMenuButton<TestResults>(
                               value: TestResults.Negative,
-                              groupValue: _selectedResult,
+                              groupValue: _selectedPartnerResult,
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedResult = value!;
+                                  _selectedPartnerResult = value!;
                                 });
                               },
                               child: Text('Negative'),
                             ),
                             RadioMenuButton<TestResults>(
                               value: TestResults.Positive,
-                              groupValue: _selectedResult,
+                              groupValue: _selectedPartnerResult,
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedResult = value!;
+                                  _selectedPartnerResult = value!;
                                 });
                               },
                               child: Text('Positive'),
                             ),
                             RadioMenuButton<TestResults>(
                               value: TestResults.Invalid,
-                              groupValue: _selectedResult,
+                              groupValue: _selectedPartnerResult,
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedResult = value!;
+                                  _selectedPartnerResult = value!;
                                 });
                               },
                               child: Text('Invalid'),
@@ -215,18 +267,18 @@ class _TestPageState extends State<TestPage> {
 
 
                         GestureDetector(
-                            onTap: _pickImage,
+                            onTap: _pickPartnerImage,
                             child: Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     height: 150, width: 150, color: Colors.grey.shade300,
-                                    child: hasImage ? Image.file(imageFile) : Center(
+                                    child: hasPartnerImage ? Image.file(partnerImageFile) : Center(
                                       child: Text("Add photo"),),
                                   ),
                                 ),
-                                showError ? Text("Please select an image", style: TextStyle(color: Colors.red),): SizedBox()
+                                showPartnerError ? Text("Please select an image", style: TextStyle(color: Colors.red),): SizedBox()
                               ],
                             ),),
 
@@ -240,34 +292,73 @@ class _TestPageState extends State<TestPage> {
                     if(state.status == ResultsStatus.loading){
                       return Center(child: CircularProgressIndicator(),);
                     }
-                    return Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          String testType = "";
-                          switch (_selectedResult) {
-                            case TestResults.Negative:
-                          testType ="Negative";
-                              break;
-                            case TestResults.Positive:
-                              testType ="Positive";
-                              break;
-                            case TestResults.Invalid:
-                              testType ="Invalid";
-                              break;
-                          }
+                    return Column(
+                      children: [
+                        state.status == ResultsStatus.loaded ? Text("Your test results were submitted successfully", style: TextStyle(color: Colors.green, fontSize: 16)):
+                        state.status == ResultsStatus.error ?  Text("There was an error submitting your test results ", style: TextStyle(color: Colors.red, fontSize: 16),) : SizedBox(),
 
-                          if(!hasImage){
-                            setState(() {
-                              showError = true;
-                            });
-                            return;
-                          }
-                          resultsBloc.add(UploadResults(results: testType , partnerResults: "N/A", image: imageUrl, partnerImage: "N/A"));
-                        }, child: Text("Submit Results"),),
+                       state.status == ResultsStatus.loaded ? SizedBox(): Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              String individualTestType = "";
+                              switch (_selectedResult) {
+                                case TestResults.Negative:
+                                  individualTestType ="Negative";
+                                  break;
+                                case TestResults.Positive:
+                                  individualTestType ="Positive";
+                                  break;
+                                case TestResults.Invalid:
+                                  individualTestType ="Invalid";
+                                  break;
+                              }
+
+
+                              String partnerTestType = "";
+                              switch (_selectedPartnerResult) {
+                                case TestResults.Negative:
+                              partnerTestType ="Negative";
+                                  break;
+                                case TestResults.Positive:
+                                  partnerTestType ="Positive";
+                                  break;
+                                case TestResults.Invalid:
+                                  partnerTestType ="Invalid";
+                                  break;
+                              }
+
+                              if(!hasImage){
+                                setState(() {
+                                  showError = true;
+                                });
+                                return;
+                              }else{
+                                setState(() {
+                                  showError = false;
+                                });
+                              }
+
+                              if(!hasPartnerImage && widget.couples){
+                                setState(() {
+                                  showPartnerError = true;
+                                });
+                                return;
+                              }else{
+                                setState(() {
+                                  showPartnerError = false;
+                                });
+                              }
+                              resultsBloc.add(UploadResults(results: individualTestType , partnerResults: widget.couples? partnerTestType :"N/A", image: imageUrl, partnerImage:  widget.couples? partnerImageUrl :"N/A"));
+                            }, child: Text("Submit Results"),),
+                        ),
+                      ],
                     );
                   },
                 )
+
+
+
 
               ],
             ),
