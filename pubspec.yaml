@@ -48,6 +48,7 @@ dependencies:
   image_cropper: ^3.0.1
   firebase_storage: ^11.0.16
   cached_network_image: ^3.2.3
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:

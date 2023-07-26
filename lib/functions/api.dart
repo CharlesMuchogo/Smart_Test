@@ -135,10 +135,18 @@ required String  profile_photo,
     return response;
   }
 
-  Future<Response> RequestAdminPrivilage() async {
-    const url = "$BASEURL/api/request_promotion";
+  Future<Response>  uploadResults(
+      {required results,
+        required partnerResults,
+        required image,
+        required partnerImage,
+      }) async {
+    const url = "$BASEURL/api/test/upload";
     var data = {
-      "email":HydratedBloc.storage.read("email")
+      "results":results,
+      "partnerResults":partnerResults,
+      "image":image,
+      "partnerImage":partnerImage
 
     };
     Response response = await dio.post(

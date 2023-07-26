@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [
           AndroidUiSettings(
-              toolbarColor: Colors.teal,
+              toolbarColor: Colors.purple,
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false)

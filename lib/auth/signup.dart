@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:research/Presentation/home.dart';
 
 
 import '../../bloc/Login/login_bloc.dart';
-import '../Profile/home.dart';
 
 
 class SignUp extends StatefulWidget {
