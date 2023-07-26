@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -85,67 +86,82 @@ class _TestPageState extends State<TestPage> {
         centerTitle: true,
         title: Text("Test"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Center(child: Text("Select test results"),),
-            SizedBox(height: 30,),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-               Column(
-                 children: [
-                   RadioMenuButton<TestResults>(
-                     value: TestResults.Negative,
-                     groupValue: _selectedResult,
-                     onChanged: (value) {
-                       setState(() {
-                         _selectedResult = value!;
-                       });
-                     },
-                     child: Text('Negative'),
-                   ),
-                   RadioMenuButton<TestResults>(
-                     value: TestResults.Positive,
-                     groupValue: _selectedResult,
-                     onChanged: (value) {
-                       setState(() {
-                         _selectedResult = value!;
-                       });
-                     },
-                     child: Text('Positive'),
-                   ),
-                   RadioMenuButton<TestResults>(
-                     value: TestResults.Invalid,
-                     groupValue: _selectedResult,
-                     onChanged: (value) {
-                       setState(() {
-                         _selectedResult = value!;
-                       });
-                     },
-                     child: Text('Invalid'),
-                   ),
-                 ],
-               ),
+      body: BlocProvider(
+        create: (context) => resultsBloc,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Center(child: Text("Select test results"),),
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      RadioMenuButton<TestResults>(
+                        value: TestResults.Negative,
+                        groupValue: _selectedResult,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedResult = value!;
+                          });
+                        },
+                        child: Text('Negative'),
+                      ),
+                      RadioMenuButton<TestResults>(
+                        value: TestResults.Positive,
+                        groupValue: _selectedResult,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedResult = value!;
+                          });
+                        },
+                        child: Text('Positive'),
+                      ),
+                      RadioMenuButton<TestResults>(
+                        value: TestResults.Invalid,
+                        groupValue: _selectedResult,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedResult = value!;
+                          });
+                        },
+                        child: Text('Invalid'),
+                      ),
+                    ],
+                  ),
 
 
-                 GestureDetector(
-                     onTap: _pickImage,
-                     child: Container(height:  150, width: 150, color: Colors.blue,
-                     child: hasImage ?  Image.file(imageFile) : Center(child: Text("Add photo"),),
-                     ))
+                  GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        height: 150, width: 150, color: Colors.blue,
+                        child: hasImage ? Image.file(imageFile) : Center(
+                          child: Text("Add photo"),),
+                      ))
 
-             ],),
-            SizedBox(height: 20,),
+                ],),
+              SizedBox(height: 20,),
 
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ElevatedButton(onPressed: (){}, child: Text("Submit"),),
-            )
+              BlocBuilder<ResultsBloc, ResultsState>(
+                builder: (context, state) {
+                  if(state.status == ResultsStatus.loading){
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        resultsBloc.add(UploadResults(results: _selectedResult.toString() , partnerResults: "N/A", image: imageUrl, partnerImage: "N/A"));
+                      }, child: Text("Submit"),),
+                  );
+                },
+              )
 
-          ],
+            ],
+          ),
         ),
       ),
 

@@ -17,10 +17,6 @@ class Api {
       "email": email,
       "password": password,
     };
-
-
-
-
     Response response = await dio.post(
       url,
       data: data,
@@ -30,69 +26,6 @@ class Api {
     return response;
   }
 
-  Future<Response> updateLocation({
-    required double current_latitude,
-    required double current_longitude,
-    required double user_distance,
-    required double max_distance,
-    required double origin_longitude,
-    required double origin_latitude,
-  }) async {
-    int user_id = int.parse(HydratedBloc.storage.read("id").toString());
-    const url = "$BASEURL/api/location";
-
-    var data = {
-      "current_latitude": current_latitude.toString(),
-      "current_longitude": current_longitude.toString(),
-      "user_id": user_id.toString(),
-      "user_distance": user_distance ?? 0.00,
-      "max_distance": max_distance
-    };
-
-    log(data.toString());
-
-
-
-
-    Response response = await dio.post(
-      url,
-      data: data,
-    );
-
-
-    return response;
-  }
-
-
-  Future<Response> setDeviceLocation({
-    required String device_id,
-    required double max_distance,
-    required double origin_longitude,
-
-    required double origin_latitude,
-  }) async {
-    String user_id = HydratedBloc.storage.read("id");
-    const url = "$BASEURL/api/location";
-
-    var data = {
-      "max_distance":max_distance,
-      "user_id":device_id,
-      "origin_latitude":origin_latitude.toString(),
-      "origin_longitude": origin_longitude.toString()
-    };
-
-
-
-
-
-    Response response = await dio.post(
-      url,
-      data: data,
-    );
-
-
-    return response;
-  }
 
   Future<Response> updateProfile({
 required String  id,
@@ -125,15 +58,6 @@ required String  profile_photo,
     return response;
   }
 
-  Future<Response> getDevices() async {
-    const url = "$BASEURL/api/location";
-    Response response = await dio.get(
-      url,
-    );
-
-
-    return response;
-  }
 
   Future<Response>  uploadResults(
       {required results,
@@ -151,6 +75,11 @@ required String  profile_photo,
     };
     Response response = await dio.post(
       url,
+      options: Options(
+        headers: {
+          "Authorization": HydratedBloc.storage.read("token")
+        }
+      ),
       data: data
     );
 
