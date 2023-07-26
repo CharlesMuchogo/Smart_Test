@@ -157,14 +157,15 @@ required String  profile_photo,
     required String firstName,
     required String phoneNumber,
   }) async {
-    const url = "$BASEURL/api/register";
+    const url = "$BASEURL/api/user/register";
 
     var data = {
       "email": email,
       "firstName": firstName,
       "lastName": middleName,
       "phone": phoneNumber,
-      "password": password
+      "password": password,
+      "profilePhoto":"https://firebasestorage.googleapis.com/v0/b/matibabu-1254d.appspot.com/o/images%2F%7Bcharlesmuchogo07%40gmail.com%7D?alt=media&token=63d32dda-9250-4569-ba04-d5dd010a41d4"
     };
 
 

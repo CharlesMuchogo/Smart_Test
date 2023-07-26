@@ -166,12 +166,12 @@ class _SignUpState extends State<SignUp> {
                         return ElevatedButton(
                             onPressed: () async {
                               print(_isChecked);
-                              if (!formKey.currentState!.validate() || !_isChecked ){
-                                print("$password , $email , $middleName, $firstName , $phoneNumber");
+                              if (!formKey.currentState!.validate()){
 
                                 return;
                               } else {
-                                print("can signup");
+                                print("$password , $email , $middleName, $firstName , $phoneNumber");
+
                                 context.read<LoginBloc>().add(Signup(
                                     password: password,
                                     email: email,
@@ -232,13 +232,13 @@ class _SignUpState extends State<SignUp> {
             return returnValue;
           },
           onChanged: (value) {
-            if (label_text.contains("email")) {
+            if (label_text.toLowerCase().contains("email")) {
               email = value;
-            } else if (label_text.contains("first name")) {
+            } else if (label_text.toLowerCase().contains("first name")) {
               firstName = value;
-            } else if (label_text.contains("last name")) {
+            } else if (label_text.toLowerCase().contains("last name")) {
               middleName = value;
-            }  else if (label_text.contains("phone number")) {
+            }  else if (label_text.toLowerCase().contains("phone number")) {
               phoneNumber = value;
             }
           },

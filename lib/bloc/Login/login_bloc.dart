@@ -31,14 +31,14 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
             status: LoginStatus.failed, message: jsonBody["message"]));
       } else {
         User user = User.fromJson(jsonBody['user']);
-        HydratedBloc.storage.write("token", jsonBody['user']);
-        HydratedBloc.storage.write("firstname", user.firstName);
-        HydratedBloc.storage.write("email", user.email);
-        HydratedBloc.storage.write("id", user.id);
-        HydratedBloc.storage.write("lastName", user.lastName);
-        HydratedBloc.storage.write("phonenumber", user.phoneNumber);
-        HydratedBloc.storage.write("status", true);
-        HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("token", jsonBody['user']);
+        await HydratedBloc.storage.write("firstname", user.firstName);
+        await HydratedBloc.storage.write("email", user.email);
+        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("lastName", user.lastName);
+        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("status", true);
+        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
 
         emit(state.copyWith(
             status: LoginStatus.success,
@@ -72,14 +72,14 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
       } else {
         User user = User.fromJson(jsonBody['user']);
 
-        HydratedBloc.storage.write("token", jsonBody['token']);
-        HydratedBloc.storage.write("firstname", user.firstName);
-        HydratedBloc.storage.write("email", user.email);
-        HydratedBloc.storage.write("id", user.id);
-        HydratedBloc.storage.write("lastName", user.lastName);
-        HydratedBloc.storage.write("phonenumber", user.phoneNumber);
-        HydratedBloc.storage.write("status", true);
-        HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("token", jsonBody['token']);
+        await HydratedBloc.storage.write("firstname", user.firstName);
+        await HydratedBloc.storage.write("email", user.email);
+        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("lastName", user.lastName);
+        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("status", true);
+        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
 
         emit(state.copyWith(
             status: LoginStatus.success,
@@ -114,14 +114,14 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
       } else {
         User user = User.fromJson(jsonBody['user']);
 
-        HydratedBloc.storage.write("token", jsonBody['token']);
-        HydratedBloc.storage.write("firstname", user.firstName);
-        HydratedBloc.storage.write("email", user.email);
-        HydratedBloc.storage.write("id", user.id);
-        HydratedBloc.storage.write("lastName", user.lastName);
-        HydratedBloc.storage.write("phonenumber", user.phoneNumber);
-        HydratedBloc.storage.write("status", true);
-        HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("token", jsonBody['token']);
+        await HydratedBloc.storage.write("firstname", user.firstName);
+        await HydratedBloc.storage.write("email", user.email);
+        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("lastName", user.lastName);
+        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("status", true);
+        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
 
         emit(state.copyWith(
             status: LoginStatus.success,
