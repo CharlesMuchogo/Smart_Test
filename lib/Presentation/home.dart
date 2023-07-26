@@ -72,7 +72,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: TestPage()));
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: TestPage(couples: false,)));
 
                   },
                   child: Column(
@@ -96,7 +96,7 @@ class Homepage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: TestPage()));
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: TestPage(couples: true,)));
                   },
                   child: Column(
                     children: [

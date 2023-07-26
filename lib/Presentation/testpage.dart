@@ -14,7 +14,9 @@ import '../common/enums.dart';
 // ... (other code)
 
 class TestPage extends StatefulWidget {
-  const TestPage({Key? key}) : super(key: key);
+  const TestPage({Key? key, required this.couples}) : super(key: key);
+
+  final bool couples;
 
   @override
   State<TestPage> createState() => _TestPageState();
@@ -25,7 +27,18 @@ class _TestPageState extends State<TestPage> {
   var imageFile;
   var imageUrl;
 
+
+
   bool hasImage = false;
+  bool showError = false;
+  //partner
+
+  var partnerImageFile;
+  var partnerImageUrl;
+
+  bool hasPartnerImage = false;
+  bool showPartnerError = false;
+
 
   ResultsBloc resultsBloc = ResultsBloc();
 
@@ -90,77 +103,174 @@ class _TestPageState extends State<TestPage> {
         create: (context) => resultsBloc,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Center(child: Text("Select test results"),),
-              SizedBox(height: 30,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      RadioMenuButton<TestResults>(
-                        value: TestResults.Negative,
-                        groupValue: _selectedResult,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedResult = value!;
-                          });
-                        },
-                        child: Text('Negative'),
-                      ),
-                      RadioMenuButton<TestResults>(
-                        value: TestResults.Positive,
-                        groupValue: _selectedResult,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedResult = value!;
-                          });
-                        },
-                        child: Text('Positive'),
-                      ),
-                      RadioMenuButton<TestResults>(
-                        value: TestResults.Invalid,
-                        groupValue: _selectedResult,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedResult = value!;
-                          });
-                        },
-                        child: Text('Invalid'),
-                      ),
-                    ],
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    Center(child: Text("Select your test results"),),
+                    SizedBox(height: 30,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Negative,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Negative'),
+                            ),
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Positive,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Positive'),
+                            ),
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Invalid,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Invalid'),
+                            ),
+                          ],
+                        ),
 
 
-                  GestureDetector(
-                      onTap: _pickImage,
-                      child: Container(
-                        height: 150, width: 150, color: Colors.blue,
-                        child: hasImage ? Image.file(imageFile) : Center(
-                          child: Text("Add photo"),),
-                      ))
+                        GestureDetector(
+                            onTap: _pickImage,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 150, width: 150, color: Colors.grey.shade300,
+                                    child: hasImage ? Image.file(imageFile) : Center(
+                                      child: Text("Add photo"),),
+                                  ),
+                                ),
+                                showError ? Text("Please select an image", style: TextStyle(color: Colors.red),): SizedBox()
+                              ],
+                            ),),
 
-                ],),
-              SizedBox(height: 20,),
+                      ],),
+                    SizedBox(height: 20,),
+                  ],
+                ),
 
-              BlocBuilder<ResultsBloc, ResultsState>(
-                builder: (context, state) {
-                  if(state.status == ResultsStatus.loading){
-                    return Center(child: CircularProgressIndicator(),);
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        resultsBloc.add(UploadResults(results: _selectedResult.toString() , partnerResults: "N/A", image: imageUrl, partnerImage: "N/A"));
-                      }, child: Text("Submit"),),
-                  );
-                },
-              )
+               !widget.couples ? SizedBox() : Column(
+                  children: [
+                    Center(child: Text("Select your partner's test results"),),
+                    SizedBox(height: 30,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Negative,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Negative'),
+                            ),
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Positive,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Positive'),
+                            ),
+                            RadioMenuButton<TestResults>(
+                              value: TestResults.Invalid,
+                              groupValue: _selectedResult,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedResult = value!;
+                                });
+                              },
+                              child: Text('Invalid'),
+                            ),
+                          ],
+                        ),
 
-            ],
+
+                        GestureDetector(
+                            onTap: _pickImage,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 150, width: 150, color: Colors.grey.shade300,
+                                    child: hasImage ? Image.file(imageFile) : Center(
+                                      child: Text("Add photo"),),
+                                  ),
+                                ),
+                                showError ? Text("Please select an image", style: TextStyle(color: Colors.red),): SizedBox()
+                              ],
+                            ),),
+
+                      ],),
+                    SizedBox(height: 20,),
+                  ],
+                ),
+
+                BlocBuilder<ResultsBloc, ResultsState>(
+                  builder: (context, state) {
+                    if(state.status == ResultsStatus.loading){
+                      return Center(child: CircularProgressIndicator(),);
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          String testType = "";
+                          switch (_selectedResult) {
+                            case TestResults.Negative:
+                          testType ="Negative";
+                              break;
+                            case TestResults.Positive:
+                              testType ="Positive";
+                              break;
+                            case TestResults.Invalid:
+                              testType ="Invalid";
+                              break;
+                          }
+
+                          if(!hasImage){
+                            setState(() {
+                              showError = true;
+                            });
+                            return;
+                          }
+                          resultsBloc.add(UploadResults(results: testType , partnerResults: "N/A", image: imageUrl, partnerImage: "N/A"));
+                        }, child: Text("Submit Results"),),
+                    );
+                  },
+                )
+
+              ],
+            ),
           ),
         ),
       ),
