@@ -108,7 +108,7 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
 
       var jsonBody = loginDetails.data;
 
-      if (loginDetails.statusCode != 200) {
+      if (loginDetails.statusCode != 201) {
         emit(state.copyWith(
             status: LoginStatus.failed, message: jsonBody["message"]));
       } else {
@@ -129,7 +129,7 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
             loggedIn: true));
       }
     } catch (e) {
-      log(e.toString());
+      log("Error"+e.toString());
       emit(state.copyWith(status: LoginStatus.error, message: e.toString()));
     }
 

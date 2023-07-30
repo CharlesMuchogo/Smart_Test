@@ -10,7 +10,7 @@ import 'package:path/path.dart';
 import '../auth/terms.dart';
 
 //local server
-//const String BASEURL =  "http://192.168.0.77:9000";
+//const String BASEURL =  "http://192.168.100.6:9000";
  const String BASEURL = "http://13.246.207.31:9000";
 const String TermsAndConditions = "https://firebasestorage.googleapis.com/v0/b/flutter-notifications-a462c.appspot.com/o/T%26C%20for%20App.pdf?alt=media&token=b0b8d75d-addd-4451-8d22-37a76dad8d13";
 
