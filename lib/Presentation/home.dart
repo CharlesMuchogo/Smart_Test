@@ -10,10 +10,42 @@ import 'package:video_player/video_player.dart';
 
 import '../functions/constants.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   Homepage({super.key});
 
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
+  VideoPlayerController? _videoPlayerController;
+  ChewieController? _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.asset('assets/video/instructions.mp4');
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController!,
+      autoPlay: false,
+      looping: false,
+    );
+  }
+
+  @override
+  void deactivate() {
+    _videoPlayerController?.pause(); // Pause the video
+    _chewieController?.dispose(); // Dispose of the Chewie controller
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,156 +62,163 @@ class Homepage extends StatelessWidget {
       return 'Good Evening';
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: Profile()));
-              },
-              child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  )),
-            ),
-          )
-        ],
-      ),
-      body: Container(
-        color: Colors.white,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 10),
-                  child: Text(
-                    "${greeting()} $firstname",
-                    style: Theme.of(context).textTheme.titleLarge,
+    return WillPopScope(
+      onWillPop: () async {
+        _videoPlayerController?.pause();
+        _chewieController?.dispose();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Home"),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: Profile()));
+                },
+                child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                    )),
+              ),
+            )
+          ],
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
+                    child: Text(
+                      "${greeting()} $firstname",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 30),
-                  child: Text(
-                    "Please select the test type",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 30),
+                    child: Text(
+                      "Please select the test type",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.fade,
-                                child: TestPage(
-                                  couples: false,
-                                )));
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(color: Colors.purple.shade100,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: TestPage(
+                                    couples: false,
+                                  )));
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(color: Colors.purple.shade100,
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.person,
+                                size: 50,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Individual"),
+                            )
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: TestPage(
+                                    couples: true,
+                                  ),),);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(color: Colors.purple.shade100,
                                 borderRadius: BorderRadius.circular(8)
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.people,
+                                size: 50,
+                              ),
                             ),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.person,
-                              size: 50,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Individual"),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Couple"),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.fade,
-                                child: TestPage(
-                                  couples: true,
-                                ),),);
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(color: Colors.purple.shade100,
-                              borderRadius: BorderRadius.circular(8)
-                            ),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.people,
-                              size: 50,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Couple"),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Instructions",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(decoration: TextDecoration.underline),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                VideoPlayerScreen(
-                  videoUrl: 'assets/video/instructions.mp4',
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(INSTRUCTIONS),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset( 'assets/images/pic1.png'),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Instructions",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(decoration: TextDecoration.underline),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  VideoPlayerScreen(
+                    chewieController: _chewieController!,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(INSTRUCTIONS),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset( 'assets/images/pic1.png'),
+                  ),
 
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset( 'assets/images/pic1.png'),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset( 'assets/images/pic1.png'),
+                  ),
 
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -189,35 +228,14 @@ class Homepage extends StatelessWidget {
 }
 
 class VideoPlayerScreen extends StatefulWidget {
-  final String videoUrl;
-
-  VideoPlayerScreen({required this.videoUrl});
+  final ChewieController chewieController;
+  VideoPlayerScreen({required this.chewieController});
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
-
-  @override
-  void initState() {
-    super.initState();
-    _videoPlayerController = VideoPlayerController.asset(widget.videoUrl);
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: false,
-      looping: false,
-    );
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +243,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       width: MediaQuery.of(context).size.width,
       height: 220,
       child: Chewie(
-        controller: _chewieController,
+        controller: widget.chewieController,
       ),
     );
   }

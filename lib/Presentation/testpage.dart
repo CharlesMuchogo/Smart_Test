@@ -349,7 +349,7 @@ class _TestPageState extends State<TestPage> {
                                   showPartnerError = false;
                                 });
                               }
-                              resultsBloc.add(UploadResults(results: individualTestType , partnerResults: widget.couples? partnerTestType :"N/A", image: imageUrl, partnerImage:  widget.couples? partnerImageUrl :"N/A"));
+                              resultsBloc.add(UploadResults(context: context, results: individualTestType , partnerResults: widget.couples? partnerTestType :"N/A", image: imageUrl, partnerImage:  widget.couples? partnerImageUrl :"N/A"));
                             }, child: Text("Submit Results"),),
                         ),
                       ],

@@ -3,7 +3,10 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import '../auth/authentication_wrapper.dart';
+import 'app_functions.dart';
 import 'constants.dart';
 
 class Api {
@@ -64,6 +67,7 @@ required String  profile_photo,
         required partnerResults,
         required image,
         required partnerImage,
+        required BuildContext context
       }) async {
     const url = "$BASEURL/api/test/upload";
     var data = {
@@ -83,6 +87,16 @@ required String  profile_photo,
       data: data
     );
 
+    if(response.statusCode == 403 || response.statusCode == 401){
+      AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
+      await HydratedBloc.storage.clear();
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  AuthenticationWrapper()),
+              (Route<dynamic> route) => false);
+    }
 
     return response;
   }

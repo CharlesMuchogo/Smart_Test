@@ -15,11 +15,13 @@ class UploadResults extends ResultsEvent {
   final String partnerResults;
   final String image;
   final String partnerImage;
+  final BuildContext context;
 
   const UploadResults(
       {required this.results,
       required this.partnerResults,
       required this.image,
+      required this.context,
       required this.partnerImage,
 });
 }

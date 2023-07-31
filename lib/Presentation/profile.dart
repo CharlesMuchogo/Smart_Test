@@ -233,7 +233,7 @@ class _ProfileState extends State<Profile> {
                   subtitle: email,
                 ),
                 AccountDetails(
-                    title: "FirstName", subtitle: "$firstname $middleName"),
+                    title: "Name", subtitle: "$firstname $middleName"),
                 AccountDetails(title: "PhoneNumber", subtitle: phonenumber),
                 SizedBox(
                   height: 20,
