@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -144,6 +145,42 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
+  int _secondsRemaining = 1200; // 20 minutes in seconds
+  bool _isRunning = false;
+  Timer? _timer;
+
+
+  void _startTimer() {
+    if (!_isRunning) {
+      _isRunning = true;
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (_secondsRemaining > 0) {
+          setState(() {
+            _secondsRemaining--;
+          });
+        } else {
+          _stopTimer();
+        }
+      });
+    }else {
+      _stopTimer();
+    }
+  }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _stopTimer() {
+    setState(() {
+      _timer?.cancel();
+      _secondsRemaining = 1200;
+      _isRunning = false;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +196,23 @@ class _TestPageState extends State<TestPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: GestureDetector(
+                    onTap: _startTimer,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.purple,
+                        radius: MediaQuery.of(context).size.width * 0.25 * MediaQuery.textScaleFactorOf(context),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('${_secondsRemaining ~/ 60}:${(_secondsRemaining % 60).toString().padLeft(2, '0')}',style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white,),),
+                            Text(_isRunning ? "Tap to finish test!" : "Tap to Start Test!")
+                          ],
+                        ),),
+                  ),
+                ),
+
                 Column(
                   children: [
                     Center(child: Text("Select your test results"),),
@@ -349,6 +403,7 @@ class _TestPageState extends State<TestPage> {
                                   showPartnerError = false;
                                 });
                               }
+                              _stopTimer();
                               resultsBloc.add(UploadResults(context: context, results: individualTestType , partnerResults: widget.couples? partnerTestType :"N/A", image: imageUrl, partnerImage:  widget.couples? partnerImageUrl :"N/A"));
                             }, child: Text("Submit Results"),),
                         ),
