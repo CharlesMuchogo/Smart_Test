@@ -27,7 +27,7 @@ jobs:
       - name: Upload APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: ${{secrets.APPID}}
-          token: ${{secrets.TOKEN}}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
           groups: beta
           file: build/app/outputs/apk/release/app-release.apk
+
