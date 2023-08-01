@@ -201,7 +201,7 @@ class _TestPageState extends State<TestPage> {
                   child: GestureDetector(
                     onTap: _startTimer,
                     child: CircleAvatar(
-                      backgroundColor: Colors.purple,
+                      backgroundColor: Colors.purple.shade300,
                         radius: MediaQuery.of(context).size.width * 0.25 * MediaQuery.textScaleFactorOf(context),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
