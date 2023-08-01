@@ -54,12 +54,12 @@ class _HomepageState extends State<Homepage> {
       hour = DateTime.now().hour;
 
       if (hour < 12) {
-        return 'Good Morning';
+        return 'Good morning';
       }
       if (hour < 17) {
-        return 'Good Afternoon';
+        return 'Good afternoon';
       }
-      return 'Good Evening';
+      return 'Good evening';
     }
 
     return WillPopScope(
@@ -214,7 +214,7 @@ class _HomepageState extends State<Homepage> {
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset( 'assets/images/pic1.png'),
+                    child: Image.asset( 'assets/images/pic2.png'),
                   ),
 
                 ],
