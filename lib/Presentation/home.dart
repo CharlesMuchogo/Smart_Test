@@ -9,6 +9,7 @@ import 'package:research/Presentation/testpage.dart';
 import 'package:video_player/video_player.dart';
 
 import '../functions/constants.dart';
+import 'documentation.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({super.key});
@@ -205,17 +206,17 @@ class _HomepageState extends State<Homepage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(INSTRUCTIONS),
+                    child: Instruction(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset( 'assets/images/pic1.png'),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset( 'assets/images/pic2.png'),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Image.asset( 'assets/images/pic1.png'),
+                  // ),
+                  //
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Image.asset( 'assets/images/pic2.png'),
+                  // ),
 
                 ],
               ),
