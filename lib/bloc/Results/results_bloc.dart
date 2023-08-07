@@ -21,7 +21,7 @@ class ResultsBloc extends HydratedBloc<ResultsEvent, ResultsState> {
   void _onUploadResults(UploadResults event, Emitter<ResultsState> emit) async{
     emit(state.copyWith(status: ResultsStatus.loading));
     try {
-      Response response = await Api().uploadResults(context: event.context, results: event.results, partnerResults: event.partnerResults, image: event.image, partnerImage: event.partnerImage);
+      Response response = await Api().uploadResults(careOption: event.careOption, context: event.context, results: event.results, partnerResults: event.partnerResults, image: event.image, partnerImage: event.partnerImage);
       if (response.statusCode != 200) {
         emit(state.copyWith(status: ResultsStatus.error, message:"Could not submit request"));
       } else {

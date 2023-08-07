@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:research/Presentation/profile.dart';
 import 'package:research/Presentation/testpage.dart';
 import 'package:video_player/video_player.dart';
@@ -22,6 +27,8 @@ class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
+  String pathPDF = "";
+
 
   @override
   void initState() {
@@ -32,6 +39,12 @@ class _HomepageState extends State<Homepage> {
       autoPlay: false,
       looping: false,
     );
+
+    fromAsset('assets/pdf/hiv.docx', 'hiv3.pdf').then((f) {
+      setState(() {
+        pathPDF = f.path;
+      });
+    });
   }
 
   @override
@@ -46,6 +59,24 @@ class _HomepageState extends State<Homepage> {
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
     super.dispose();
+  }
+
+  Future<File> fromAsset(String asset, String filename) async {
+    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
+    Completer<File> completer = Completer();
+
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/$filename");
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
   }
 
   @override
@@ -129,8 +160,7 @@ class _HomepageState extends State<Homepage> {
                                   type: PageTransitionType.fade,
                                   child: TestPage(
                                     couples: false,
-                                  )));
-                        },
+                                  ),),);},
                         child: Column(
                           children: [
                             Container(
@@ -204,20 +234,18 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Instruction(),
-                  ),
                   // Padding(
                   //   padding: const EdgeInsets.all(8.0),
-                  //   child: Image.asset( 'assets/images/pic1.png'),
-                  // ),
-                  //
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Image.asset( 'assets/images/pic2.png'),
+                  //   child: Instruction(),
                   // ),
 
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.height ,
+                  //   child: WebView(
+                  //     initialUrl: pathPDF,
+                  //     javascriptMode: JavascriptMode.unrestricted,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

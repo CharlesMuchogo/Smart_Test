@@ -33,6 +33,8 @@ dependencies:
   page_transition: ^2.0.9
   video_player: ^2.7.0
   chewie: ^1.7.0
+  flutter_pdfview: ^1.3.1
+  webview_flutter: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +60,7 @@ flutter:
   assets:
     - assets/video/
     - assets/images/
+    - assets/pdf/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

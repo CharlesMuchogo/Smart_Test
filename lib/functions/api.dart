@@ -65,6 +65,7 @@ required String  profile_photo,
   Future<Response>  uploadResults(
       {required results,
         required partnerResults,
+        required careOption,
         required image,
         required partnerImage,
         required BuildContext context
@@ -74,7 +75,8 @@ required String  profile_photo,
       "results":results,
       "partnerResults":partnerResults,
       "image":image,
-      "partnerImage":partnerImage
+      "partnerImage":partnerImage,
+      "care_option":careOption
 
     };
     Response response = await dio.post(

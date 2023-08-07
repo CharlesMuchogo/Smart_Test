@@ -14,12 +14,14 @@ class UploadResults extends ResultsEvent {
   final String results;
   final String partnerResults;
   final String image;
+  final String careOption;
   final String partnerImage;
   final BuildContext context;
 
   const UploadResults(
       {required this.results,
       required this.partnerResults,
+      required this.careOption,
       required this.image,
       required this.context,
       required this.partnerImage,
