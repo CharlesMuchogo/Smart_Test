@@ -10,8 +10,8 @@ import 'package:path/path.dart';
 import '../auth/terms.dart';
 
 //local server
-const String BASEURL =  "http://192.168.100.6:9000";
-// const String BASEURL = "http://13.246.207.31:9000";
+//const String BASEURL =  "http://192.168.100.6:9000";
+const String BASEURL = "http://13.246.207.31:9000";
 const String TermsAndConditions = "https://firebasestorage.googleapis.com/v0/b/flutter-notifications-a462c.appspot.com/o/T%26C%20for%20App.pdf?alt=media&token=b0b8d75d-addd-4451-8d22-37a76dad8d13";
 
 const String INSTRUCTIONS = '''
@@ -41,63 +41,38 @@ Pricking your finger to get blood might sound a bit scary – but it really does
 
     ''';
 
-const FIRST_HEADING = "Results in 3 Easy Steps/ Matokeo katika Hatua 3 Rahisi";
-const FIRST_INSTRUCTIONS = '''For complete instructions, refer to the testing materials and package insert provided with the test kit.
- Kwa maagizo kamili, rejea vifaa vya upimaji na kuingiza kifurushi kilichotolewa na kit cha mtihani.''';
+const FIRST_HEADING = "Results in three Easy Steps/ Matokeo katika Hatua tatu Rahisi";
+const FIRST_INSTRUCTIONS = '''Step 1: Collect''';
 
 const SECOND_INSTRUCTIONS = '''Gently swab the pad along your upper gums once and your lower gums once. You may use either side of the flat pad.
-Suuza pedi kwa upole kwenye ufizi wako wa juu mara moja na ufizi wako wa chini mara moja. Unaweza kutumia upande wowote wa pedi ya gorofa.''';
+Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
 
 const SECOND_HEADING = "Step 2: Insert/Ingiza";
 
-const STEP_TWO_INSTRUCTIONS = '''Put the test directly into the test tube where indicated in the upper portion of the test kit - "Test Holder".
-Weka nyenzo ya majaribio moja kwa moja kwenye bomba la mtihani ambapo imeonyeshwa kwenye sehemu ya juu ya kit cha mtihani - "Mmiliki wa Mtihani".''';
+const STEP_TWO_INSTRUCTIONS = '''Put the test directly into the test tube where indicated in the upper portion of the test kit - "Test Holder". 
+Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
 
 const THIRD_HEADING = "Step 3: Read";
 const STEP_THREE_INSTRUCTIONS = '''The test window will turn pink for a few minutes. Do not read your results before 20 minutes have passed. Once your results are ready, you must read between 20 and 40 minutes from the start time.
-Dirisha la majaribio litageuka pink kwa dakika chache. Usisome matokeo yako kabla ya dakika 20 kupita. Mara tu matokeo yako yanapokuwa tayari, lazima usome kati ya dakika 20 na 40 kutoka wakati wa kuanza. ''';
+Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
 
-const RECOMENDATIONS_HEADING = "Here are some recommendations to prepare:";
-const RECOMENDATIONS = '''
-    1. Do not eat, drink or use oral care products (such as mouthwash, toothpaste, or whitening strips) 30 minutes before starting this test.
-    2. Always use the directions in the HIV home test kit to help read your results correctly.
-    3. Make sure you have a timer, watch or something that can keep time 20 to 40 minutes.
-    4. Remove dental products such as dentures or any other products that cover your gums
-    5. It may be helpful to have access to a phone to speak directly with a support person.
-Remember, this test detects HIV infection if used 3 months after a risk event. That's because OraQuick tests for HIV antibodies, and it takes your body up to 3 months to produce these antibodies at levels that can be detected.''';
+const RECOMENDATIONS_HEADING = "Reading your OraQuick In-Home results/ Kusoma Matokeo";
+const RECOMENDATIONS = '''Negative Test''';
 
-const IMPORTANT_INFORMATION_HEADING = "Other important information:";
-const IMPORTANT_INFORMATION = '''Indicated for use in ages 17 and older.
-If you’re known HIV positive or are on treatment or preventive treatment for HIV, the OraQuick test is not meant for you.
-If you've participated in an HIV vaccine clinical trial, you may get a positive result using this test, but it may not mean that you are infected with HIV. You should seek follow-up with the research group.''';
+const IMPORTANT_INFORMATION = '''If there's one line next to the "C" and no line next to the "T", your result is negative.
+Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
 
-const PRECAUTIONS_HEAD = "Don't use the test if:";
-const PRECAUTIONS = '''The tamper-evident seal has been broken or if any of the package contents are missing, broken, or have been opened.
-The expiration date of the test is passed the date printed on the outside of the box.
-The test has been exposed to household cleaning products.
-The test has been stored outside the acceptable temperature of 36°-80° F (2°-27°C).
+const PRECAUTIONS_HEAD = "Positive Test";
+const PRECAUTIONS = '''If there are two complete lines, one next to the "C" and any line next to the "T"—even a faint line—you may have HIV.
+Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
  ''';
 
-const READING_HEAD = "Reading your OraQuick In-Home results";
-const READING = '''Interpreting the test is simple. The below information explains how to tell when a test is negative or positive. Knowing your HIV status is an important part of your overall health. Regardless of your status, there are options for prevention and treatment to help keep you healthy. When performing a test, please refer to the package insert, inclusive of the warnings and precautions. ''';
+const READING_HEAD = "Negative result explanation";
+const READING = '''If your result is negative and if it has been at least 3 months since you have had a risk event and you have followed the directions carefully, then you likely do not have HIV. If your test result is negative and you engage in activities that put you at risk for HIV, you should test regularly.
+The most important thing to keep in mind is that HIV is preventable. Understanding how you can avoid getting HIV is important to protect yourself and your partner(s).''';
 
-const INTERPRETATION_HEADING  = "WHAT YOUR RESULTS MEAN TO YOU \n \nNegative Test";
-const INTERPRETATION_NEGATIVE = '''If there's one line next to the "C" and no line next to the "T", your result is negative.''';
-
-const POSITIVE_TEST_HEAD = '''Understanding Risk Event
-
-Positive Test ''';
-
-const POSITIVE_TEST = '''If there are two complete lines, one next to the "C" and any line next to the "T"—even a faint line—you may have HIV.''';
-const TESTING_AND_ME_HEADING = ''' HIV, Testing & Me
-
-Negative Result Explanation''';
-
-const NEGATIVE_RESULT_EXPLANATION = '''If your result is negative and if it has been at least 3 months since you have had a risk event and you have followed the directions carefully, then you likely do not have HIV.
-If your test result is negative and you engage in activities that put you at risk for HIV, you should test regularly.
-The most important thing to keep in mind is that HIV is preventable. Understanding how you can avoid getting HIV is important to protect yourself and your partner(s). ''';
-
-const POSITIVE_RESULT_EXPLANATION = '''If your result is positive, there are a couple of important things you should do next.
+const INTERPRETATION_HEADING  = "Positive result explanation";
+const INTERPRETATION_NEGATIVE = '''If your result is positive, there are a couple of important things you should do next.
 A clinic or healthcare professional must confirm your test result.
 There are also some things that you should know about HIV that may ease some of the stress or confusion that you may be feeling:
     • You are not alone
@@ -105,24 +80,7 @@ There are also some things that you should know about HIV that may ease some of 
     • Having HIV does not mean that you have or will get AIDS
 With new treatments, many people who are HIV-positive continue to live long and active lives. They are also able to have normal relationships with HIV-negative individuals without the risk of infecting them with the virus. Ongoing research is finding better ways to treat HIV nearly every day. The key is to identify the infection as early as possible before irreparable damage is done.''';
 
-const WARNINGS_AND_PRECAUTIONS = "Warnings & Precautions";
-const WARNINGS_AND_PRECAUTIONS_INTRO = '''A positive result with this test does not mean that you are definitely infected with HIV, but rather that additional testing should be done in a medical setting.''';
-
-
-const WARNINGS = '''A negative result with this test does not mean that you are definitely not infected with HIV, particularly when exposure may have been within the previous 3 months.
-If your test is negative and you engage in activities that put you at risk for HIV on a regular basis, you should test regularly.
-This product should not be used to make decisions on behavior that may put you at increased risk for HIV.
-Understanding risk event >
-The Centers for Disease Control and Prevention (CDC) recommends being tested at least once a year if you do things that can result in HIV infection. These include:
-    • Sex (vaginal, oral, or anal) with multiple sex partners
-    • Sex with someone who is HIV positive or who’s HIV status you don’t know
-    • Sex between a man and another man
-    • Using illegal injected drugs or steroids
-    • Shared needles or syringes
-    • Exchanged sex for money
-    • Having been diagnosed or treated for hepatitis, tuberculosis or a sexually transmitted disease like syphilis.''';
-
-
+const POSITIVE_TEST_HEAD = '''NOTE: FOR FURTHER INSTRUCTIONS, REFER TO THE INSTRUCTION MANUAL ACCOMPANYING THE TEST KITS''';
 
 
 class AppConstants {

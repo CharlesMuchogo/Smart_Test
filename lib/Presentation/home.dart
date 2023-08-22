@@ -234,18 +234,11 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(
                     height: 10,
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Instruction(),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Instruction(),
+                  ),
 
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.height ,
-                  //   child: WebView(
-                  //     initialUrl: pathPDF,
-                  //     javascriptMode: JavascriptMode.unrestricted,
-                  //   ),
-                  // ),
                 ],
               ),
             ),

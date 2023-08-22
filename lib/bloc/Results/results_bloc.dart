@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../functions/api.dart';
@@ -15,7 +14,6 @@ part 'results_state.dart';
 class ResultsBloc extends HydratedBloc<ResultsEvent, ResultsState> {
   ResultsBloc() : super(const ResultsState()) {
     on<UploadResults>(_onUploadResults);
-
   }
 
   void _onUploadResults(UploadResults event, Emitter<ResultsState> emit) async{

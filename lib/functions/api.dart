@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:http/http.dart' as http;
 import '../auth/authentication_wrapper.dart';
 import 'app_functions.dart';
 import 'constants.dart';
@@ -62,7 +63,7 @@ required String  profile_photo,
   }
 
 
-  Future<Response>  uploadResults(
+  Future<http.Response>  uploadResults(
       {required results,
         required partnerResults,
         required careOption,
@@ -79,17 +80,16 @@ required String  profile_photo,
       "care_option":careOption
 
     };
-    Response response = await dio.post(
-      url,
-      options: Options(
-        headers: {
-          "Authorization": HydratedBloc.storage.read("token")
-        }
-      ),
-      data: data
-    );
 
-    if(response.statusCode == 403 || response.statusCode == 401){
+    http.Response response = await http.post(Uri.parse(url),
+        body: jsonEncode(data),
+        headers: {
+    "Authorization": HydratedBloc.storage.read("token")
+    } );
+
+    log("request reesponse ${response.body}" );
+
+    if(response.statusCode == 401){
       AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
       await HydratedBloc.storage.clear();
       Navigator.pushAndRemoveUntil(

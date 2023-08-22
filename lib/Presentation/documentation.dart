@@ -15,16 +15,17 @@ class Instruction extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(FIRST_HEADING, style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
         ),
-        Text(FIRST_INSTRUCTIONS),
+        Text(FIRST_INSTRUCTIONS,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.black, fontWeight: FontWeight.bold)),
         Text(SECOND_INSTRUCTIONS),
+        Image.asset("assets/images/pic1.png"),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(SECOND_HEADING,  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
+          child: Text(SECOND_HEADING,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),),
         ),
         Text(STEP_TWO_INSTRUCTIONS),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(THIRD_HEADING,  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
+          child: Text(THIRD_HEADING,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),),
         ),
         Text(STEP_THREE_INSTRUCTIONS),
         Padding(
@@ -32,10 +33,6 @@ class Instruction extends StatelessWidget {
           child: Text(RECOMENDATIONS_HEADING,  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
         ),
         Text(RECOMENDATIONS),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(IMPORTANT_INFORMATION_HEADING,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
-        ),
         Text(IMPORTANT_INFORMATION),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -56,19 +53,7 @@ class Instruction extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(POSITIVE_TEST_HEAD,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
         ),
-        Text(POSITIVE_TEST),
-        Text(TESTING_AND_ME_HEADING,  style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
-        Text(NEGATIVE_RESULT_EXPLANATION),
-        Text(POSITIVE_RESULT_EXPLANATION),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(WARNINGS_AND_PRECAUTIONS,  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.blue.shade800, fontWeight: FontWeight.bold),),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(WARNINGS_AND_PRECAUTIONS_INTRO,  style: Theme.of(context).textTheme.bodyLarge!.copyWith( fontWeight: FontWeight.bold),),
-        ),
-        Text(WARNINGS),
+
       ],
     );
   }
