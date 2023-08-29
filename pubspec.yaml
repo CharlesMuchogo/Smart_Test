@@ -34,6 +34,8 @@ dependencies:
   video_player: ^2.7.0
   chewie: ^1.7.0
   http: ^0.13.6
+  flutter_local_notifications: ^12.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +61,7 @@ flutter:
   assets:
     - assets/video/
     - assets/images/
-    - assets/pdf/
+    - assets/audio/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

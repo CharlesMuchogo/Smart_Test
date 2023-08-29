@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, constant_identifier_names
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http ;
 
@@ -56,7 +58,7 @@ const THIRD_HEADING = "Step 3: Read";
 const STEP_THREE_INSTRUCTIONS = '''The test window will turn pink for a few minutes. Do not read your results before 20 minutes have passed. Once your results are ready, you must read between 20 and 40 minutes from the start time.
 Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
 
-const RECOMENDATIONS_HEADING = "Reading your OraQuick In-Home results/ Kusoma Matokeo";
+const RECOMENDATIONS_HEADING = "Reading your OraQuick results/ Kusoma matokeo";
 const RECOMENDATIONS = '''Negative Test''';
 
 const IMPORTANT_INFORMATION = '''If there's one line next to the "C" and no line next to the "T", your result is negative.
@@ -68,22 +70,46 @@ Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na viru
  ''';
 
 const READING_HEAD = "Negative result explanation";
-const READING = '''If your result is negative and if it has been at least 3 months since you have had a risk event and you have followed the directions carefully, then you likely do not have HIV. If your test result is negative and you engage in activities that put you at risk for HIV, you should test regularly.
-The most important thing to keep in mind is that HIV is preventable. Understanding how you can avoid getting HIV is important to protect yourself and your partner(s).''';
+const READING = '''If negative after 3 months post-risk event, you likely don't have HIV. Test regularly if ongoing risk. Prevention is vital; know how to protect yourself and partners from HIV.''';
 
 const INTERPRETATION_HEADING  = "Positive result explanation";
-const INTERPRETATION_NEGATIVE = '''If your result is positive, there are a couple of important things you should do next.
-A clinic or healthcare professional must confirm your test result.
-There are also some things that you should know about HIV that may ease some of the stress or confusion that you may be feeling:
-    • You are not alone
-    • Medical treatments are available to help people live long, healthy, lives
-    • Having HIV does not mean that you have or will get AIDS
-With new treatments, many people who are HIV-positive continue to live long and active lives. They are also able to have normal relationships with HIV-negative individuals without the risk of infecting them with the virus. Ongoing research is finding better ways to treat HIV nearly every day. The key is to identify the infection as early as possible before irreparable damage is done.''';
+const INTERPRETATION_NEGATIVE = '''If positive, confirm with healthcare. HIV doesn't guarantee AIDS. Treatment allows normal life and reduces transmission risk. Early identification crucial for effective treatment.
+Please link to care during the submission of your test results in order to receive proper guidelines on your health condition.
+''';
 
 const POSITIVE_TEST_HEAD = '''NOTE: FOR FURTHER INSTRUCTIONS, REFER TO THE INSTRUCTION MANUAL ACCOMPANYING THE TEST KITS''';
 
+AndroidNotificationChannel channel = AndroidNotificationChannel(
+    "High importance", "High important notifications ",
+    //"This channel is used for important notifications",
+    importance: Importance.high,
+    playSound: true);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 class AppConstants {
+
+  void playNotification() {
+    log(" A new message on local notification");
+    flutterLocalNotificationsPlugin.show(
+      1,
+      "Your test is completed",
+      "Please read your test and submit the results",
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          importance: Importance.high,
+          color: Colors.blue,
+          playSound: true,
+          icon: "@mipmap/ic_launcher",
+        ),
+      ),
+    );
+    log(" message sent on local notification");
+  }
 
    Future<File> loadNetwork() async {
     final response = await http.get(Uri.parse(TermsAndConditions));

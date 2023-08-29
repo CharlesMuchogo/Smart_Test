@@ -27,7 +27,6 @@ class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-  String pathPDF = "";
 
 
   @override
@@ -40,11 +39,6 @@ class _HomepageState extends State<Homepage> {
       looping: false,
     );
 
-    fromAsset('assets/pdf/hiv.docx', 'hiv3.pdf').then((f) {
-      setState(() {
-        pathPDF = f.path;
-      });
-    });
   }
 
   @override
@@ -61,23 +55,6 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
-  Future<File> fromAsset(String asset, String filename) async {
-    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
-    Completer<File> completer = Completer();
-
-    try {
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File("${dir.path}/$filename");
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
-  }
 
   @override
   Widget build(BuildContext context) {

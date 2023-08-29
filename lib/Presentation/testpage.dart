@@ -2,12 +2,12 @@
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:research/functions/constants.dart';
 
 import '../bloc/Results/results_bloc.dart';
 import '../common/enums.dart';
@@ -152,6 +152,7 @@ class _TestPageState extends State<TestPage> {
 
 
   void _startTimer() {
+
     if (!_isRunning) {
       _isRunning = true;
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -174,12 +175,14 @@ class _TestPageState extends State<TestPage> {
     super.dispose();
   }
 
-  void _stopTimer() {
+  void _stopTimer() async {
     setState(() {
       _timer?.cancel();
       _secondsRemaining = 1200;
       _isRunning = false;
     });
+AppConstants().playNotification();
+
   }
 
 
