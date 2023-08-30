@@ -53,3 +53,11 @@ class GetLogin extends LoginEvent {
     required this.password,
   });
 }
+
+class CheckAuthentication extends LoginEvent {
+  final BuildContext context;
+
+  const CheckAuthentication({
+    required this.context,
+  });
+}

@@ -103,6 +103,33 @@ required String  profile_photo,
     return response;
   }
 
+
+  Future<http.Response>  checkAuthenticationStatus(
+      {
+        required BuildContext context
+      }) async {
+    const url = "$BASEURL/api/test/check_authentication_status";
+
+
+    http.Response response = await http.post(Uri.parse(url),
+        headers: {
+    "Authorization": HydratedBloc.storage.read("token") ?? "notAuthenticated"
+    } );
+
+    if(response.statusCode == 401){
+      AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
+      await HydratedBloc.storage.clear();
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  AuthenticationWrapper()),
+              (Route<dynamic> route) => false);
+    }
+
+    return response;
+  }
+
   Future<Response> signup({
     required String password,
     required String email,

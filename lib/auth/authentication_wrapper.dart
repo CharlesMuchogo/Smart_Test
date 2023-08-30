@@ -4,6 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:research/bloc/Login/login_bloc.dart';
 
@@ -24,6 +25,7 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   @override
   void initState() {
     super.initState();
+    context.read<LoginBloc>().add(CheckAuthentication(context: context));
   }
 
   @override

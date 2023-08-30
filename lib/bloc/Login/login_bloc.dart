@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:http/http.dart' as http;
+
 
 import '../../functions/api.dart';
 import '../../models/user/user.dart';
@@ -17,6 +20,7 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
     on<LoginInitial>(_onGetLoginStatus);
     on<updateProfile>(_onUpdateProfile);
     on<Signup>(onSignup);
+    on<CheckAuthentication>(onCheckLogin);
   }
 
   void _onUpdateProfile(updateProfile event, Emitter<LoginState> emit) async {
@@ -55,6 +59,21 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
   void _onGetLoginStatus(LoginInitial event, Emitter<LoginState> emit) {
     emit(state.copyWith(status: LoginStatus.initial));
   }
+
+  void onCheckLogin(CheckAuthentication event, Emitter<LoginState> emit)async {
+    if(state.status == LoginStatus.initial){
+      emit(state.copyWith(status: LoginStatus.loading));
+    }
+
+
+    try{
+
+      http.Response response = await Api().checkAuthenticationStatus(context: event.context);
+    }catch(e){
+      emit(state.copyWith(status: LoginStatus.error));
+    }
+  }
+
 
   void _onGetLogin(GetLogin event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.loading));
