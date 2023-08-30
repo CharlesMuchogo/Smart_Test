@@ -47,25 +47,30 @@ const FIRST_HEADING = "Results in three Easy Steps/ Matokeo katika Hatua tatu Ra
 const FIRST_INSTRUCTIONS = '''Step 1: Collect''';
 
 const SECOND_INSTRUCTIONS = '''Gently swab the pad along your upper gums once and your lower gums once. You may use either side of the flat pad.
+
 Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
 
 const SECOND_HEADING = "Step 2: Insert/Ingiza";
 
 const STEP_TWO_INSTRUCTIONS = '''Put the test directly into the test tube where indicated in the upper portion of the test kit - "Test Holder". 
+
 Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
 
 const THIRD_HEADING = "Step 3: Read";
 const STEP_THREE_INSTRUCTIONS = '''The test window will turn pink for a few minutes. Do not read your results before 20 minutes have passed. Once your results are ready, you must read between 20 and 40 minutes from the start time.
+
 Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
 
 const RECOMENDATIONS_HEADING = "Reading your OraQuick results/ Kusoma matokeo";
 const RECOMENDATIONS = '''Negative Test''';
 
 const IMPORTANT_INFORMATION = '''If there's one line next to the "C" and no line next to the "T", your result is negative.
+
 Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
 
 const PRECAUTIONS_HEAD = "Positive Test";
 const PRECAUTIONS = '''If there are two complete lines, one next to the "C" and any line next to the "T"—even a faint line—you may have HIV.
+
 Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
  ''';
 
