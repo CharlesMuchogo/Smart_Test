@@ -25,7 +25,6 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   @override
   void initState() {
     super.initState();
-    context.read<LoginBloc>().add(CheckAuthentication(context: context));
   }
 
   @override

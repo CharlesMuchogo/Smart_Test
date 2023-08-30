@@ -87,7 +87,6 @@ required String  profile_photo,
     "Authorization": HydratedBloc.storage.read("token")
     } );
 
-    log("request reesponse ${response.body}" );
 
     if(response.statusCode == 401){
       AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
@@ -115,6 +114,8 @@ required String  profile_photo,
         headers: {
     "Authorization": HydratedBloc.storage.read("token") ?? "notAuthenticated"
     } );
+    print("request response ${response.body}" );
+
 
     if(response.statusCode == 401){
       AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);

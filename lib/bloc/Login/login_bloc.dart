@@ -67,7 +67,7 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
 
 
     try{
-
+print("Checking status");
       http.Response response = await Api().checkAuthenticationStatus(context: event.context);
     }catch(e){
       emit(state.copyWith(status: LoginStatus.error));

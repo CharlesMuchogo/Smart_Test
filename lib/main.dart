@@ -33,24 +33,24 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Research',
-        theme: ThemeData(
-          // useMaterial3: true,
-          primarySwatch: Colors.purple,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ResultsBloc(),
         ),
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => ResultsBloc(),
-            ),
-            BlocProvider(
-              create: (context) => LoginBloc(),
-            ),
-          ],
-          child: AuthenticationWrapper(),
-        )
+        BlocProvider(
+          create: (context) => LoginBloc(),
+        ),
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Research',
+          theme: ThemeData(
+            // useMaterial3: true,
+            primarySwatch: Colors.purple,
+          ),
+          home: AuthenticationWrapper()
+      ),
     );
   }
 }

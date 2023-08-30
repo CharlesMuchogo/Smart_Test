@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,7 @@ import 'package:research/Presentation/profile.dart';
 import 'package:research/Presentation/testpage.dart';
 import 'package:video_player/video_player.dart';
 
+import '../bloc/Login/login_bloc.dart';
 import '../functions/constants.dart';
 import 'documentation.dart';
 
@@ -31,6 +33,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void initState() {
+
     super.initState();
     _videoPlayerController = VideoPlayerController.asset('assets/video/instructions.mp4');
     _chewieController = ChewieController(
@@ -38,6 +41,7 @@ class _HomepageState extends State<Homepage> {
       autoPlay: false,
       looping: false,
     );
+
 
   }
 
@@ -58,6 +62,8 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginBloc>().add(CheckAuthentication(context: context));
+
     var hour = DateTime.now().hour;
     String greeting() {
       hour = DateTime.now().hour;
