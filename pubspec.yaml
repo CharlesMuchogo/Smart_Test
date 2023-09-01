@@ -35,6 +35,7 @@ dependencies:
   chewie: ^1.7.0
   http: ^0.13.6
   flutter_local_notifications: ^12.0.2
+  permission_handler: ^10.4.3
 
 
 dev_dependencies:
