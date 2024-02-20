@@ -6,7 +6,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:research/models/dto/resultsDTO.dart';
 import '../auth/authentication_wrapper.dart';
+import 'package:http_parser/http_parser.dart';
 import 'app_functions.dart';
 import 'constants.dart';
 
@@ -25,11 +27,8 @@ class Api {
       url,
       data: data,
     );
-
-
     return response;
   }
-
 
   Future<Response> updateProfile({
 required String  id,
@@ -52,8 +51,6 @@ required String  profile_photo,
       "profile_photo":profile_photo
     };
 
-
-
     Response response = await dio.post(
       url,
       data: data,
@@ -62,6 +59,34 @@ required String  profile_photo,
     return response;
   }
 
+  Future<Response> uploadTest(
+      {required ResultsDTO resultsDTO }) async {
+  final data = FormData.fromMap({
+      "results": resultsDTO.results,
+      "partner_results": resultsDTO.partnerResults,
+      "care_option": resultsDTO.careOption,
+      if (resultsDTO.resultsPhoto != null)
+        "user_photo": await MultipartFile.fromFile(
+          resultsDTO.resultsPhoto!.path,
+          contentType: MediaType('image', 'png'),
+        ),
+      if (resultsDTO.partnerResultsPhoto != null)
+        "partner_photo": await MultipartFile.fromFile(
+          resultsDTO.partnerResultsPhoto!.path,
+          contentType: MediaType('image', 'png'),
+        ),
+    });
+
+  var dio = Dio();
+
+  return dio.post("$BASEURL/api/mobile/upload",
+      options: Options(headers: {
+        "Authorization": HydratedBloc.storage.read("token"),
+        "Accept": "application/json",
+      }),
+      data: data);
+
+  }
 
   Future<http.Response>  uploadResults(
       {required results,
@@ -71,7 +96,7 @@ required String  profile_photo,
         required partnerImage,
         required BuildContext context
       }) async {
-    const url = "$BASEURL/api/test/upload";
+    const url = "$BASEURL/api/mobile/upload";
     var data = {
       "results":results,
       "partnerResults":partnerResults,
@@ -95,7 +120,7 @@ required String  profile_photo,
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  AuthenticationWrapper()),
+                  const AuthenticationWrapper()),
               (Route<dynamic> route) => false);
     }
 
@@ -107,14 +132,13 @@ required String  profile_photo,
       {
         required BuildContext context
       }) async {
-    const url = "$BASEURL/api/test/check_authentication_status";
+    const url = "$BASEURL/api/mobile/check_authentication_status";
 
 
     http.Response response = await http.post(Uri.parse(url),
         headers: {
     "Authorization": HydratedBloc.storage.read("token") ?? "notAuthenticated"
     } );
-    print("request response ${response.body}" );
 
 
     if(response.statusCode == 401){
@@ -124,7 +148,7 @@ required String  profile_photo,
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  AuthenticationWrapper()),
+                  const AuthenticationWrapper()),
               (Route<dynamic> route) => false);
     }
 
@@ -155,8 +179,6 @@ required String  profile_photo,
       url,
       data: data,
     );
-
-
     return response;
   }
 }

@@ -12,6 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:research/Presentation/profile.dart';
 import 'package:research/Presentation/testpage.dart';
+import 'package:research/Presentation/videoPlayer.dart';
 import 'package:video_player/video_player.dart';
 
 import '../bloc/Login/login_bloc.dart';
@@ -29,21 +30,6 @@ class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-
-
-  @override
-  void initState() {
-
-    super.initState();
-    _videoPlayerController = VideoPlayerController.asset('assets/video/instructions.mp4');
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController!,
-      autoPlay: false,
-      looping: false,
-    );
-
-
-  }
 
   @override
   void deactivate() {
@@ -211,9 +197,11 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(
                     height: 10,
                   ),
-                  VideoPlayerScreen(
-                    chewieController: _chewieController!,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomVideoPlayer(url:  'assets/video/instructions.mp4'),
                   ),
+
                   SizedBox(
                     height: 10,
                   ),
@@ -227,28 +215,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class VideoPlayerScreen extends StatefulWidget {
-  final ChewieController chewieController;
-  VideoPlayerScreen({required this.chewieController});
-
-  @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
-}
-
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 220,
-      child: Chewie(
-        controller: widget.chewieController,
       ),
     );
   }

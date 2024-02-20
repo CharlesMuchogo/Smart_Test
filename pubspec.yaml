@@ -31,7 +31,7 @@ dependencies:
   firebase_storage: ^11.0.16
   cached_network_image: ^3.2.3
   page_transition: ^2.0.9
-  video_player: ^2.7.0
+  video_player: ^2.8.2
   chewie: ^1.7.0
   http: ^0.13.6
   flutter_local_notifications: ^12.0.2

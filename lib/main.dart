@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           title: 'Research',
           theme: ThemeData(
             // useMaterial3: true,
-            primarySwatch: Colors.purple,
+            primarySwatch: Colors.green,
           ),
           home: AuthenticationWrapper()
       ),
