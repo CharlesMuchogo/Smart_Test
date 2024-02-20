@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Research',
           theme: ThemeData(
-            // useMaterial3: true,
+            useMaterial3: true,
             primarySwatch: Colors.green,
           ),
           home: AuthenticationWrapper()

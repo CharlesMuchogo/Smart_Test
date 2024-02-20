@@ -17,6 +17,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   late String password, email;
   final formKey = GlobalKey<FormState>();
+  bool _obscureText = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +46,14 @@ class _LoginState extends State<Login> {
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
-
                         decoration: InputDecoration(
                           labelText: "Email",
                           labelStyle: TextStyle(color: Colors.grey),
-                          icon: Icon(Icons.email_outlined, color: Colors.black),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0)),
                           fillColor: Colors.black,
                         ),
                         style: TextStyle(color: Colors.black),
-                        //controller: email,
                         validator: (val) => !val!.contains("@")
                             ? "Enter a valid email address"
                             : null,
@@ -63,14 +62,22 @@ class _LoginState extends State<Login> {
                         },
                         onSaved: (val) => email = val!,
                       ),
-                      Padding(padding: EdgeInsets.all(20)),
+                      Padding(padding: EdgeInsets.all(15)),
                       TextFormField(
                         keyboardType: TextInputType.visiblePassword,
 
                         decoration: InputDecoration(
                           labelText:"Password",
                           labelStyle: TextStyle(color: Colors.grey),
-                          icon: Icon(Icons.lock, color: Colors.black),
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                              child: _obscureText == true
+                                  ? Icon(Icons.visibility)
+                                  : Icon(Icons.visibility_off)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0)),
                           fillColor: Colors.black,
@@ -83,10 +90,10 @@ class _LoginState extends State<Login> {
                           password = value;
                         },
                         onSaved: (val) => password = val!,
-                        obscureText: true,
+                        obscureText: _obscureText,
                       ),
                       Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(15),
                       ),
                       BlocConsumer<LoginBloc, LoginState>(
                         listener: (context, state) {
@@ -134,8 +141,8 @@ class _LoginState extends State<Login> {
                                 );
                               }
 
-                              return ElevatedButton(
-                                onPressed: () async {
+                              return GestureDetector(
+                                onTap: () async {
                                   if (!formKey.currentState!.validate()) {
                                     return;
                                   }
@@ -150,12 +157,17 @@ class _LoginState extends State<Login> {
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
-                                  height: 30,
-                                  width: 200,
+                                  height: 50,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.all(
+                                  Radius.circular(5.0) //
+                                ),
+                                  ),
                                   child: Text(
                                       "Log In",
-                                      
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(fontSize: 18, color: Colors.white),
                                   ),
                                 ),
                               );
@@ -167,20 +179,22 @@ class _LoginState extends State<Login> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Text(
-                          //   AppLocalizations.of(context)!.new_user_create_account,
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .bodyMedium!
-                          //       .copyWith(fontSize: 17),
-                          // ),
+                          Text(
+                            "Don't have an account? ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                fontSize: 19,
+                                ),
+                          ),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => SignUp()));
                             },
                             child: Text(
-                              "Create account",
+                              "Sign up",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -190,7 +204,8 @@ class _LoginState extends State<Login> {
                             ),
                          ),
                         ],
-                      )
+                      ),
+                      Padding(padding: EdgeInsets.all(20)),
                     ]),
               ),
             ),

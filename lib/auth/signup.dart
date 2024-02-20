@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/Presentation/home.dart';
 
-
 import '../../bloc/Login/login_bloc.dart';
-
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -26,8 +24,6 @@ class _SignUpState extends State<SignUp> {
   String confirm_password = "";
 
   final formKey = GlobalKey<FormState>();
-  bool _isChecked = false;
-
   bool _obscureText = true;
 
   @override
@@ -50,14 +46,11 @@ class _SignUpState extends State<SignUp> {
                 ),
                 Padding(padding: EdgeInsets.all(20)),
                 //email
-                textForm(
-                    "Email", TextInputType.emailAddress, Icons.email_outlined),
-                textForm(
-                    "First Name", TextInputType.text, Icons.person_outline),
 
-                textForm(
-                    "Last Name", TextInputType.text, Icons.person_outline),
-                textForm("Phone Number", TextInputType.number, Icons.phone),
+                textForm("First Name", TextInputType.text),
+                textForm("Last Name", TextInputType.text),
+                textForm("Email", TextInputType.emailAddress),
+                textForm("Phone Number", TextInputType.number),
 
                 //password
                 TextFormField(
@@ -75,7 +68,6 @@ class _SignUpState extends State<SignUp> {
                     isDense: true,
                     labelText: "Enter Password",
                     labelStyle: TextStyle(color: Colors.grey),
-                    icon: Icon(Icons.lock, color: Colors.black),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                     fillColor: Colors.black,
@@ -106,7 +98,6 @@ class _SignUpState extends State<SignUp> {
                     isDense: true,
                     labelText: "Confirm Password",
                     labelStyle: TextStyle(color: Colors.grey),
-                    icon: Icon(Icons.lock, color: Colors.black),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                     fillColor: Colors.black,
@@ -127,9 +118,11 @@ class _SignUpState extends State<SignUp> {
                   listener: (context, state) {
                     if (state.status == LoginStatus.success) {
                       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => Homepage(),),);
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => Homepage(),
+                        ),
+                      );
                     }
 
                     if (state.status == LoginStatus.failed) {
@@ -163,36 +156,64 @@ class _SignUpState extends State<SignUp> {
                         if (state.status == LoginStatus.loading) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        return ElevatedButton(
-                            onPressed: () async {
-                              print(_isChecked);
-                              if (!formKey.currentState!.validate()){
-
-                                return;
-                              } else {
-                                print("$password , $email , $middleName, $firstName , $phoneNumber");
-
-                                context.read<LoginBloc>().add(Signup(
-                                    password: password,
-                                    email: email,
-                                    middleName: middleName,
-                                    firstName: firstName,
-                                    phoneNumber: phoneNumber));
-                              }
-                            },
-                            child: Container(
-                                alignment: Alignment.center,
-                                height: 30,
-                                width: 200,
-                                child: Text(
-                                    "Sign Up",
-
-                                  style: TextStyle(fontSize: 18),
-                                )));
+                        return GestureDetector(
+                          onTap: () async {
+                            if (!formKey.currentState!.validate()) {
+                              return;
+                            } else {
+                              context.read<LoginBloc>().add(Signup(
+                                  password: password,
+                                  email: email,
+                                  middleName: middleName,
+                                  firstName: firstName,
+                                  phoneNumber: phoneNumber));
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(5.0) //
+                              ),
+                            ),
+                            child: Text(
+                              "Sign up",
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
-                )
+                ),
+                Padding(padding: EdgeInsets.all(20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Already have an account? ",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontSize: 19,
+                          ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Login",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontSize: 19,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(padding: EdgeInsets.all(20)),
+
               ]),
             ),
           ),
@@ -201,8 +222,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget textForm(
-      String label_text, TextInputType keyboard_type, IconData icon) {
+  Widget textForm(String label_text, TextInputType keyboard_type) {
     return Column(
       children: [
         TextFormField(
@@ -211,7 +231,6 @@ class _SignUpState extends State<SignUp> {
             labelText: label_text,
             isDense: true,
             labelStyle: TextStyle(color: Colors.grey),
-            icon: Icon(icon, color: Colors.black),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
             fillColor: Colors.black,
@@ -238,7 +257,7 @@ class _SignUpState extends State<SignUp> {
               firstName = value;
             } else if (label_text.toLowerCase().contains("last name")) {
               middleName = value;
-            }  else if (label_text.toLowerCase().contains("phone number")) {
+            } else if (label_text.toLowerCase().contains("phone number")) {
               phoneNumber = value;
             }
           },

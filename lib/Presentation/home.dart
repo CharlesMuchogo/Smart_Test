@@ -209,7 +209,6 @@ class _HomepageState extends State<Homepage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Instruction(),
                   ),
-
                 ],
               ),
             ),
