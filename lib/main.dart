@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ResultsBloc(),
+          create: (context) => ResultsBloc()..add(GetTestResults(context: context)),
         ),
         BlocProvider(
           create: (context) => LoginBloc(),

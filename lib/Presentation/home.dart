@@ -28,22 +28,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
-  VideoPlayerController? _videoPlayerController;
-  ChewieController? _chewieController;
-
-  @override
-  void deactivate() {
-    _videoPlayerController?.pause(); // Pause the video
-    _chewieController?.dispose(); // Dispose of the Chewie controller
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController?.dispose();
-    _chewieController?.dispose();
-    super.dispose();
-  }
 
 
   @override
@@ -63,154 +47,125 @@ class _HomepageState extends State<Homepage> {
       return 'Good evening';
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        _videoPlayerController?.pause();
-        _chewieController?.dispose();
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Home"),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: Profile()));
-                },
-                child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.black,
-                    )),
-              ),
-            )
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "${greeting()} $firstname",
         ),
-        body: Container(
-          color: Colors.white,
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 10),
-                    child: Text(
-                      "${greeting()} $firstname",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: Container(
+        color: Colors.white,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 30),
+                  child: Text(
+                    "Please select the test type",
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 30),
-                    child: Text(
-                      "Please select the test type",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.fade,
-                                  child: TestPage(
-                                    couples: false,
-                                  ),),);},
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(color: Colors.purple.shade100,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.person,
-                                size: 50,
-                              ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: TestPage(
+                              couples: false,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Individual"),
-                            )
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.fade,
-                                  child: TestPage(
-                                    couples: true,
-                                  ),),);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(color: Colors.purple.shade100,
-                                borderRadius: BorderRadius.circular(8)
-                              ),
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.people,
-                                size: 50,
-                              ),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.purple.shade100,
+                                borderRadius: BorderRadius.circular(8)),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.person,
+                              size: 50,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Couple"),
-                            )
-                          ],
-                        ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Individual"),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Instructions",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(decoration: TextDecoration.underline),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: TestPage(
+                              couples: true,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.purple.shade100,
+                                borderRadius: BorderRadius.circular(8)),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.people,
+                              size: 50,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Couple"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Instructions",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(decoration: TextDecoration.underline),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomVideoPlayer(url:  'assets/video/instructions.mp4'),
-                  ),
-
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Instruction(),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+                      CustomVideoPlayer(url: 'assets/video/instructions.mp4'),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Instruction(),
+                ),
+              ],
             ),
           ),
         ),

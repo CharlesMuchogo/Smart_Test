@@ -31,13 +31,13 @@ class Api {
   }
 
   Future<Response> updateProfile({
-required String  id,
-required String  email,
-required String  first_name,
-required String  middle_name,
-required String  phone_number,
-required String  password,
-required String  profile_photo,
+    required String  id,
+    required String  email,
+    required String  first_name,
+    required String  middle_name,
+    required String  phone_number,
+    required String  password,
+    required String  profile_photo,
   }) async {
     String user_id = HydratedBloc.storage.read("id") ;
     const url = "$BASEURL/api/user";
@@ -88,41 +88,15 @@ required String  profile_photo,
 
   }
 
-  Future<http.Response>  uploadResults(
-      {required results,
-        required partnerResults,
-        required careOption,
-        required image,
-        required partnerImage,
-        required BuildContext context
-      }) async {
-    const url = "$BASEURL/api/mobile/upload";
-    var data = {
-      "results":results,
-      "partnerResults":partnerResults,
-      "image":image,
-      "partnerImage":partnerImage,
-      "care_option":careOption
+  Future<http.Response>  GetTestResults() async {
 
-    };
 
-    http.Response response = await http.post(Uri.parse(url),
-        body: jsonEncode(data),
+    http.Response response = await http.get(Uri.parse("$BASEURL/api/mobile/results"),
         headers: {
     "Authorization": HydratedBloc.storage.read("token")
-    } );
-
-
-    if(response.statusCode == 401){
-      AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
-      await HydratedBloc.storage.clear();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const AuthenticationWrapper()),
-              (Route<dynamic> route) => false);
     }
+    );
+
 
     return response;
   }

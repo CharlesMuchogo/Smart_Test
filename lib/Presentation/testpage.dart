@@ -432,7 +432,7 @@ class _TestPageState extends State<TestPage> {
                     }
                     return Column(
                       children: [
-                        state.status == ResultsStatus.loaded
+                        state.status == ResultsStatus.success
                             ? Text(
                                 "Your test results were submitted successfully",
                                 style: TextStyle(
@@ -444,7 +444,7 @@ class _TestPageState extends State<TestPage> {
                                         color: Colors.red, fontSize: 16),
                                   )
                                 : SizedBox(),
-                        state.status == ResultsStatus.loaded
+                        state.status == ResultsStatus.success
                             ? SizedBox()
                             : Padding(
                                 padding: const EdgeInsets.all(15.0),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:research/bloc/Login/login_bloc.dart';
 
+import '../Presentation/BottomNavigationBar.dart';
 import '../Presentation/home.dart';
 import 'Login.dart';
 class AuthenticationWrapper extends StatefulWidget {
@@ -24,6 +25,6 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
     return
-        HydratedBloc.storage.read("token") == null ? Login() : Homepage();
+        HydratedBloc.storage.read("token") == null ? Login() : BottomNavigation();
   }
 }

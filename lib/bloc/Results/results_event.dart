@@ -10,6 +10,12 @@ abstract class ResultsEvent extends Equatable {
 
 class ResultsInitial extends ResultsEvent {}
 
+class GetTestResults extends ResultsEvent {
+  final BuildContext context ;
+  const GetTestResults({required this.context});
+}
+
+
 class UploadResults extends ResultsEvent {
   final ResultsDTO resultsDTO;
   const UploadResults(

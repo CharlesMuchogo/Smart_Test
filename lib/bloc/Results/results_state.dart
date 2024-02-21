@@ -55,8 +55,11 @@ class ResultsState extends Equatable {
 enum ResultsStatus {
   initial,
   loading,
+
   loaded,
   error,
+
+
   failed,
   success,
 }

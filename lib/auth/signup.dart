@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/Presentation/home.dart';
 
 import '../../bloc/Login/login_bloc.dart';
+import '../Presentation/BottomNavigationBar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -120,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => Homepage(),
+                          builder: (BuildContext context) => BottomNavigation(),
                         ),
                       );
                     }

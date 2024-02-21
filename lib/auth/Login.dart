@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/Presentation/home.dart';
 import 'package:research/auth/signup.dart';
+import '../Presentation/BottomNavigationBar.dart';
 import '../bloc/Login/login_bloc.dart';
 
 class Login extends StatefulWidget {
@@ -102,7 +103,7 @@ class _LoginState extends State<Login> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                    Homepage() ));
+                                        BottomNavigation() ));
                           }
 
                           if (state.status == LoginStatus.failed) {
