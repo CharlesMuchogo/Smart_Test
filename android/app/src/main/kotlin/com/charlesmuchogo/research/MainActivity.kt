@@ -1,4 +1,4 @@
-package com.example.research
+package com.charlesmuchogo.research
 
 import io.flutter.embedding.android.FlutterActivity
 

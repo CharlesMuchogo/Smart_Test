@@ -46,7 +46,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:121837678657:android:8a7ca4a97f876a8fb296c0",
         "android_client_info": {
-          "package_name": "com.example.research"
+          "package_name": "com.charlesmuchogo.research"
         }
       },
       "oauth_client": [
@@ -54,7 +54,7 @@
           "client_id": "121837678657-a87cma9ivobpe9abj6griupsjl4ck4ld.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.research",
+            "package_name": "com.charlesmuchogo.research",
             "certificate_hash": "f52dcd4aed8d4851dde3baa60d2e46bf58a3944b"
           }
         },
