@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http ;
 
 import 'package:path_provider/path_provider.dart';
@@ -43,46 +42,36 @@ Pricking your finger to get blood might sound a bit scary – but it really does
 
     ''';
 
-const FIRST_HEADING = "Results in three Easy Steps/ Matokeo katika Hatua tatu Rahisi";
-const FIRST_INSTRUCTIONS = '''Step 1: Collect''';
+const FIRST_HEADING = "Matokeo katika Hatua tatu Rahisi";
+const FIRST_INSTRUCTIONS = '''Hatua ya 1: Kusanya''';
 
-const SECOND_INSTRUCTIONS = '''Gently swab the pad along your upper gums once and your lower gums once. You may use either side of the flat pad.
+const SECOND_INSTRUCTIONS = '''Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
 
-Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
+const SECOND_HEADING = "Hatua ya 2: Ingiza";
 
-const SECOND_HEADING = "Step 2: Insert/Ingiza";
+const STEP_TWO_INSTRUCTIONS = '''Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
 
-const STEP_TWO_INSTRUCTIONS = '''Put the test directly into the test tube where indicated in the upper portion of the test kit - "Test Holder". 
+const THIRD_HEADING = "Hatua ya 3: Soma";
+const STEP_THREE_INSTRUCTIONS = '''Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
 
-Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
+const RECOMENDATIONS_HEADING = "Kusoma matokeo";
+const RECOMENDATIONS = '''Tokeo Hasi''';
 
-const THIRD_HEADING = "Step 3: Read";
-const STEP_THREE_INSTRUCTIONS = '''The test window will turn pink for a few minutes. Do not read your results before 20 minutes have passed. Once your results are ready, you must read between 20 and 40 minutes from the start time.
+const IMPORTANT_INFORMATION = '''Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
 
-Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
-
-const RECOMENDATIONS_HEADING = "Reading your OraQuick results/ Kusoma matokeo";
-const RECOMENDATIONS = '''Negative Test''';
-
-const IMPORTANT_INFORMATION = '''If there's one line next to the "C" and no line next to the "T", your result is negative.
-
-Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
-
-const PRECAUTIONS_HEAD = "Positive Test";
-const PRECAUTIONS = '''If there are two complete lines, one next to the "C" and any line next to the "T"—even a faint line—you may have HIV.
-
-Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
+const PRECAUTIONS_HEAD = "Matokeo chanya";
+const PRECAUTIONS = '''Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
  ''';
 
-const READING_HEAD = "Negative result explanation";
-const READING = '''If negative after 3 months post-risk event, you likely don't have HIV. Test regularly if ongoing risk. Prevention is vital; know how to protect yourself and partners from HIV.''';
+const READING_HEAD = "Ufafanuzi wa matokeo hasi";
+const READING = '''Ikiwa hasi baada ya tukio la baada ya hatari ya miezi 3, kuna uwezekano kwamba huna HIV. Pima mara kwa mara ikiwa kuna hatari inayoendelea. Kuzuia ni muhimu; kujua jinsi ya kujikinga wewe na wenzi wako dhidi ya HIV.''';
 
-const INTERPRETATION_HEADING  = "Positive result explanation";
-const INTERPRETATION_NEGATIVE = '''If positive, confirm with healthcare. HIV doesn't guarantee AIDS. Treatment allows normal life and reduces transmission risk. Early identification crucial for effective treatment.
-Please link to care during the submission of your test results in order to receive proper guidelines on your health condition.
+const INTERPRETATION_HEADING  = "Ufafanuzi wa matokeo chanya";
+const INTERPRETATION_NEGATIVE = '''Ikiwa chanya, thibitisha na huduma ya afya. HIV haitoi dhamana ya UKIMWI. Matibabu inaruhusu maisha ya kawaida na kupunguza hatari ya maambukizi. Utambulisho wa mapema ni muhimu kwa matibabu ya ufanisi.
+Tafadhali unganisha huduma wakati wa kuwasilisha matokeo yako ya mtihani ili kupokea miongozo inayofaa kuhusu hali yako ya afya.
 ''';
 
-const POSITIVE_TEST_HEAD = '''NOTE: FOR FURTHER INSTRUCTIONS, REFER TO THE INSTRUCTION MANUAL ACCOMPANYING THE TEST KITS''';
+const POSITIVE_TEST_HEAD = '''KUMBUKA: KWA MAELEKEZO ZAIDI, REJEA MWONGOZO WA MAAGIZO UNAOAMBATANA NA VITI VYA KUJARIBU.''';
 
 AndroidNotificationChannel channel = AndroidNotificationChannel(
     "High importance", "High important notifications ",

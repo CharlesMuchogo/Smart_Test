@@ -1,22 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:async';
-import 'dart:io';
 
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:research/Presentation/profile.dart';
 import 'package:research/Presentation/testpage.dart';
 import 'package:research/Presentation/videoPlayer.dart';
-import 'package:video_player/video_player.dart';
 
 import '../bloc/Login/login_bloc.dart';
-import '../functions/constants.dart';
 import 'documentation.dart';
 
 class Homepage extends StatefulWidget {
@@ -143,7 +135,7 @@ class _HomepageState extends State<Homepage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Instructions",
+                    "Maagizo",
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
