@@ -5,7 +5,6 @@ import 'dart:io';
 class Terms extends StatelessWidget {
   final File file;
 
-
   @override
   Widget build(BuildContext context) {
     final name = basename(file.path);

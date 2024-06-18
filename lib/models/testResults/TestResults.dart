@@ -23,15 +23,15 @@ class TestResult extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    results,
-    partnerResults,
-    image,
-    partnerImage,
-    careOption,
-    userId,
-    date,
-  ];
+        id,
+        results,
+        partnerResults,
+        image,
+        partnerImage,
+        careOption,
+        userId,
+        date,
+      ];
 
   factory TestResult.fromJson(Map<String, dynamic> json) {
     return TestResult(

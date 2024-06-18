@@ -23,25 +23,28 @@ class Signup extends LoginEvent {
       required this.email,
       required this.middleName,
       required this.firstName,
-
-      required  this.phoneNumber});
+      required this.phoneNumber});
 }
 
-class updateProfile extends LoginEvent{
-final String  id;
-final String  email;
-final String  first_name;
-final String  middle_name;
-final String  phone_number;
+class updateProfile extends LoginEvent {
+  final String id;
+  final String email;
+  final String first_name;
+  final String middle_name;
+  final String phone_number;
 
-final String  password;
-final String  profile_photo;
+  final String password;
+  final String profile_photo;
 
-updateProfile({required this.id, required this.email, required this.first_name,required  this.middle_name,
-  required this.phone_number,  required this.password, required this.profile_photo});
+  updateProfile(
+      {required this.id,
+      required this.email,
+      required this.first_name,
+      required this.middle_name,
+      required this.phone_number,
+      required this.password,
+      required this.profile_photo});
 }
-
-
 
 class GetLogin extends LoginEvent {
   final String email;

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart' as http ;
+import 'package:http/http.dart' as http;
 
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -13,7 +13,8 @@ import '../auth/terms.dart';
 //local server
 //const String BASEURL =  "http://192.168.100.6:9000";
 const String BASEURL = "http://13.246.207.31:9000";
-const String TermsAndConditions = "https://firebasestorage.googleapis.com/v0/b/flutter-notifications-a462c.appspot.com/o/T%26C%20for%20App.pdf?alt=media&token=b0b8d75d-addd-4451-8d22-37a76dad8d13";
+const String TermsAndConditions =
+    "https://firebasestorage.googleapis.com/v0/b/flutter-notifications-a462c.appspot.com/o/T%26C%20for%20App.pdf?alt=media&token=b0b8d75d-addd-4451-8d22-37a76dad8d13";
 
 const String INSTRUCTIONS = '''
 You can test for HIV in a safe place
@@ -45,33 +46,41 @@ Pricking your finger to get blood might sound a bit scary – but it really does
 const FIRST_HEADING = "Matokeo katika Hatua tatu Rahisi";
 const FIRST_INSTRUCTIONS = '''Hatua ya 1: Kusanya''';
 
-const SECOND_INSTRUCTIONS = '''Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
+const SECOND_INSTRUCTIONS =
+    '''Finyilia utambi wa Kifaa juu ya ufizi, pangusa ufizi wote wa juu mara moja na pia ufizi wote wa chini mara moja ''';
 
 const SECOND_HEADING = "Hatua ya 2: Ingiza";
 
-const STEP_TWO_INSTRUCTIONS = '''Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
+const STEP_TWO_INSTRUCTIONS =
+    '''Ingiza Kifaa ndani ya kichupa hadi Utambi utumbukie ndani ya maji''';
 
 const THIRD_HEADING = "Hatua ya 3: Soma";
-const STEP_THREE_INSTRUCTIONS = '''Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
+const STEP_THREE_INSTRUCTIONS =
+    '''Wacha kifaa ndani ya kichupa kwa dakika 20 kabla ya kusoma tokeo. Usisome tokeo baada ya dakika 40''';
 
 const RECOMENDATIONS_HEADING = "Kusoma matokeo";
 const RECOMENDATIONS = '''Tokeo Hasi''';
 
-const IMPORTANT_INFORMATION = '''Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
+const IMPORTANT_INFORMATION =
+    '''Mstari mmoja kwenye eneo “c” na hakuna mstari kwenye eneo “T”, tokeo lako ni hasi, huna virusi vya ukimwi.''';
 
 const PRECAUTIONS_HEAD = "Matokeo chanya";
-const PRECAUTIONS = '''Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
+const PRECAUTIONS =
+    '''Laini mbili kamili, hataingawa laini ni hafifu, inamaanisha huenda ukawa na virusi vya ukimwi na unahitaji vipimo zaidi.
  ''';
 
 const READING_HEAD = "Ufafanuzi wa matokeo hasi";
-const READING = '''Ikiwa hasi baada ya tukio la baada ya hatari ya miezi 3, kuna uwezekano kwamba huna HIV. Pima mara kwa mara ikiwa kuna hatari inayoendelea. Kuzuia ni muhimu; kujua jinsi ya kujikinga wewe na wenzi wako dhidi ya HIV.''';
+const READING =
+    '''Ikiwa hasi baada ya tukio la baada ya hatari ya miezi 3, kuna uwezekano kwamba huna HIV. Pima mara kwa mara ikiwa kuna hatari inayoendelea. Kuzuia ni muhimu; kujua jinsi ya kujikinga wewe na wenzi wako dhidi ya HIV.''';
 
-const INTERPRETATION_HEADING  = "Ufafanuzi wa matokeo chanya";
-const INTERPRETATION_NEGATIVE = '''Ikiwa chanya, thibitisha na huduma ya afya. HIV haitoi dhamana ya UKIMWI. Matibabu inaruhusu maisha ya kawaida na kupunguza hatari ya maambukizi. Utambulisho wa mapema ni muhimu kwa matibabu ya ufanisi.
+const INTERPRETATION_HEADING = "Ufafanuzi wa matokeo chanya";
+const INTERPRETATION_NEGATIVE =
+    '''Ikiwa chanya, thibitisha na huduma ya afya. HIV haitoi dhamana ya UKIMWI. Matibabu inaruhusu maisha ya kawaida na kupunguza hatari ya maambukizi. Utambulisho wa mapema ni muhimu kwa matibabu ya ufanisi.
 Tafadhali unganisha huduma wakati wa kuwasilisha matokeo yako ya mtihani ili kupokea miongozo inayofaa kuhusu hali yako ya afya.
 ''';
 
-const POSITIVE_TEST_HEAD = '''KUMBUKA: KWA MAELEKEZO ZAIDI, REJEA MWONGOZO WA MAAGIZO UNAOAMBATANA NA VITI VYA KUJARIBU.''';
+const POSITIVE_TEST_HEAD =
+    '''KUMBUKA: KWA MAELEKEZO ZAIDI, REJEA MWONGOZO WA MAAGIZO UNAOAMBATANA NA VITI VYA KUJARIBU.''';
 
 AndroidNotificationChannel channel = AndroidNotificationChannel(
     "High importance", "High important notifications ",
@@ -80,10 +89,9 @@ AndroidNotificationChannel channel = AndroidNotificationChannel(
     playSound: true);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 class AppConstants {
-
   void playNotification() {
     log(" A new message on local notification");
     flutterLocalNotificationsPlugin.show(
@@ -105,16 +113,16 @@ class AppConstants {
     log(" message sent on local notification");
   }
 
-   Future<File> loadNetwork() async {
+  Future<File> loadNetwork() async {
     final response = await http.get(Uri.parse(TermsAndConditions));
     final bytes = response.bodyBytes;
 
     return _storeFile(TermsAndConditions, bytes);
   }
 
-   void openPDF(BuildContext context, File file) => Navigator.of(context).push(
-     MaterialPageRoute(builder: (context) => Terms( file)),
-   );
+  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => Terms(file)),
+      );
 
   Future<File> _storeFile(String url, List<int> bytes) async {
     final filename = basename(url);
@@ -124,7 +132,6 @@ class AppConstants {
     await file.writeAsBytes(bytes, flush: true);
     return file;
   }
-
 
   void alertDialog(
       {required BuildContext context,

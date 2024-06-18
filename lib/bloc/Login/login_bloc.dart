@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http;
 
-
 import '../../functions/api.dart';
 import '../../models/user/user.dart';
 
@@ -25,7 +24,14 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
   void _onUpdateProfile(updateProfile event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.loading));
     try {
-      Response loginDetails = await Api().updateProfile(id: event.id, email: event.email, first_name: event.first_name, middle_name: event.middle_name, phone_number: event.phone_number, password: event.password, profile_photo: event.profile_photo);
+      Response loginDetails = await Api().updateProfile(
+          id: event.id,
+          email: event.email,
+          first_name: event.first_name,
+          middle_name: event.middle_name,
+          phone_number: event.phone_number,
+          password: event.password,
+          profile_photo: event.profile_photo);
 
       var jsonBody = loginDetails.data;
 
@@ -52,27 +58,25 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
       log(e.toString());
       emit(state.copyWith(status: LoginStatus.error, message: e.toString()));
     }
-
-
   }
+
   void _onGetLoginStatus(LoginInitial event, Emitter<LoginState> emit) {
     emit(state.copyWith(status: LoginStatus.initial));
   }
 
-  void onCheckLogin(CheckAuthentication event, Emitter<LoginState> emit)async {
-    if(state.status == LoginStatus.initial){
+  void onCheckLogin(CheckAuthentication event, Emitter<LoginState> emit) async {
+    if (state.status == LoginStatus.initial) {
       emit(state.copyWith(status: LoginStatus.loading));
     }
 
-
-    try{
-print("Checking status");
-      http.Response response = await Api().checkAuthenticationStatus(context: event.context);
-    }catch(e){
+    try {
+      print("Checking status");
+      http.Response response =
+          await Api().checkAuthenticationStatus(context: event.context);
+    } catch (e) {
       emit(state.copyWith(status: LoginStatus.error));
     }
   }
-
 
   void _onGetLogin(GetLogin event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.loading));
@@ -110,8 +114,6 @@ print("Checking status");
     }
   }
 
-
-
   void onSignup(Signup event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.loading));
     try {
@@ -121,8 +123,6 @@ print("Checking status");
           middleName: event.middleName,
           firstName: event.firstName,
           phoneNumber: event.phoneNumber);
-
-      
 
       var jsonBody = loginDetails.data;
 
@@ -147,11 +147,9 @@ print("Checking status");
             loggedIn: true));
       }
     } catch (e) {
-      log("Error"+e.toString());
+      log("Error" + e.toString());
       emit(state.copyWith(status: LoginStatus.error, message: e.toString()));
     }
-
-
   }
 
   @override

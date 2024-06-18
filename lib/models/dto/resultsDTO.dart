@@ -12,11 +12,10 @@ class ResultsDTO {
     required this.partnerResultsPhoto,
   });
 
-   final String? results;
-   final String? partnerResults;
-   final String? careOption;
-   final BuildContext context;
-   final File? resultsPhoto;
-   final File? partnerResultsPhoto;
-
+  final String? results;
+  final String? partnerResults;
+  final String? careOption;
+  final BuildContext context;
+  final File? resultsPhoto;
+  final File? partnerResultsPhoto;
 }

@@ -19,7 +19,6 @@ class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
   bool _obscureText = true;
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -67,7 +66,7 @@ class _LoginState extends State<Login> {
                         keyboardType: TextInputType.visiblePassword,
 
                         decoration: InputDecoration(
-                          labelText:"Password",
+                          labelText: "Password",
                           labelStyle: TextStyle(color: Colors.grey),
                           suffixIcon: GestureDetector(
                               onTap: () {
@@ -102,7 +101,7 @@ class _LoginState extends State<Login> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        BottomNavigation() ));
+                                        BottomNavigation()));
                           }
 
                           if (state.status == LoginStatus.failed) {
@@ -120,8 +119,7 @@ class _LoginState extends State<Login> {
 
                           if (state.status == LoginStatus.error) {
                             final snackBar = SnackBar(
-                              content: Text(
-                                  "Login failed! Try again"),
+                              content: Text("Login failed! Try again"),
                               backgroundColor: (Colors.red),
                               action: SnackBarAction(
                                 label: '',
@@ -160,14 +158,15 @@ class _LoginState extends State<Login> {
                                   height: 50,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.all(
-                                  Radius.circular(5.0) //
-                                ),
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0) //
+                                            ),
                                   ),
                                   child: Text(
-                                      "Log In",
-                                    style: TextStyle(fontSize: 18, color: Colors.white),
+                                    "Log In",
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.white),
                                   ),
                                 ),
                               );
@@ -185,7 +184,7 @@ class _LoginState extends State<Login> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                fontSize: 19,
+                                  fontSize: 19,
                                 ),
                           ),
                           GestureDetector(
@@ -202,7 +201,7 @@ class _LoginState extends State<Login> {
                                       fontSize: 19,
                                       color: Theme.of(context).primaryColor),
                             ),
-                         ),
+                          ),
                         ],
                       ),
                       Padding(padding: EdgeInsets.all(20)),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-
-class AppFunctions{
-
-
+class AppFunctions {
   void snackbar(BuildContext context, String message, Color color) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -17,7 +14,4 @@ class AppFunctions{
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-
-
 }

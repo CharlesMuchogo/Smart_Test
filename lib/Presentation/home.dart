@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -20,7 +19,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   String firstname = HydratedBloc.storage.read("firstname") ?? "";
-
 
   @override
   Widget build(BuildContext context) {

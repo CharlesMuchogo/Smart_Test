@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/bloc/Results/results_bloc.dart';
@@ -30,7 +29,7 @@ class ResultsHistory extends StatelessWidget {
               } else if (state.status == ResultsStatus.error &&
                   state.Results.isEmpty) {
                 Text(state.message);
-              }else if(state.Results.isEmpty){
+              } else if (state.Results.isEmpty) {
                 const Text("You have not uploaded any test results yet");
               }
               List<TestResult> results =

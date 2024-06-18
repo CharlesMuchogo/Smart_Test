@@ -30,24 +30,24 @@ class Api {
   }
 
   Future<Response> updateProfile({
-    required String  id,
-    required String  email,
-    required String  first_name,
-    required String  middle_name,
-    required String  phone_number,
-    required String  password,
-    required String  profile_photo,
+    required String id,
+    required String email,
+    required String first_name,
+    required String middle_name,
+    required String phone_number,
+    required String password,
+    required String profile_photo,
   }) async {
-    String user_id = HydratedBloc.storage.read("id") ;
+    String user_id = HydratedBloc.storage.read("id");
     const url = "$BASEURL/api/user";
     log(url);
-    var data ={
-      "id":int.parse(id),
-      "email":email,
-      "first_name":first_name,
-      "middle_name":middle_name,
-      "phone_number":phone_number,
-      "profile_photo":profile_photo
+    var data = {
+      "id": int.parse(id),
+      "email": email,
+      "first_name": first_name,
+      "middle_name": middle_name,
+      "phone_number": phone_number,
+      "profile_photo": profile_photo
     };
 
     Response response = await dio.post(
@@ -58,9 +58,8 @@ class Api {
     return response;
   }
 
-  Future<Response> uploadTest(
-      {required ResultsDTO resultsDTO }) async {
-  final data = FormData.fromMap({
+  Future<Response> uploadTest({required ResultsDTO resultsDTO}) async {
+    final data = FormData.fromMap({
       "results": resultsDTO.results,
       "partner_results": resultsDTO.partnerResults,
       "care_option": resultsDTO.careOption,
@@ -76,53 +75,41 @@ class Api {
         ),
     });
 
-  var dio = Dio();
+    var dio = Dio();
 
-  return dio.post("$BASEURL/api/mobile/upload",
-      options: Options(headers: {
-        "Authorization": HydratedBloc.storage.read("token"),
-        "Accept": "application/json",
-      }),
-      data: data);
-
+    return dio.post("$BASEURL/api/mobile/upload",
+        options: Options(headers: {
+          "Authorization": HydratedBloc.storage.read("token"),
+          "Accept": "application/json",
+        }),
+        data: data);
   }
 
-  Future<http.Response>  GetTestResults() async {
-
-
-    http.Response response = await http.get(Uri.parse("$BASEURL/api/mobile/results"),
-        headers: {
-    "Authorization": HydratedBloc.storage.read("token")
-    }
-    );
-
+  Future<http.Response> GetTestResults() async {
+    http.Response response = await http.get(
+        Uri.parse("$BASEURL/api/mobile/results"),
+        headers: {"Authorization": HydratedBloc.storage.read("token")});
 
     return response;
   }
 
-
-  Future<http.Response>  checkAuthenticationStatus(
-      {
-        required BuildContext context
-      }) async {
+  Future<http.Response> checkAuthenticationStatus(
+      {required BuildContext context}) async {
     const url = "$BASEURL/api/mobile/check_authentication_status";
 
+    http.Response response = await http.post(Uri.parse(url), headers: {
+      "Authorization": HydratedBloc.storage.read("token") ?? "notAuthenticated"
+    });
 
-    http.Response response = await http.post(Uri.parse(url),
-        headers: {
-    "Authorization": HydratedBloc.storage.read("token") ?? "notAuthenticated"
-    } );
-
-
-    if(response.statusCode == 401){
-      AppFunctions().snackbar(context, "Your session expired please log in again", Colors.red);
+    if (response.statusCode == 401) {
+      AppFunctions().snackbar(
+          context, "Your session expired please log in again", Colors.red);
       await HydratedBloc.storage.clear();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const AuthenticationWrapper()),
-              (Route<dynamic> route) => false);
+              builder: (BuildContext context) => const AuthenticationWrapper()),
+          (Route<dynamic> route) => false);
     }
 
     return response;
@@ -143,10 +130,9 @@ class Api {
       "lastName": middleName,
       "phone": phoneNumber,
       "password": password,
-      "profilePhoto":"https://firebasestorage.googleapis.com/v0/b/matibabu-1254d.appspot.com/o/images%2F%7Bcharlesmuchogo07%40gmail.com%7D?alt=media&token=63d32dda-9250-4569-ba04-d5dd010a41d4"
+      "profilePhoto":
+          "https://firebasestorage.googleapis.com/v0/b/matibabu-1254d.appspot.com/o/images%2F%7Bcharlesmuchogo07%40gmail.com%7D?alt=media&token=63d32dda-9250-4569-ba04-d5dd010a41d4"
     };
-
-
 
     Response response = await dio.post(
       url,
@@ -155,5 +141,3 @@ class Api {
     return response;
   }
 }
-
-

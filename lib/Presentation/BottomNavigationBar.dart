@@ -20,21 +20,30 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   int selectedPageIndex = 0;
 
-
   void selectPage(int index) {
     setState(() {
       selectedPageIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[selectedPageIndex]["page"],
       bottomNavigationBar: NavigationBar(
-        destinations: pages.map((e) => NavigationDestination(
-          icon: Icon(e["icon"], color: e["label"] == pages[selectedPageIndex]["label"] ? Colors.white : Colors.grey,) ,
-          label: e["label"],
-        ),) .toList(),
+        destinations: pages
+            .map(
+              (e) => NavigationDestination(
+                icon: Icon(
+                  e["icon"],
+                  color: e["label"] == pages[selectedPageIndex]["label"]
+                      ? Colors.white
+                      : Colors.grey,
+                ),
+                label: e["label"],
+              ),
+            )
+            .toList(),
         selectedIndex: selectedPageIndex,
         indicatorColor: Theme.of(context).primaryColor,
         onDestinationSelected: selectPage,

@@ -11,7 +11,6 @@ import 'package:research/bloc/Results/results_bloc.dart';
 import 'auth/authentication_wrapper.dart';
 import 'bloc/Login/login_bloc.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.notification.isDenied.then((value) {
@@ -35,27 +34,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ResultsBloc()..add(GetTestResults(context: context)),
+          create: (context) =>
+              ResultsBloc()..add(GetTestResults(context: context)),
         ),
         BlocProvider(
           create: (context) => LoginBloc(),
         ),
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Research',
-          theme: ThemeData(
-            useMaterial3: true,
-            primarySwatch: Colors.green,
-          ),
-          home: AuthenticationWrapper()
+        debugShowCheckedModeBanner: false,
+        title: 'Research',
+        theme: ThemeData(
+          useMaterial3: true,
+          primarySwatch: Colors.green,
+        ),
+        home: AuthenticationWrapper(),
       ),
     );
   }

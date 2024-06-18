@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../../bloc/Login/login_bloc.dart';
 import '../Presentation/BottomNavigationBar.dart';
@@ -25,6 +28,13 @@ class _SignUpState extends State<SignUp> {
 
   final formKey = GlobalKey<FormState>();
   bool _obscureText = true;
+
+  final TextEditingController controller = TextEditingController();
+
+  String localeName = Platform.localeName;
+
+  String initialCountry = 'KE';
+  PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +61,25 @@ class _SignUpState extends State<SignUp> {
                 textForm("Last Name", TextInputType.text),
                 textForm("Email", TextInputType.emailAddress),
                 textForm("Phone Number", TextInputType.number),
+
+                Container(
+                  margin: EdgeInsets.only(left: 4.0),
+                  child: InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      print(number.phoneNumber);
+                    },
+                    selectorConfig: SelectorConfig(
+                      leadingPadding: 0,
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                      useBottomSheetSafeArea: true,
+                    ),
+                    initialValue: number,
+                    textFieldController: controller,
+                    formatInput: true,
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                  ),
+                ),
 
                 //password
                 TextFormField(
@@ -175,13 +204,14 @@ class _SignUpState extends State<SignUp> {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(5.0) //
-                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0) //
+                                      ),
                             ),
                             child: Text(
                               "Sign up",
-                              style: TextStyle(fontSize: 18, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ),
                         );
@@ -213,7 +243,6 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
                 Padding(padding: EdgeInsets.all(20)),
-
               ]),
             ),
           ),
