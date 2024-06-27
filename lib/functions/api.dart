@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:research/models/dto/UpdateUserDTO.dart';
 import 'package:research/models/dto/resultsDTO.dart';
 import '../auth/authentication_wrapper.dart';
 import 'package:http_parser/http_parser.dart';
@@ -137,6 +138,22 @@ class Api {
     Response response = await dio.post(
       url,
       data: data,
+    );
+    return response;
+  }
+
+  Future<Response> updateDetails({
+    required UpdateUserDTO userDTO,
+  }) async {
+    const url = "$BASEURL/api/mobile/user";
+
+    Response response = await dio.post(
+      options: Options(headers: {
+        "Authorization": HydratedBloc.storage.read("token"),
+        "Accept": "application/json",
+      }),
+      url,
+      data: userDTO.toJson(),
     );
     return response;
   }

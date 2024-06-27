@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/auth/signup.dart';
+import 'package:research/functions/app_functions.dart';
 import '../Presentation/BottomNavigationBar.dart';
 import '../bloc/Login/login_bloc.dart';
 
@@ -118,16 +119,7 @@ class _LoginState extends State<Login> {
                           }
 
                           if (state.status == LoginStatus.error) {
-                            final snackBar = SnackBar(
-                              content: Text("Login failed! Try again"),
-                              backgroundColor: (Colors.red),
-                              action: SnackBarAction(
-                                label: '',
-                                onPressed: () {},
-                              ),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            AppFunctions().snackbar(context, state.message, Colors.red);
                           }
                         },
                         builder: (context, state) {

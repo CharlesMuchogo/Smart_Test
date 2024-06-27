@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:research/Presentation/common/AppButton.dart';
 import 'package:research/Presentation/common/AppTextField.dart';
+import 'package:research/bloc/Login/login_bloc.dart';
+import 'package:research/functions/app_functions.dart';
+import 'package:research/functions/constants.dart';
+import 'package:research/models/dto/UpdateUserDTO.dart';
+
+import '../Presentation/common/AppLoadingButtonContent.dart';
 
 class DemographicDataPage extends StatefulWidget {
   const DemographicDataPage({super.key});
@@ -11,7 +18,7 @@ class DemographicDataPage extends StatefulWidget {
 }
 
 class _DemographicDataPageState extends State<DemographicDataPage> {
-  GlobalKey<FormState> _key = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController ageController = TextEditingController();
 
   List<String> educationChoices = [
@@ -45,7 +52,7 @@ class _DemographicDataPageState extends State<DemographicDataPage> {
         ),
       ),
       body: Form(
-        key: _key,
+        key: _formKey,
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 12),
           children: [
@@ -70,6 +77,9 @@ class _DemographicDataPageState extends State<DemographicDataPage> {
                     educationLevel = newValue.toString();
                   });
                 },
+                validator: (val) => educationLevel == null
+                    ? "Please select your education level"
+                    : null,
                 items: educationChoices.map((choice) {
                   return DropdownMenuItem(
                     child: Text(choice),
@@ -93,6 +103,8 @@ class _DemographicDataPageState extends State<DemographicDataPage> {
                     gender = newValue.toString();
                   });
                 },
+                validator: (val) =>
+                    gender == null ? "Please select your gender" : null,
                 items: genders.map((choice) {
                   return DropdownMenuItem(
                     child: Text(choice),
@@ -118,8 +130,38 @@ class _DemographicDataPageState extends State<DemographicDataPage> {
             ),
             SizedBox(height: 16),
             AppButton(
-              content: Text("Submit", style: TextStyle(color: Colors.white),),
-              onClick: (){},
+              content: BlocConsumer<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if(state.status == LoginStatus.failed){
+                    AppFunctions().snackbar(context, state.message, Colors.red);
+                  }
+                  if(state.status == LoginStatus.success){
+                    AppFunctions().snackbar(context, state.message, Colors.green);
+                  }
+                },
+                  builder: (context, state) {
+                  if(state.status == LoginStatus.loading){
+                    return AppLoadingButtonContent(message: "submitting...");
+                  }
+                  return Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
+                  );
+                },
+              ),
+              onClick: () {
+                if (!_formKey.currentState!.validate()) {
+                  return;
+                }
+                UpdateUserDTO userDTO = UpdateUserDTO(
+                    age: ageController.text,
+                    educationLevel: educationLevel!,
+                    testedBefore: testedBefore,
+                    gender: gender!);
+                context
+                    .read<LoginBloc>()
+                    .add(UpdateDetails(userDTO: userDTO, context: context));
+              },
             )
           ],
         ),

@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:research/models/dto/UpdateUserDTO.dart';
+import 'package:research/models/dto/login_response_dto.dart';
 
 import '../../functions/api.dart';
-import '../../models/user/user.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -17,6 +19,7 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
     on<GetLogin>(_onGetLogin);
     on<LoginInitial>(_onGetLoginStatus);
     on<updateProfile>(_onUpdateProfile);
+    on<UpdateDetails>(_onUpdateDetails);
     on<Signup>(onSignup);
     on<CheckAuthentication>(onCheckLogin);
   }
@@ -39,15 +42,17 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
         emit(state.copyWith(
             status: LoginStatus.failed, message: jsonBody["message"]));
       } else {
-        User user = User.fromJson(jsonBody['user']);
+        LoginResponseDTO loginResponseDTO = LoginResponseDTO.fromJson(jsonBody);
+        User user = loginResponseDTO.user;
+
         await HydratedBloc.storage.write("token", jsonBody['user']);
         await HydratedBloc.storage.write("firstname", user.firstName);
         await HydratedBloc.storage.write("email", user.email);
-        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("id", user.ID);
         await HydratedBloc.storage.write("lastName", user.lastName);
-        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("phonenumber", user.phone);
         await HydratedBloc.storage.write("status", true);
-        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("profile_photo", user.profilePhoto);
 
         emit(state.copyWith(
             status: LoginStatus.success,
@@ -92,24 +97,27 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
         emit(state.copyWith(
             status: LoginStatus.failed, message: jsonBody["message"]));
       } else {
-        User user = User.fromJson(jsonBody['user']);
+        LoginResponseDTO loginResponseDTO = LoginResponseDTO.fromJson(jsonBody);
+        User user = loginResponseDTO.user;
 
         await HydratedBloc.storage.write("token", jsonBody['token']);
         await HydratedBloc.storage.write("firstname", user.firstName);
         await HydratedBloc.storage.write("email", user.email);
-        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("id", user.ID);
         await HydratedBloc.storage.write("lastName", user.lastName);
-        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("phonenumber", user.phone);
         await HydratedBloc.storage.write("status", true);
-        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("profile_photo", user.profilePhoto);
 
         emit(state.copyWith(
             status: LoginStatus.success,
             message: jsonBody["message"],
             loggedIn: true));
       }
+    } on DioException catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.error, message: e.response?.data["message"]));
     } catch (e) {
-      log(e.toString());
       emit(state.copyWith(status: LoginStatus.error, message: e.toString()));
     }
   }
@@ -130,25 +138,66 @@ class LoginBloc extends HydratedBloc<LoginEvent, LoginState> {
         emit(state.copyWith(
             status: LoginStatus.failed, message: jsonBody["message"]));
       } else {
-        User user = User.fromJson(jsonBody['user']);
+        LoginResponseDTO loginResponseDTO = LoginResponseDTO.fromJson(jsonBody);
+        User user = loginResponseDTO.user;
+
+
 
         await HydratedBloc.storage.write("token", jsonBody['token']);
         await HydratedBloc.storage.write("firstname", user.firstName);
         await HydratedBloc.storage.write("email", user.email);
-        await HydratedBloc.storage.write("id", user.id);
+        await HydratedBloc.storage.write("id", user.ID);
         await HydratedBloc.storage.write("lastName", user.lastName);
-        await HydratedBloc.storage.write("phonenumber", user.phoneNumber);
+        await HydratedBloc.storage.write("phonenumber", user.phone);
         await HydratedBloc.storage.write("status", true);
-        await HydratedBloc.storage.write("profile_photo", user.profile_photo);
+        await HydratedBloc.storage.write("profile_photo", user.profilePhoto);
+        await HydratedBloc.storage.write("user", user.toJson());
 
         emit(state.copyWith(
             status: LoginStatus.success,
             message: jsonBody["message"],
             loggedIn: true));
       }
+    } on DioException catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.error, message: e.response?.data["message"]));
     } catch (e) {
-      log("Error" + e.toString());
       emit(state.copyWith(status: LoginStatus.error, message: e.toString()));
+    }
+  }
+
+  void _onUpdateDetails(UpdateDetails event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(status: LoginStatus.loading));
+
+    try {
+      Response response = await Api().updateDetails(
+        userDTO: event.userDTO,
+      );
+
+      var jsonBody = response.data;
+
+      if (response.statusCode != 200) {
+      } else {
+        LoginResponseDTO loginResponseDTO = LoginResponseDTO.fromJson(jsonBody);
+        User user = loginResponseDTO.user;
+
+        await HydratedBloc.storage.write("age", user.age);
+        await HydratedBloc.storage.write("gender", user.gender);
+        await HydratedBloc.storage.write("testedBefore", user.testedBefore);
+        await HydratedBloc.storage.write("educationLevel", user.educationLevel);
+
+        emit(
+          state.copyWith(
+            status: LoginStatus.success,
+            message: loginResponseDTO.message,
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.failed, message: e.response?.data["message"]));
+    } catch (e) {
+      emit(state.copyWith(status: LoginStatus.failed, message: e.toString()));
     }
   }
 

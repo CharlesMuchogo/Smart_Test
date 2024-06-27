@@ -59,8 +59,16 @@ class GetLogin extends LoginEvent {
 
 class CheckAuthentication extends LoginEvent {
   final BuildContext context;
-
   const CheckAuthentication({
+    required this.context,
+  });
+}
+
+class UpdateDetails extends LoginEvent {
+  final BuildContext context;
+  final UpdateUserDTO userDTO;
+  const UpdateDetails( {
+    required this.userDTO,
     required this.context,
   });
 }
