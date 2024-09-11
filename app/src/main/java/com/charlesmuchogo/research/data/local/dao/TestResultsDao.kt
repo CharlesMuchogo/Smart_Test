@@ -23,4 +23,7 @@ interface TestResultsDao {
 
     @Delete
     suspend fun deleteResult(result: TestResult)
+
+    @Query("DELETE FROM TESTRESULTS")
+    suspend fun deleteResults()
 }

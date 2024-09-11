@@ -63,6 +63,12 @@ class AuthenticationViewModel @Inject constructor (private  val database: AppDat
         }
     }
 
+    fun logout() {
+        viewModelScope.launch {
+            database.userDao().deleteUsers()
+            database.testResultsDao().deleteResults()
+        }
+    }
 
 
 }
