@@ -4,11 +4,13 @@ import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.ErrorDTO
+import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -41,6 +43,33 @@ class RemoteRepositoryImpl(private val apiHelper: ApiHelper, private val appData
                 } else {
                     val apiResponse = apiHelper.safeApiCall(response.status) {
                         response.body<LoginResponseDTO>()
+                    }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
+    }
+
+    override suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(appDatabase = appDatabase).client.get("/api/mobile/results") {
+                        contentType(ContentType.Application.Json)
+                    }
+
+                if (response.status != HttpStatusCode.OK) {
+
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
+                        response.body<ErrorDTO>()
+                    }
+
+                    emit(Results.error(apiResponse.data?.message ?: "Error getting results"))
+                } else {
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
+                        response.body<GetTestResultsDTO>()
                     }
                     emit(apiResponse)
                 }

@@ -25,13 +25,7 @@ class InstructionsPage:Screen {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun InstructionsScreen(modifier: Modifier = Modifier) {
-    Scaffold(floatingActionButton = {
-        ExtendedFloatingActionButton(
-            onClick = {},
-            icon = { Icon(imageVector = Icons.Filled.Add, "Extended floating action button.") },
-            text = { Text(text = "Take a test") },
-        )
-    }) {
+    Scaffold {
         CenteredColumn(modifier = Modifier) {
             Text(text = "Instructions Page")
         }

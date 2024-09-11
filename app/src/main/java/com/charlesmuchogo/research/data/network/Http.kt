@@ -70,7 +70,7 @@ class Http(private val appDatabase: AppDatabase) {
 
     companion object{
         fun httpUrlBuilder(): String {
-            return "http://192.168.0.104:9000"
+            return "http://13.244.41.201:9000"
         }
     }
 }
