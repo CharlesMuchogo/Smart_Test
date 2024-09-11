@@ -3,7 +3,9 @@ package com.charlesmuchogo.research.presentation.authentication
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,7 +45,6 @@ class ForgotPasswordPage : Screen {
 fun ForgotPasswordScreen(modifier: Modifier = Modifier) {
     val navigator = LocalNavigator.currentOrThrow
     var email by remember { mutableStateOf("") }
-    var subdomain by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -58,12 +59,13 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier) {
     ) { paddingValues ->
         LazyColumn(modifier = modifier.padding(paddingValues).padding(horizontal = 8.dp)) {
             item {
+                Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_launcher_background),
+                        painter = painterResource(R.drawable.icon),
                         contentDescription = null,
                         modifier = Modifier
                             .size(width = 200.dp, height = 200.dp).padding(vertical = 20.dp)

@@ -75,12 +75,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         ) {
 
             item {
+                Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_launcher_background),
+                        painter = painterResource(R.drawable.icon),
                         contentDescription = null,
                         modifier = Modifier
                             .size(width = 200.dp, height = 200.dp)
