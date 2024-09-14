@@ -31,65 +31,69 @@ fun ProfileIcon(
     photoSize: Dp = 50.dp,
     iconSize: Dp = 30.dp,
     icon: ImageVector = Icons.Default.Person,
-    onclick: () -> Unit
+    onclick: () -> Unit,
 ) {
-
     val hasImage = !image.isNullOrBlank()
     val photoModifier = modifier.size(photoSize).clip(CircleShape)
     Box(
-        modifier = photoModifier
-            .background(MaterialTheme.colorScheme.primary).clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { onclick.invoke() }
-            ),
-        contentAlignment = Alignment.Center
+        modifier =
+            photoModifier
+                .background(MaterialTheme.colorScheme.primary)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onclick.invoke() },
+                ),
+        contentAlignment = Alignment.Center,
     ) {
         if (hasImage) {
             SubcomposeAsyncImage(
-                modifier = Modifier.fillMaxSize().clip(
-                    RoundedCornerShape(4)
-                ),
+                modifier =
+                    Modifier.fillMaxSize().clip(
+                        RoundedCornerShape(4),
+                    ),
                 model = image,
                 contentScale = ContentScale.Crop,
                 contentDescription = image,
                 loading = {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center),
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator(
                             color = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier
-                                .size(30.dp)
+                            modifier =
+                                Modifier
+                                    .size(30.dp),
                         )
                     }
                 },
                 error = {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             tint = MaterialTheme.colorScheme.onPrimary,
                             imageVector = icon,
                             contentDescription = image,
-                            modifier = Modifier.size(iconSize)
+                            modifier = Modifier.size(iconSize),
                         )
                     }
-                }
+                },
             )
-
         } else {
             Icon(
                 tint = MaterialTheme.colorScheme.onPrimary,
                 imageVector = icon,
                 contentDescription = image,
-                modifier = Modifier.size(iconSize)
+                modifier = Modifier.size(iconSize),
             )
         }
     }

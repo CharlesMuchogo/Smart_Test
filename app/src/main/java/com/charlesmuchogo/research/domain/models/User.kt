@@ -19,5 +19,5 @@ data class User(
     val phone: String,
     val profilePhoto: String,
     val token: String? = null,
-    val testedBefore: Boolean
+    val testedBefore: Boolean,
 )

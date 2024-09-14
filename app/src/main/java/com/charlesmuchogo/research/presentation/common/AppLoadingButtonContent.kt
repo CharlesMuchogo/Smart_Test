@@ -18,17 +18,17 @@ import androidx.compose.ui.unit.dp
 fun AppLoginButtonContent(message: String = "Submitting...") {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             CircularProgressIndicator(
                 color = Color.White,
                 modifier = Modifier.size(25.dp),
-                strokeWidth = 2.dp
+                strokeWidth = 2.dp,
             )
             Text(modifier = Modifier.padding(horizontal = 10.dp), text = message)
         }

@@ -53,44 +53,44 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier) {
                         Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                     }
                 },
-                title = { Text("Forgot Password?") }
+                title = { Text("Forgot Password?") },
             )
-        }
+        },
     ) { paddingValues ->
         LazyColumn(modifier = modifier.padding(paddingValues).padding(horizontal = 8.dp)) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Image(
                         painter = painterResource(R.drawable.icon),
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(width = 200.dp, height = 200.dp).padding(vertical = 20.dp)
+                        modifier =
+                            Modifier
+                                .size(width = 200.dp, height = 200.dp)
+                                .padding(vertical = 20.dp),
                     )
                 }
             }
 
             item {
-
                 AppTextField(
                     label = "Email",
                     value = email,
                     onValueChanged = { email = it },
                     error = null,
                     placeholder = "johndoe@email.com",
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Email,
                 )
 
                 AppButton(
                     onClick = {
-
                     },
                     content = {
                         Text("Reset password")
-                    }
+                    },
                 )
             }
         }

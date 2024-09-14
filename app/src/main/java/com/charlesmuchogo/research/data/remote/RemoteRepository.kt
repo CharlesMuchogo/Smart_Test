@@ -8,5 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
     suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>>
+
     suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>>
 }

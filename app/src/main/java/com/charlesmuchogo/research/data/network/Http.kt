@@ -1,8 +1,6 @@
 package com.charlesmuchogo.research.data.network
 
-
 import com.charlesmuchogo.research.data.local.AppDatabase
-import com.charlesmuchogo.research.data.remote.RemoteRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
@@ -17,24 +15,31 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
-class Http(private val appDatabase: AppDatabase) {
-
+class Http(
+    private val appDatabase: AppDatabase,
+) {
     private var token: String? = null
 
     init {
         runBlocking {
-            token = appDatabase.userDao().getUser().firstOrNull()?.token
+            token =
+                appDatabase
+                    .userDao()
+                    .getUser()
+                    .firstOrNull()
+                    ?.token
         }
     }
 
     val client by lazy {
         HttpClient(OkHttp.create {}) {
             install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        println(message)
+                logger =
+                    object : Logger {
+                        override fun log(message: String) {
+                            println(message)
+                        }
                     }
-                }
                 level = LogLevel.ALL
             }
 
@@ -49,11 +54,12 @@ class Http(private val appDatabase: AppDatabase) {
             }
 
             install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                }
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
                 )
             }
 
@@ -68,9 +74,7 @@ class Http(private val appDatabase: AppDatabase) {
         }
     }
 
-    companion object{
-        fun httpUrlBuilder(): String {
-            return "http://13.244.41.201:9000"
-        }
+    companion object {
+        fun httpUrlBuilder(): String = "http://13.244.41.201:9000"
     }
 }

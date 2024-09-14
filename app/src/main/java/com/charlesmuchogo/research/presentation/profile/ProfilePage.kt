@@ -76,17 +76,14 @@ class ProfilePage : Screen {
                     },
                     title = {
                         Text("Profile")
-                    }
+                    },
                 )
-            }
+            },
         ) {
             ProfileScreen(modifier = Modifier.padding(it))
         }
-
     }
-
 }
-
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier) {
@@ -94,9 +91,10 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
     val profileState = profileViewModel.profileStatus.collectAsStateWithLifecycle().value
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondaryContainer)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.secondaryContainer),
     ) {
         when (profileState.status) {
             ResultStatus.INITIAL, ResultStatus.LOADING -> {
@@ -115,22 +113,21 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                 profileState.data?.let { ProfileListView(profile = it) }
             }
         }
-
     }
 }
 
 @Composable
-fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
+fun ProfileListView(
+    profile: User,
+    modifier: Modifier = Modifier,
+) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
 
-    val darkTheme =  false
-
-
+    val darkTheme = false
 
     if (showLogoutDialog) {
-
         AppAlertDialog(
             onDismissRequest = { showLogoutDialog = false },
             onConfirmation = {
@@ -140,52 +137,53 @@ fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
             },
             dialogTitle = "Log out",
             dialogText = "You are about to log out",
-            icon = Icons.Default.Info
+            icon = Icons.Default.Info,
         )
     }
     LazyColumn(modifier = modifier.padding(horizontal = 8.dp)) {
         item {
             Box(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.18f)
-                    .shadow(1.dp, shape = RoundedCornerShape(4))
-                    .clip(
-                        RoundedCornerShape(4)
-                    )
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(vertical = 8.dp),
+                modifier =
+                    Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.18f)
+                        .shadow(1.dp, shape = RoundedCornerShape(4))
+                        .clip(
+                            RoundedCornerShape(4),
+                        ).background(MaterialTheme.colorScheme.background)
+                        .padding(vertical = 8.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
                     horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-
                     ProfileIcon(
                         image = profile.profilePhoto,
                         modifier = Modifier.clip(RoundedCornerShape(100)),
                         photoSize = 70.dp,
-                        onclick = {}
+                        onclick = {},
                     )
 
                     Column(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .weight(1f),
-                        verticalArrangement = Arrangement.Center
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 8.dp)
+                                .weight(1f),
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Text(
-                            profile.firstName + " "+ profile.lastName,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                            profile.firstName + " " + profile.lastName,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                         )
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Normal),
-                            text = profile.email
+                            text = profile.email,
                         )
                     }
 
@@ -194,7 +192,7 @@ fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
                             imageVector = Icons.Default.Edit,
                             contentDescription = null,
                             modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -205,12 +203,12 @@ fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     "General",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
                 )
 
                 IconButton(onClick = {}) {
@@ -218,91 +216,85 @@ fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
                         imageVector = Icons.Default.Edit,
                         contentDescription = null,
                         modifier = Modifier.size(25.dp),
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
-
-
             }
         }
 
         item {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(1.dp, shape = RoundedCornerShape(4))
-                    .clip(
-                        RoundedCornerShape(4)
-                    )
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(vertical = 8.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .shadow(1.dp, shape = RoundedCornerShape(4))
+                        .clip(
+                            RoundedCornerShape(4),
+                        ).background(MaterialTheme.colorScheme.background)
+                        .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
                     ProfileCard(
                         modifier = Modifier,
                         label = profile.firstName + " " + profile.lastName,
                         prefixIcon = Icons.Default.Person,
-                        onClick = {})
+                        onClick = {},
+                    )
 
                     ProfileCard(
                         modifier = Modifier,
                         label = profile.email,
                         prefixIcon = Icons.Default.Email,
-                        onClick = {})
+                        onClick = {},
+                    )
 
-                        ProfileCard(
-                            modifier = Modifier,
-                            label = profile.phone,
-                            prefixIcon = Icons.Default.Phone,
-                            onClick = {})
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = profile.phone,
+                        prefixIcon = Icons.Default.Phone,
+                        onClick = {},
+                    )
 
-
-                        ProfileCard(
-                            modifier = Modifier,
-                            label = profile.educationLevel.ifBlank{ "N/A" },
-                            prefixIcon = Icons.Default.School,
-                            onClick = {})
-
-
-
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = profile.educationLevel.ifBlank { "N/A" },
+                        prefixIcon = Icons.Default.School,
+                        onClick = {},
+                    )
                 }
             }
-
-
         }
 
         item {
             Text(
                 "Preferences",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp),
             )
         }
 
         item {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(1.dp, shape = RoundedCornerShape(4))
-                    .clip(
-                        RoundedCornerShape(4)
-                    )
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(vertical = 8.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .shadow(1.dp, shape = RoundedCornerShape(4))
+                        .clip(
+                            RoundedCornerShape(4),
+                        ).background(MaterialTheme.colorScheme.background)
+                        .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
                     ProfileCard(
                         modifier = Modifier,
                         label = "Dark Theme",
                         prefixIcon = if (darkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        onClick = {  },
+                        onClick = { },
                         trailingIcon = {
                             Switch(checked = darkTheme, onCheckedChange = {
-
                             })
-                        })
-
-
+                        },
+                    )
 
                     ProfileCard(
                         modifier = Modifier,
@@ -316,17 +308,14 @@ fun ProfileListView(profile: User, modifier: Modifier = Modifier) {
                                 imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
                                 contentDescription = null,
                             )
-                        }
+                        },
                     )
                 }
             }
             Spacer(Modifier.padding(top = 8.dp))
         }
-
-
     }
 }
-
 
 @Composable
 fun ProfileCard(
@@ -334,24 +323,26 @@ fun ProfileCard(
     prefixIcon: ImageVector,
     label: String,
     trailingIcon: @Composable () -> Unit = {},
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .clickable(
-                onClick = { onClick.invoke() },
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .clickable(
+                    onClick = { onClick.invoke() },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(4.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = prefixIcon, contentDescription = label)
@@ -363,4 +354,3 @@ fun ProfileCard(
         }
     }
 }
-

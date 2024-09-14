@@ -47,7 +47,6 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-
 class LoginPage : Screen {
     @Composable
     override fun Content() {
@@ -57,7 +56,6 @@ class LoginPage : Screen {
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
-
     Scaffold { padding ->
         val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
         val loginStatus = authenticationViewModel.loginStatus.collectAsState().value
@@ -68,38 +66,38 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         var rememberMe by remember { mutableStateOf(true) }
         var passwordVisible by remember { mutableStateOf(false) }
         LazyColumn(
-            modifier = modifier
-                .padding(padding)
-                .padding(horizontal = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                modifier
+                    .padding(padding)
+                    .padding(horizontal = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Image(
                         painter = painterResource(R.drawable.icon),
                         contentDescription = null,
-                        modifier = Modifier
-                            .size(width = 200.dp, height = 200.dp)
-                            .padding(vertical = 8.dp)
+                        modifier =
+                            Modifier
+                                .size(width = 200.dp, height = 200.dp)
+                                .padding(vertical = 8.dp),
                     )
                 }
                 Text(
                     "Log in to your account",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold)
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
                     "Welcome back! Please enter your details to continue.",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = Normal)
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = Normal),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
-
 
             item {
                 AppTextField(
@@ -108,7 +106,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     onValueChanged = { email = it },
                     error = null,
                     placeholder = "johndoe@email.com",
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Email,
                 )
             }
 
@@ -128,41 +126,43 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         }) {
                             Icon(
                                 imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                contentDescription = "show password"
+                                contentDescription = "show password",
                             )
                         }
-                    }
+                    },
                 )
             }
 
             item {
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = rememberMe,
-                            onCheckedChange = { isChecked -> rememberMe = isChecked }
+                            onCheckedChange = { isChecked -> rememberMe = isChecked },
                         )
                         Text(
                             "Remember me",
                             style = MaterialTheme.typography.labelLarge.copy(fontWeight = SemiBold),
                         )
                     }
-                    Text("Forgot password?",
-                        style = MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = SemiBold,
-                            color = MaterialTheme.colorScheme.primary
-                        ),
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .clickable {
-                                navigator.push(ForgotPasswordPage())
-                            })
-
+                    Text(
+                        "Forgot password?",
+                        style =
+                            MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = SemiBold,
+                                color = MaterialTheme.colorScheme.primary,
+                            ),
+                        modifier =
+                            Modifier
+                                .padding(top = 16.dp)
+                                .clickable {
+                                    navigator.push(ForgotPasswordPage())
+                                },
+                    )
                 }
             }
 
@@ -170,7 +170,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 loginStatus.message?.let {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         Text(it, color = MaterialTheme.colorScheme.error)
                     }
@@ -178,20 +178,20 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
                 AppButton(
                     onClick = {
-                       authenticationViewModel.login(
-                            loginRequestDTO = LoginRequestDTO(
-                                email = email.lowercase().trim(),
-                                password = password,
-                            ),
+                        authenticationViewModel.login(
+                            loginRequestDTO =
+                                LoginRequestDTO(
+                                    email = email.lowercase().trim(),
+                                    password = password,
+                                ),
                         )
-
-
                     },
                     content = {
                         when (loginStatus.status) {
                             ResultStatus.INITIAL,
 
-                            ResultStatus.ERROR -> {
+                            ResultStatus.ERROR,
+                            -> {
                                 Text("Log in")
                             }
 
@@ -204,22 +204,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                                 AppLoginButtonContent(message = "Authenticating...")
                             }
                         }
-
-
-                    }
+                    },
                 )
             }
-
         }
-
     }
 }
-
-
-
-
-
-
-
-
-

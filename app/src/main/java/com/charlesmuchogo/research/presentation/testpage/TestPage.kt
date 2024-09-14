@@ -54,10 +54,11 @@ class TestPage : Screen {
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { navigator.pop() }) {
-                      Icon(imageVector = Icons.Default.Close, contentDescription = "Back" )
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                     }
                 },
-                title = { Text(text = "Take a test") })
+                title = { Text(text = "Take a test") },
+            )
         }) { values ->
             Column(modifier = Modifier.padding(values).fillMaxSize()) {
                 TabRow(
@@ -70,20 +71,34 @@ class TestPage : Screen {
                             onClick = { testResultsViewModel.updateCurrentTab(tab = index) },
                             text = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-
                                     Icon(
                                         imageVector = if (currentTab == index) item.selectedIcon else item.unSelectedIcon,
-                                        tint = if (currentTab == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
-                                        contentDescription = item.title
+                                        tint =
+                                            if (currentTab ==
+                                                index
+                                            ) {
+                                                MaterialTheme.colorScheme.primary
+                                            } else {
+                                                MaterialTheme.colorScheme.onBackground
+                                            },
+                                        contentDescription = item.title,
                                     )
 
                                     Text(
                                         modifier = Modifier.padding(horizontal = 8.dp),
                                         text = item.title,
-                                        style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = if (currentTab == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
-                                        )
+                                        style =
+                                            MaterialTheme.typography.bodyMedium.copy(
+                                                fontWeight = FontWeight.SemiBold,
+                                                color =
+                                                    if (currentTab ==
+                                                        index
+                                                    ) {
+                                                        MaterialTheme.colorScheme.primary
+                                                    } else {
+                                                        MaterialTheme.colorScheme.onBackground
+                                                    },
+                                            ),
                                     )
                                 }
                             },
@@ -95,16 +110,17 @@ class TestPage : Screen {
                     state = pagerState,
                 ) { page ->
                     when (page) {
-                        0 -> SingleTestScreen(
-                            modifier = Modifier,
-                        )
+                        0 ->
+                            SingleTestScreen(
+                                modifier = Modifier,
+                            )
 
-                        1 -> CoupleTestScreen(
-                            modifier = Modifier,
-                        )
+                        1 ->
+                            CoupleTestScreen(
+                                modifier = Modifier,
+                            )
                     }
                 }
-
             }
         }
     }

@@ -17,15 +17,16 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlin.coroutines.coroutineContext
 
-class RemoteRepositoryImpl(private val apiHelper: ApiHelper, private val appDatabase: AppDatabase): RemoteRepository {
-    override suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>> {
-        return flow {
+class RemoteRepositoryImpl(
+    private val apiHelper: ApiHelper,
+    private val appDatabase: AppDatabase,
+) : RemoteRepository {
+    override suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>> =
+        flow {
             try {
                 val response =
                     Http(appDatabase = appDatabase).client.post("/api/login") {
@@ -34,26 +35,26 @@ class RemoteRepositoryImpl(private val apiHelper: ApiHelper, private val appData
                     }
 
                 if (response.status != HttpStatusCode.OK) {
-
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<ErrorDTO>()
-                    }
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
 
                     emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
                 } else {
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<LoginResponseDTO>()
-                    }
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<LoginResponseDTO>()
+                        }
                     emit(apiResponse)
                 }
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
         }.flowOn(Dispatchers.Main)
-    }
 
-    override suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>> {
-        return flow {
+    override suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>> =
+        flow {
             try {
                 val response =
                     Http(appDatabase = appDatabase).client.get("/api/mobile/results") {
@@ -61,22 +62,21 @@ class RemoteRepositoryImpl(private val apiHelper: ApiHelper, private val appData
                     }
 
                 if (response.status != HttpStatusCode.OK) {
-
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<ErrorDTO>()
-                    }
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
 
                     emit(Results.error(apiResponse.data?.message ?: "Error getting results"))
                 } else {
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<GetTestResultsDTO>()
-                    }
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<GetTestResultsDTO>()
+                        }
                     emit(apiResponse)
                 }
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
         }.flowOn(Dispatchers.Main)
-    }
-
 }

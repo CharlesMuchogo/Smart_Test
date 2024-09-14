@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class LoginResponseDTO(
     val message: String,
     val token: String,
-    val user: User
+    val user: User,
 )

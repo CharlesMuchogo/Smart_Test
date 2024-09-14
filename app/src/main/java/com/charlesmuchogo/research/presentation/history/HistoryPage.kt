@@ -39,7 +39,8 @@ fun HistoryScreen(modifier: Modifier = Modifier) {
 
     when (testResultsStatus.status) {
         ResultStatus.INITIAL,
-        ResultStatus.LOADING -> {
+        ResultStatus.LOADING,
+        -> {
             CenteredColumn(modifier = Modifier) {
                 CircularProgressIndicator()
             }
@@ -64,23 +65,29 @@ fun HistoryScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TestResultsListView(modifier: Modifier = Modifier, results: List<TestResult>) {
+fun TestResultsListView(
+    modifier: Modifier = Modifier,
+    results: List<TestResult>,
+) {
     LazyColumn(modifier = Modifier.padding(horizontal = 8.dp)) {
         items(results) { result ->
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .padding(vertical = 4.dp),
-                onClick = { }) {
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(vertical = 4.dp),
+                onClick = { },
+            ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                 ) {
-                  Text(text = result.results)
+                    Text(text = result.results)
                     Text(text = result.care_option)
                     Text(text = result.date)
                 }

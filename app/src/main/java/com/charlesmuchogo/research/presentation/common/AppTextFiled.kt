@@ -40,7 +40,7 @@ fun AppTextField(
     focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
     modifier: Modifier = Modifier,
-    trailingIcon: @Composable () -> Unit = {}
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     Column(modifier) {
         var currentError by remember { mutableStateOf(error) }
@@ -48,17 +48,18 @@ fun AppTextField(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                modifier = Modifier.padding(vertical = 5.dp)
+                modifier = Modifier.padding(vertical = 5.dp),
             )
         }
 
         OutlinedTextField(
             value = value,
             placeholder = { Text(text = placeholder, color = Color.Gray) },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType,
-                imeAction = imeAction
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = keyboardType,
+                    imeAction = imeAction,
+                ),
             onValueChange = {
                 if (it.length <= maxCharacters) {
                     onValueChanged(it)
@@ -71,31 +72,30 @@ fun AppTextField(
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             trailingIcon = trailingIcon,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = focusedBorderColor,
-                unfocusedBorderColor = unfocusedBorderColor
-            )
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = focusedBorderColor,
+                    unfocusedBorderColor = unfocusedBorderColor,
+                ),
         )
 
         if (maxCharacters != Int.MAX_VALUE) {
-        Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.End),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().align(Alignment.End),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
                     text = currentError ?: " ",
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.labelLarge
-
+                    style = MaterialTheme.typography.labelLarge,
                 )
-            
+
                 Text(
-                    "${value.length}/${maxCharacters}",
-                    style = MaterialTheme.typography.bodyMedium
+                    "${value.length}/$maxCharacters",
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
     }
 }
-    

@@ -17,34 +17,31 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
     fun provideDatabase(
-        @ApplicationContext context: Context
-    ): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "SmartApp_db"
-        ).fallbackToDestructiveMigration().build()
-    }
+        @ApplicationContext context: Context,
+    ): AppDatabase =
+        Room
+            .databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                "SmartApp_db",
+            ).fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     @Singleton
-    fun provideHttp(appDatabase: AppDatabase): Http {
-        return Http(appDatabase)
-    }
+    fun provideHttp(appDatabase: AppDatabase): Http = Http(appDatabase)
 
     @Provides
     @Singleton
-    fun provideApiHelper(): ApiHelper {
-        return ApiHelper()
-    }
+    fun provideApiHelper(): ApiHelper = ApiHelper()
 
     @Provides
     @Singleton
-    fun provideRemoteRepository(apiHelper: ApiHelper, appDatabase: AppDatabase): RemoteRepository {
-        return RemoteRepositoryImpl(apiHelper, appDatabase)
-    }
+    fun provideRemoteRepository(
+        apiHelper: ApiHelper,
+        appDatabase: AppDatabase,
+    ): RemoteRepository = RemoteRepositoryImpl(apiHelper, appDatabase)
 }

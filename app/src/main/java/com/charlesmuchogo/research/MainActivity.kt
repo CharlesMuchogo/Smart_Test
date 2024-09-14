@@ -15,45 +15,49 @@ import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.utils.ProvideAppNavigator
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
-import com.charlesmuchogo.research.ui.theme.SmartTestTheme
 import dagger.hilt.android.AndroidEntryPoint
+import ui.theme.SmartTestTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
-            SmartTestTheme {
+            SmartTestTheme(dynamicColor = false, darkTheme = false) {
                 val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-                val profileStatus = authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
-                when(profileStatus.status){
+                val profileStatus =
+                    authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
+                when (profileStatus.status) {
                     ResultStatus.INITIAL,
-                    ResultStatus.LOADING -> {
+                    ResultStatus.LOADING,
+                    -> {
                         CenteredColumn {
                             CircularProgressIndicator()
                         }
                     }
+
                     ResultStatus.ERROR -> {
                         Navigator(
                             screen = LoginPage(),
                             content = { navigator ->
                                 ProvideAppNavigator(
                                     navigator = navigator,
-                                    content = { FadeTransition(navigator = navigator) }
+                                    content = { FadeTransition(navigator = navigator) },
                                 )
-                            }
+                            },
                         )
                     }
+
                     ResultStatus.SUCCESS -> {
                         Navigator(
                             screen = if (profileStatus.data != null) HomePage() else LoginPage(),
                             content = { navigator ->
                                 ProvideAppNavigator(
                                     navigator = navigator,
-                                    content = { FadeTransition(navigator = navigator) }
+                                    content = { FadeTransition(navigator = navigator) },
                                 )
-                            }
+                            },
                         )
                     }
                 }
@@ -61,4 +65,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

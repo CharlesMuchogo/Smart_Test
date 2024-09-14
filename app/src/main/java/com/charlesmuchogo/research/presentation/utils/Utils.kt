@@ -9,7 +9,10 @@ import cafe.adriel.voyager.navigator.Navigator
 val LocalAppNavigator: ProvidableCompositionLocal<Navigator?> = staticCompositionLocalOf { null }
 
 @Composable
-fun ProvideAppNavigator(navigator: Navigator, content: @Composable () -> Unit) {
+fun ProvideAppNavigator(
+    navigator: Navigator,
+    content: @Composable () -> Unit,
+) {
     CompositionLocalProvider(LocalAppNavigator provides navigator) {
         content()
     }
