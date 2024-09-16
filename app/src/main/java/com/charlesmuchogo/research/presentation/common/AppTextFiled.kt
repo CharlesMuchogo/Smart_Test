@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppTextField(
+    modifier: Modifier = Modifier,
     label: String = "",
     value: String,
     placeholder: String,
@@ -39,7 +40,6 @@ fun AppTextField(
     imeAction: ImeAction = ImeAction.Next,
     focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
     unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-    modifier: Modifier = Modifier,
     trailingIcon: @Composable () -> Unit = {},
 ) {
     Column(modifier) {

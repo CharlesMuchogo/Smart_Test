@@ -58,13 +58,15 @@ class HomePage : Screen {
                     CenterAlignedTopAppBar(title = {
                         Text(
                             tabNavigator.current.options.title,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     })
                 },
                 floatingActionButton = {
                     if (tabNavigator.current != BottomNavigationTabs.ProfileTab) {
                         ExtendedFloatingActionButton(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
                             onClick = {
                                 navigator.push(TestPage())
                             },

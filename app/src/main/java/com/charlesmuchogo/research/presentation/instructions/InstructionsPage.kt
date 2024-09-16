@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.charlesmuchogo.research.R
@@ -72,7 +73,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Second Instructions
-            Text(text = SECOND_INSTRUCTIONS)
+            Text(text = SECOND_INSTRUCTIONS, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
             Image(
                 painter = painterResource(R.drawable.pdf1),
                 contentDescription = null,
@@ -91,7 +92,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Step Two Instructions
-            Text(text = STEP_TWO_INSTRUCTIONS)
+            Text(text = STEP_TWO_INSTRUCTIONS, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
             Image(
                 painter = painterResource(R.drawable.pdf2),
                 contentDescription = null,
@@ -110,7 +111,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Step Three Instructions
-            Text(text = STEP_THREE_INSTRUCTIONS)
+            Text(text = STEP_THREE_INSTRUCTIONS, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
             Image(
                 painter = painterResource(R.drawable.pdf3),
                 contentDescription = null,
@@ -144,7 +145,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Important Information
-            Text(text = IMPORTANT_INFORMATION)
+            Text(text = IMPORTANT_INFORMATION, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
 
             // Precautions Heading
             Text(
@@ -163,7 +164,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Precautions
-            Text(text = PRECAUTIONS)
+            Text(text = PRECAUTIONS, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
 
             // Reading Heading
             Text(
@@ -176,7 +177,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Reading
-            Text(text = READING)
+            Text(text = READING, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
 
             // Interpretation Heading
             Text(
@@ -188,7 +189,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             )
 
             // Interpretation Negative
-            Text(text = INTERPRETATION_NEGATIVE)
+            Text(text = INTERPRETATION_NEGATIVE, style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify))
 
             // Positive Test Head
             Text(

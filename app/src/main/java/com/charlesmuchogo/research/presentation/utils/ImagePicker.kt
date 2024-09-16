@@ -19,16 +19,13 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import java.io.ByteArrayOutputStream
 
-class ImagePicker {
+class ImagePicker(private val context: Context){
     private lateinit var getContent: ActivityResultLauncher<Intent>
     private lateinit var takePicture: ManagedActivityResultLauncher<Void?, Bitmap?>
-    private lateinit var context: Context
 
     @Composable
     fun RegisterPicker(onImagePicked: (ByteArray) -> Unit) {
         val activity = LocalContext.current as ComponentActivity
-        context = LocalContext.current
-
         getContent = rememberLauncherForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->

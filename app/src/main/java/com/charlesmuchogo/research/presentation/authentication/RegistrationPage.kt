@@ -1,9 +1,7 @@
 package com.charlesmuchogo.research.presentation.authentication
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +41,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
+import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.AppButton
@@ -53,72 +50,84 @@ import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class LoginPage : Screen {
+class RegistrationPage : Screen {
     @Composable
     override fun Content() {
-        LoginScreen(modifier = Modifier)
+        RegistrationScreen(modifier = Modifier)
     }
 }
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(modifier: Modifier = Modifier) {
+
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val loginStatus = authenticationViewModel.loginStatus.collectAsState().value
-
+    val registrationStatus = authenticationViewModel.registrationStatus.collectAsState().value
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    var rememberMe by remember { mutableStateOf(true) }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-
-    Scaffold(
-        bottomBar = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp)){
-                Text(text = "Don't have an account?", style = MaterialTheme.typography.bodyLarge)
-                 TextButton(onClick = { navigator.push(RegistrationPage())}){
-                    Text(text = "Sign up", style = MaterialTheme.typography.bodyLarge)
-                }
-            }
-        }
-    ){ padding ->
-
+    Scaffold { padding ->
         LazyColumn(
             verticalArrangement = Arrangement.Center,
-            modifier = modifier.fillMaxSize().padding(padding).padding(horizontal = 12.dp),
+            modifier =
+            modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.icon),
-                        contentDescription = null,
-                        modifier =
-                        Modifier
-                            .size(width = 150.dp, height = 150.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .padding(vertical = 8.dp),
-                    )
-                }
                 Text(
-                    "Log in to your account",
+                    "Create an account",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "Welcome back! Please enter your details to continue.",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = Normal),
+                    "Please enter your details to continue.",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = Normal),
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically ,modifier = Modifier.fillMaxWidth()){
+                    AppTextField(
+                        modifier = Modifier.weight(1f),
+                        label = "First Name",
+                        value = firstName,
+                        onValueChanged = { firstName = it },
+                        error = null,
+                        placeholder = "John",
+                        keyboardType = KeyboardType.Text,
+                    )
+                    AppTextField(
+                        modifier = Modifier.weight(1f),
+                        label = "Last Name",
+                        value = lastName,
+                        onValueChanged = { lastName = it },
+                        error = null,
+                        placeholder = "Doe",
+                        keyboardType = KeyboardType.Text,
+                    )
+                }
+            }
+
+
+            item {
+                AppTextField(
+                    label = "Phone Number",
+                    value = phone,
+                    onValueChanged = { phone = it },
+                    error = null,
+                    placeholder = "07123456789",
+                    keyboardType = KeyboardType.Phone,
+                )
             }
 
             item {
@@ -141,6 +150,29 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
                     passwordVisible = passwordVisible,
+                    imeAction = ImeAction.Next,
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisible = !passwordVisible
+                        }) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = "show password",
+                            )
+                        }
+                    },
+                )
+            }
+
+            item {
+                AppTextField(
+                    label = "Confirm Password",
+                    value = confirmPassword,
+                    onValueChanged = { confirmPassword = it },
+                    error = null,
+                    placeholder = "*********",
+                    keyboardType = KeyboardType.Password,
+                    passwordVisible = passwordVisible,
                     imeAction = ImeAction.Done,
                     trailingIcon = {
                         IconButton(onClick = {
@@ -156,40 +188,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             }
 
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = rememberMe,
-                            onCheckedChange = { isChecked -> rememberMe = isChecked },
-                        )
-                        Text(
-                            "Remember me",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = SemiBold),
-                        )
-                    }
-                    Text(
-                        "Forgot password?",
-                        style =
-                            MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = SemiBold,
-                                color = MaterialTheme.colorScheme.primary,
-                            ),
-                        modifier =
-                        Modifier
-                            .padding(top = 16.dp)
-                            .clickable {
-                                navigator.push(ForgotPasswordPage())
-                            },
-                    )
-                }
-            }
-
-            item {
-                loginStatus.message?.let {
+                registrationStatus.message?.let {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
@@ -200,20 +199,21 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
                 AppButton(
                     onClick = {
-                        authenticationViewModel.login(
-                            loginRequestDTO =
-                                LoginRequestDTO(
-                                    email = email.lowercase().trim(),
-                                    password = password,
-                                ),
+                        authenticationViewModel.register(
+                            registrationRequestDTO =
+                            RegistrationRequestDTO(
+                                firstName = firstName,
+                                lastName = lastName,
+                                phone = phone,
+                                email = email.lowercase().trim(),
+                                password = password,
+                            ),
                         )
                     },
                     content = {
-                        when (loginStatus.status) {
+                        when (registrationStatus.status) {
                             ResultStatus.INITIAL,
-
-                            ResultStatus.ERROR,
-                            -> {
+                            ResultStatus.ERROR -> {
                                 Text("Log in")
                             }
 
@@ -223,11 +223,26 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             }
 
                             ResultStatus.LOADING -> {
-                                AppLoginButtonContent(message = "Authenticating...")
+                                AppLoginButtonContent(message = "Signing up ...")
                             }
                         }
                     },
                 )
+            }
+
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(text = "Have an account?", style = MaterialTheme.typography.bodyLarge)
+                    TextButton(onClick = { navigator.pop() }) {
+                        Text(text = "Sign in", style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
             }
         }
     }

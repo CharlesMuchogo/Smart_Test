@@ -6,6 +6,7 @@ import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
+import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.events.AuthenticationEvent
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -18,27 +19,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthenticationViewModel
-    @Inject
-    constructor(
-        private val database: AppDatabase,
-        private val remoteRepository: RemoteRepository,
-    ) : ViewModel() {
-        val loginStatus =  MutableStateFlow(
-                Results<LoginResponseDTO>(
-                    data = null,
-                    message = null,
-                    status = ResultStatus.INITIAL,
-                ),
-            )
+@Inject
+constructor(
+    private val database: AppDatabase,
+    private val remoteRepository: RemoteRepository,
+) : ViewModel() {
+    val loginStatus = MutableStateFlow(
+        Results<LoginResponseDTO>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL,
+        ),
+    )
+    val registrationStatus = MutableStateFlow(
+        Results<LoginResponseDTO>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL,
+        ),
+    )
 
-        val profileStatus =
-            MutableStateFlow(
-                Results<User>(
-                    data = null,
-                    message = null,
-                    status = ResultStatus.INITIAL,
-                ),
-            )
+    val profileStatus =
+        MutableStateFlow(
+            Results<User>(
+                data = null,
+                message = null,
+                status = ResultStatus.INITIAL,
+            ),
+        )
 
 
     val authenticationEventState = MutableStateFlow(
@@ -55,39 +63,50 @@ class AuthenticationViewModel
     }
 
     init {
-            getCurrentUser()
-        }
+        getCurrentUser()
+    }
 
-        fun login(loginRequestDTO: LoginRequestDTO) {
-            viewModelScope.launch {
-                loginStatus.value = Results.loading()
-                remoteRepository.login(loginRequestDTO).collect { results ->
-                    results.data?.let { result ->
-                        database.userDao().insertUser(user = result.user.copy(token = result.token))
-                    }
-                    loginStatus.value = results
+    fun login(loginRequestDTO: LoginRequestDTO) {
+        viewModelScope.launch {
+            loginStatus.value = Results.loading()
+            remoteRepository.login(loginRequestDTO).collect { results ->
+                results.data?.let { result ->
+                    database.userDao().insertUser(user = result.user.copy(token = result.token))
                 }
-            }
-        }
-
-        fun getCurrentUser() {
-            viewModelScope.launch {
-                profileStatus.value = Results.loading()
-                database
-                    .userDao()
-                    .getUser()
-                    .catch {
-                        profileStatus.value = Results.error()
-                    }.collect {
-                        profileStatus.value = Results.success(it)
-                    }
-            }
-        }
-
-        fun logout() {
-            viewModelScope.launch {
-                database.userDao().deleteUsers()
-                database.testResultsDao().deleteResults()
+                loginStatus.value = results
             }
         }
     }
+    fun register(registrationRequestDTO: RegistrationRequestDTO) {
+        viewModelScope.launch {
+            registrationStatus.value = Results.loading()
+            remoteRepository.signUp(registrationRequestDTO).collect { results ->
+                results.data?.let { result ->
+                    database.userDao().insertUser(user = result.user.copy(token = result.token))
+                }
+                registrationStatus.value = results
+            }
+        }
+    }
+
+    private fun getCurrentUser() {
+        viewModelScope.launch {
+            profileStatus.value = Results.loading()
+            database
+                .userDao()
+                .getUser()
+                .catch {
+                    profileStatus.value = Results.error()
+                }.collect {
+                    profileStatus.value = Results.success(it)
+                }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            database.userDao().deleteUsers()
+            database.testResultsDao().deleteResults()
+        }
+    }
+}

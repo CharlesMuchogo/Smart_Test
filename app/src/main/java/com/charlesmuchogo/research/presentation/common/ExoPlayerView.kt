@@ -58,7 +58,6 @@ fun ExoPlayerView() {
         factory = { ctx ->
             playerView.apply {
                 player = exoPlayer
-
                 setOnClickListener {
                     isControllerVisible = !isControllerVisible
                     if (isControllerVisible) {

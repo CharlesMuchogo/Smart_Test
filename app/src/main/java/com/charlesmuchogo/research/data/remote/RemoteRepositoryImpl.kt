@@ -7,6 +7,7 @@ import com.charlesmuchogo.research.domain.dto.ErrorDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
+import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
 import io.ktor.client.call.body
@@ -52,6 +53,35 @@ class RemoteRepositoryImpl(
                 emit(Results.error(decodeExceptionMessage(e)))
             }
         }.flowOn(Dispatchers.Main)
+
+    override suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(appDatabase = appDatabase).client.post("/api/register") {
+                        contentType(ContentType.Application.Json)
+                        setBody(registrationRequestDTO)
+                    }
+
+                if (response.status != HttpStatusCode.Created) {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
+
+                    emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
+                } else {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<LoginResponseDTO>()
+                        }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
+    }
 
     override suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>> =
         flow {
