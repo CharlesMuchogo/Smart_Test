@@ -3,7 +3,6 @@ package com.charlesmuchogo.research
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -11,6 +10,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.authentication.LoginPage
+import com.charlesmuchogo.research.presentation.authentication.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.utils.ProvideAppNavigator
@@ -51,7 +51,15 @@ class MainActivity : ComponentActivity() {
 
                     ResultStatus.SUCCESS -> {
                         Navigator(
-                            screen = if (profileStatus.data != null) HomePage() else LoginPage(),
+                            screen = if (profileStatus.data != null) {
+                                if (profileStatus.data.age.isBlank() || profileStatus.data.educationLevel.isBlank()) {
+                                    MoreDetailsPage()
+                                } else {
+                                    HomePage()
+                                }
+                            } else {
+                                LoginPage()
+                            },
                             content = { navigator ->
                                 ProvideAppNavigator(
                                     navigator = navigator,

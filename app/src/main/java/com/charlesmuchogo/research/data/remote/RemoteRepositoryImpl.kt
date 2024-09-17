@@ -8,6 +8,8 @@ import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
+import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
 import io.ktor.client.call.body
@@ -69,11 +71,40 @@ class RemoteRepositoryImpl(
                             response.body<ErrorDTO>()
                         }
 
-                    emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
+                    emit(Results.error(apiResponse.data?.message ?: "Error signing up"))
                 } else {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {
                             response.body<LoginResponseDTO>()
+                        }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
+    }
+
+    override suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(appDatabase = appDatabase).client.post("/api/mobile/user") {
+                        contentType(ContentType.Application.Json)
+                        setBody(detailsDTO)
+                    }
+
+                if (response.status != HttpStatusCode.OK) {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
+
+                    emit(Results.error(apiResponse.data?.message ?: "Error updating your details. Try again"))
+                } else {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<UpdateUserDetailsResponseDTO>()
                         }
                     emit(apiResponse)
                 }
@@ -97,7 +128,7 @@ class RemoteRepositoryImpl(
                             response.body<ErrorDTO>()
                         }
 
-                    emit(Results.error(apiResponse.data?.message ?: "Error getting results"))
+                    emit(Results.error(apiResponse.data?.message ?: "Error getting results. Try again"))
                 } else {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {

@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "121837678657",
+    "firebase_url": "https://fir-demo-fb995-default-rtdb.firebaseio.com",
+    "project_id": "fir-demo-fb995",
+    "storage_bucket": "fir-demo-fb995.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121837678657:android:8ad8e6a115636a17b296c0",
+        "android_client_info": {
+          "package_name": "com.charlesmuchogo.research"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtEi3N-9DkEjZX86azrqkzHkCXc20gCJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121837678657:android:8a7ca4a97f876a8fb296c0",
+        "android_client_info": {
+          "package_name": "com.example.research"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121837678657-a87cma9ivobpe9abj6griupsjl4ck4ld.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.research",
+            "certificate_hash": "f52dcd4aed8d4851dde3baa60d2e46bf58a3944b"
+          }
+        },
+        {
+          "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtEi3N-9DkEjZX86azrqkzHkCXc20gCJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121837678657:android:8cb49620d53edd7bb296c0",
+        "android_client_info": {
+          "package_name": "com.example.ru_foody"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtEi3N-9DkEjZX86azrqkzHkCXc20gCJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121837678657-bbja3e4s67o50b9d89mv4b16062v2ijn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

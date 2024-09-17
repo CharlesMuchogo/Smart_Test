@@ -7,6 +7,8 @@ import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
+import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
 import com.charlesmuchogo.research.domain.events.AuthenticationEvent
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -56,6 +58,13 @@ constructor(
             message = null
         )
     )
+    val completeRegistrationState = MutableStateFlow(
+        Results<UpdateUserDetailsResponseDTO>(
+            status = ResultStatus.INITIAL,
+            data = null,
+            message = null
+        )
+    )
 
     fun updateAuthenticationEvent(authenticationEvent: AuthenticationEvent) {
         authenticationEventState.value = Results.initial()
@@ -86,6 +95,18 @@ constructor(
                 }
                 registrationStatus.value = results
             }
+        }
+    }
+
+    fun updateUserDetails(details: UpdateUserDetailsDTO){
+        viewModelScope.launch {
+            completeRegistrationState.value = Results.loading()
+          remoteRepository.completeRegistration(detailsDTO = details).collect{ results ->
+              results.data?.let {
+                  database.userDao().updateUser(user = it.user)
+              }
+              completeRegistrationState.value = results
+          }
         }
     }
 
