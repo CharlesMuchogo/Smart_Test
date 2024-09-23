@@ -1,9 +1,14 @@
 package com.charlesmuchogo.research.presentation.utils
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import cafe.adriel.voyager.navigator.Navigator
 
 val LocalAppNavigator: ProvidableCompositionLocal<Navigator?> = staticCompositionLocalOf { null }
@@ -16,6 +21,21 @@ fun ProvideAppNavigator(
     CompositionLocalProvider(LocalAppNavigator provides navigator) {
         content()
     }
+}
+
+const val PERMISSION_REQUEST_CODE = 123
+
+@SuppressLint("InlinedApi")
+@Composable
+fun RequestPermissions() {
+    val context = LocalContext.current as Activity
+    ActivityCompat.requestPermissions(
+        context,
+        arrayOf(
+            Manifest.permission.CAMERA
+        ),
+        PERMISSION_REQUEST_CODE
+    )
 }
 
 fun decodeExceptionMessage(e: Exception): String {

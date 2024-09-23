@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.testpage
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +27,7 @@ class CoupleTestPage : Screen {
 fun CoupleTestScreen(modifier: Modifier = Modifier) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 
-    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally){
+    LazyColumn(modifier = Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally){
         item {
             TestProgress(
                 content = "20:00",

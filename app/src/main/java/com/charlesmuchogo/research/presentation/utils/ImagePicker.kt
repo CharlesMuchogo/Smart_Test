@@ -19,26 +19,11 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import java.io.ByteArrayOutputStream
 
-class ImagePicker(private val context: Context){
-    private lateinit var getContent: ActivityResultLauncher<Intent>
+class ImagePicker(private val context: Context, private val activity: ComponentActivity){
     private lateinit var takePicture: ManagedActivityResultLauncher<Void?, Bitmap?>
 
     @Composable
     fun RegisterPicker(onImagePicked: (ByteArray) -> Unit) {
-        val activity = LocalContext.current as ComponentActivity
-        getContent = rememberLauncherForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                data?.data?.let { uri ->
-                    activity.contentResolver.openInputStream(uri)?.use {
-                        onImagePicked(it.readBytes())
-                    }
-                }
-            }
-        }
-
         takePicture = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview(),
             onResult = { newImage ->
@@ -52,12 +37,6 @@ class ImagePicker(private val context: Context){
         )
     }
 
-    fun pickImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        getContent.launch(intent)
-    }
-
-
     fun captureImage() {
         val permissionCheckResult = ContextCompat.checkSelfPermission(
             context,
@@ -67,7 +46,7 @@ class ImagePicker(private val context: Context){
             takePicture.launch()
         } else {
             requestPermissions(
-                context as Activity,
+                activity,
                 arrayOf(Manifest.permission.CAMERA),
                 123
             )

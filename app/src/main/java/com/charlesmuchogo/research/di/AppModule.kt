@@ -38,10 +38,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideImagePicker(@ApplicationContext context: Context): ImagePicker = ImagePicker(context)
-
-    @Provides
-    @Singleton
     fun provideApiHelper(): ApiHelper = ApiHelper()
 
     @Provides

@@ -5,6 +5,7 @@ import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.ErrorDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
+import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
@@ -95,12 +96,14 @@ class RemoteRepositoryImpl(
                     }
 
                 if (response.status != HttpStatusCode.OK) {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
-                            response.body<ErrorDTO>()
-                        }
-
-                    emit(Results.error(apiResponse.data?.message ?: "Error updating your details. Try again"))
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
+                        response.body<ErrorDTO>()
+                    }
+                    emit(
+                        Results.error(
+                            apiResponse.data?.message ?: "Error updating your details. Try again"
+                        )
+                    )
                 } else {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {
@@ -128,7 +131,11 @@ class RemoteRepositoryImpl(
                             response.body<ErrorDTO>()
                         }
 
-                    emit(Results.error(apiResponse.data?.message ?: "Error getting results. Try again"))
+                    emit(
+                        Results.error(
+                            apiResponse.data?.message ?: "Error getting results. Try again"
+                        )
+                    )
                 } else {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {
@@ -140,4 +147,36 @@ class RemoteRepositoryImpl(
                 emit(Results.error(decodeExceptionMessage(e)))
             }
         }.flowOn(Dispatchers.Main)
+
+    override suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(appDatabase = appDatabase).client.get("/api/mobile/clinics") {
+                        contentType(ContentType.Application.Json)
+                    }
+
+                if (response.status != HttpStatusCode.OK) {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
+
+                    emit(
+                        Results.error(
+                            apiResponse.data?.message ?: "Error getting clinics. Try again"
+                        )
+                    )
+                } else {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<GetClinicsDTO>()
+                        }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
+    }
 }

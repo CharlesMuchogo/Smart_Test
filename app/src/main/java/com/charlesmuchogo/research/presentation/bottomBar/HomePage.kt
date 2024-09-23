@@ -36,8 +36,7 @@ class HomePage : Screen {
     override fun Content() {
 
         val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-        val authenticationEventState =
-            authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
+        val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
         val navigator = LocalAppNavigator.currentOrThrow
 
 
