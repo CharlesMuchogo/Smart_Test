@@ -144,7 +144,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                     onOptionSelected = {
                         selectedClinic = it
                     }) {
-                    Text(it.name, style = MaterialTheme.typography.bodyLarge)
+                    Text("${it.name} - ${it.address}", style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }

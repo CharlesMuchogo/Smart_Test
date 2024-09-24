@@ -101,6 +101,9 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.coil.compose)
 
+    //image cropper
+    implementation(libs.ucrop.compose)
+
     //exoplayer
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)

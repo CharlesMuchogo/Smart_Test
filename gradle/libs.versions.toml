@@ -18,6 +18,7 @@ hiltAndroid = "2.51.1"
 hiltAndroidCompiler = "2.51.1"
 hiltCompiler = "1.1.0"
 coil = "2.7.0"
+ucrop = "2.2.9-native"
 
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
@@ -72,6 +73,8 @@ coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" }
+
+ucrop-compose = {module = "com.github.yalantis:ucrop", version.ref = "ucrop"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
