@@ -59,7 +59,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val context = LocalContext.current
     val activity = LocalContext.current as ComponentActivity
-    val imagePicker = ImagePicker(context, activity)
+    val imagePicker = ImagePicker(context)
     val clinicsStatus = testResultsViewModel.getClinicsStatus.collectAsStateWithLifecycle().value
 
 
