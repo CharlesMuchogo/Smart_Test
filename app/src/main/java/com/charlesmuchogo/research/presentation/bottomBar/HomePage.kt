@@ -1,6 +1,9 @@
 package com.charlesmuchogo.research.presentation.bottomBar
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -16,7 +19,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
@@ -102,10 +109,19 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     val tabNavigator = LocalTabNavigator.current
     val isSelected = tabNavigator.current == tab
 
-    IconButton(
-        modifier = Modifier.weight(1f),
-        onClick = { tabNavigator.current = tab },
-    ) {
+    val color =   if (isSelected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onBackground
+    }
+
+    Column(modifier = Modifier.weight(1f).clickable(
+        interactionSource = remember {
+            MutableInteractionSource()
+        },
+        indication = null,
+        onClick = { tabNavigator.current = tab }
+    ), horizontalAlignment = Alignment.CenterHorizontally){
         Icon(
             painter =
             if (isSelected) {
@@ -114,12 +130,9 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
                 tab.options.icon!!
             },
             contentDescription = tab.options.title,
-            tint =
-            if (isSelected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onBackground
-            },
+            tint = color,
         )
+
+        Text(modifier = Modifier.padding(top = 4.dp), text = tab.options.title, style = MaterialTheme.typography.labelLarge.copy(color = color, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium ))
     }
 }

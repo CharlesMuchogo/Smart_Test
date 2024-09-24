@@ -1,10 +1,7 @@
 package com.charlesmuchogo.research.data.network
 
-import com.charlesmuchogo.research.domain.events.AuthenticationEvent
-import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.utils.Results
 import io.ktor.http.HttpStatusCode
-import javax.inject.Inject
 
 class ApiHelper (
      //private val authenticationViewModel: AuthenticationViewModel

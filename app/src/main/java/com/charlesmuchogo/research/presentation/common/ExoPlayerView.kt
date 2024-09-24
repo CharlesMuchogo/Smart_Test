@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.common
 
-import android.media.browse.MediaBrowser
 import android.net.Uri
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
@@ -10,10 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -22,7 +18,6 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.RawResourceDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.charlesmuchogo.research.R
@@ -32,7 +27,6 @@ import com.charlesmuchogo.research.R
 fun ExoPlayerView() {
     val context = LocalContext.current
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
-    var isControllerVisible by remember {  mutableStateOf(false)}
 
     val videoUri = Uri.parse("android.resource://${context.packageName}/${R.raw.instructions}")
 

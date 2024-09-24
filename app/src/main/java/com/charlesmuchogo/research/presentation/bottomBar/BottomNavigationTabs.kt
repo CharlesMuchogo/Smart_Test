@@ -21,7 +21,7 @@ internal sealed class BottomNavigationTabs {
             @Composable
             get() {
                 val title = "Instructions"
-                val icon = painterResource(R.drawable.outline_home_24)
+                val icon = painterResource(R.drawable.baseline_info_outline_24)
                 return remember {
                     TabOptions(
                         index = 0u,
@@ -78,8 +78,8 @@ internal sealed class BottomNavigationTabs {
 @Composable
 fun bottomBarTabFilledIcon(item: Tab) =
     when (item.options.index) {
-        (0u).toUShort() -> painterResource(R.drawable.baseline_home_24)
+        (0u).toUShort() -> painterResource(R.drawable.baseline_info_24)
         (1u).toUShort() -> painterResource(R.drawable.baseline_schedule_24)
         (2u).toUShort() -> painterResource(R.drawable.baseline_person_24)
-        else -> painterResource(R.drawable.baseline_home_24)
+        else -> painterResource(R.drawable.baseline_info_24)
     }

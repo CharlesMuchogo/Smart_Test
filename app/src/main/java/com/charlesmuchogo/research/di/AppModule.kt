@@ -7,7 +7,6 @@ import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
-import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -14,7 +14,6 @@ import com.charlesmuchogo.research.presentation.authentication.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.utils.ProvideAppNavigator
-import com.charlesmuchogo.research.presentation.utils.RequestPermissions
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import dagger.hilt.android.AndroidEntryPoint
 import ui.theme.SmartTestTheme
@@ -33,11 +32,7 @@ class MainActivity : ComponentActivity() {
                 when (profileStatus.status) {
                     ResultStatus.INITIAL,
                     ResultStatus.LOADING,
-                    -> {
-                        CenteredColumn {
-                            CircularProgressIndicator()
-                        }
-                    }
+                    -> { }
 
                     ResultStatus.ERROR -> {
                         Navigator(
