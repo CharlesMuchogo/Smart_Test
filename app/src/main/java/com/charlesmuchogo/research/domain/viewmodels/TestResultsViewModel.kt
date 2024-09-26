@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
+import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
+import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
 import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,12 +23,46 @@ constructor(
     private val remoteRepository: RemoteRepository,
     private val database: AppDatabase,
 ) : ViewModel() {
-    private val _currentTab = MutableStateFlow(0)
-    val currentTab: StateFlow<Int> = _currentTab.asStateFlow()
+
+
+    var currentTab = MutableStateFlow(0)
+        private  set
 
     fun updateCurrentTab(tab: Int) {
-        _currentTab.value = tab
+        currentTab.value = tab
     }
+
+    var userImage = MutableStateFlow<ByteArray?>(null)
+        private set
+
+    fun updateUserImage(image: ByteArray?) {
+        userImage.value = image
+    }
+
+    var partnerImage = MutableStateFlow<ByteArray?>(null)
+        private set
+
+    fun updatePartnerImage(image: ByteArray?) {
+        partnerImage.value = image
+    }
+
+    var selectingPartnerImage = MutableStateFlow(false)
+        private set
+
+    fun updateSelectingPartnerImage(selecting: Boolean) {
+        selectingPartnerImage.value = selecting
+    }
+
+    var selectedClinic = MutableStateFlow<Clinic?>(null)
+        private set
+
+    fun updateSelectedClinic(clinic: Clinic?) {
+        selectedClinic.value = clinic
+    }
+
+
+
+
 
     val testResultsStatus = MutableStateFlow(
         Results<List<TestResult>>(
@@ -40,6 +74,14 @@ constructor(
 
     val getClinicsStatus = MutableStateFlow(
         Results<List<Clinic>>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL,
+        ),
+    )
+
+    val uploadResultsStatus = MutableStateFlow(
+        Results<UploadTestResultsResponse>(
             data = null,
             message = null,
             status = ResultStatus.INITIAL,
@@ -97,6 +139,15 @@ constructor(
                 }.collect {
                     testResultsStatus.value = Results.success(it)
                 }
+        }
+    }
+
+    fun updateResults(resultsDTO: UploadTestResultsDTO){
+        viewModelScope.launch {
+            uploadResultsStatus.value = Results.loading()
+            remoteRepository.uploadResults(resultsDTO).collect{
+                uploadResultsStatus.value = it
+            }
         }
     }
 }

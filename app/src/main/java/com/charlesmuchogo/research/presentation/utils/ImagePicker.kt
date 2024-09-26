@@ -43,19 +43,16 @@ class ImagePicker(private val context: Context) {
             contract = ActivityResultContracts.TakePicturePreview(),
             onResult = { newImage ->
                 newImage?.let {
-                    // Save the captured image temporarily
                     val byteArrayOutputStream = ByteArrayOutputStream()
                     it.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
                     val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
 
-                    // Proceed to crop the image
                     val imageUri = getImageUriFromByteArray(byteArray)
                     startCrop(imageUri)
                 }
             }
         )
 
-        // Initialize cropImageLauncher for handling cropped images
         cropImageLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -96,7 +93,6 @@ class ImagePicker(private val context: Context) {
     }
 
     private fun startCrop(sourceUri: Uri) {
-        // Define destination URI where the cropped image will be saved
         val destinationUri = Uri.fromFile(File(context.cacheDir, "croppedImage.png"))
 
         val options = UCrop.Options()
@@ -106,16 +102,15 @@ class ImagePicker(private val context: Context) {
 
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 
-        // Start the UCrop activity
         val uCrop = UCrop.of(sourceUri, destinationUri)
             .withAspectRatio(4f, 3f)
+            .withMaxResultSize(300, 300)
             .withOptions(options)
             .getIntent(context)
 
         cropImageLauncher.launch(uCrop)
     }
 
-    // Helper function to convert ByteArray to Uri
     private fun getImageUriFromByteArray(byteArray: ByteArray): Uri {
         val tempFile = File.createTempFile("capturedImage", ".png", context.cacheDir)
         tempFile.writeBytes(byteArray)

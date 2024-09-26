@@ -1,7 +1,6 @@
 package com.charlesmuchogo.research.presentation.testpage
 
 import android.graphics.BitmapFactory
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,11 +8,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,14 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
+import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
+import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
+import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 class SingleTestPage : Screen {
     @Composable
@@ -58,22 +61,16 @@ class SingleTestPage : Screen {
 fun SingleTestScreen(modifier: Modifier = Modifier) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val context = LocalContext.current
-    val activity = LocalContext.current as ComponentActivity
     val imagePicker = ImagePicker(context)
     val clinicsStatus = testResultsViewModel.getClinicsStatus.collectAsStateWithLifecycle().value
+    val uploadResultsStatus =   testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
+    val userImage =   testResultsViewModel.userImage.collectAsStateWithLifecycle().value
+    val selectedClinic =   testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
 
 
-
-    var selectedClinic by remember {
-        mutableStateOf<Clinic?>(null)
-    }
-
-    var resultImage by remember {
-        mutableStateOf<ByteArray?>(null)
-    }
 
     imagePicker.RegisterPicker(onImagePicked = { image ->
-        resultImage = image
+        testResultsViewModel.updateUserImage(image)
     })
 
     LazyColumn(
@@ -94,40 +91,44 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
         }
 
         item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(vertical = 24.dp)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.onBackground)
-                    .clip(
-                        RoundedCornerShape(8.dp)
-                    )
-                    .clickable(
-                        onClick = { imagePicker.captureImage() },
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null
-                    )
-            ) {
-                if (resultImage != null) {
-                    val bitmap = BitmapFactory.decodeByteArray(resultImage, 0, resultImage!!.size)
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Captured test image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
-                    )
-                }else{
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+                Box(
+                    modifier = Modifier
+                        .width(250.dp)
+                        .height(250.dp)
+                        .padding(vertical = 24.dp)
+                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onBackground, shape =RoundedCornerShape(8.dp) )
+                        .clickable(
+                            onClick = { imagePicker.captureImage() },
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            indication = null
+                        )
+                ) {
+                    if (userImage != null) {
+                        val bitmap =
+                            BitmapFactory.decodeByteArray(userImage, 0, userImage.size)
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Captured test image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
 
-                    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement =  Arrangement.Center) {
-                        Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "Take photo of the test")
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(text = "Take photo of the test")
+                        }
                     }
-                }
 
+                }
             }
         }
 
@@ -142,7 +143,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                         error = null
                     ),
                     onOptionSelected = {
-                        selectedClinic = it
+                        testResultsViewModel.updateSelectedClinic(it)
                     }) {
                     Text("${it.name} - ${it.address}", style = MaterialTheme.typography.bodyLarge)
                 }
@@ -150,8 +151,37 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
         }
 
         item {
-            AppButton(onClick = { /*TODO*/ }) {
-                Text(text = "Submit results")
+            uploadResultsStatus.message?.let {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Text(it, color = MaterialTheme.colorScheme.error)
+                }
+            }
+        }
+
+        item {
+            AppButton(onClick = {
+                userImage?.let {
+                    testResultsViewModel.updateResults(
+                        UploadTestResultsDTO(
+                            image = it,
+                            careOption = selectedClinic?.id
+                        )
+                    )
+                }
+            }) {
+                when (uploadResultsStatus.status) {
+                    ResultStatus.LOADING -> {
+                        AppLoginButtonContent(message = "Submitting...")
+                    }
+                    ResultStatus.INITIAL,
+                    ResultStatus.SUCCESS,
+                    ResultStatus.ERROR -> {
+                        Text(text = "Submit results")
+                    }
+                }
             }
         }
     }

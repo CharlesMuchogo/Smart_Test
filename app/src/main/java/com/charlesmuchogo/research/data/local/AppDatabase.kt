@@ -9,7 +9,7 @@ import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.models.User
 
-@Database(entities = [User::class, TestResult::class, Clinic::class], version = 2)
+@Database(entities = [User::class, TestResult::class, Clinic::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun clinicsDao(): ClinicsDao

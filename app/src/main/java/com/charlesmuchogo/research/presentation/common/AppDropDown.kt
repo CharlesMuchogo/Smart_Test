@@ -60,7 +60,7 @@ fun <T> AppDropDown(
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = if (!selectedOption.isSelected) MaterialTheme.colorScheme.onBackground else Color.Gray),
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = if (selectedOption.isSelected) MaterialTheme.colorScheme.onBackground else Color.Gray),
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
