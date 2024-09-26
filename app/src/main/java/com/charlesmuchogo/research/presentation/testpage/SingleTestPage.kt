@@ -23,10 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -37,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
-import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
@@ -47,6 +43,7 @@ import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
 
 class SingleTestPage : Screen {
     @Composable
@@ -66,12 +63,17 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
     val uploadResultsStatus =   testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
     val userImage =   testResultsViewModel.userImage.collectAsStateWithLifecycle().value
     val selectedClinic =   testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
+    val ongoingTestStatus = testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
+
+
 
 
 
     imagePicker.RegisterPicker(onImagePicked = { image ->
         testResultsViewModel.updateUserImage(image)
     })
+
+    println("Time Spent ${ongoingTestStatus.data?.timeSpent}")
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
@@ -81,12 +83,17 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
             TestProgress(
-                content = "20:00",
+                content = convertMillisecondsToTimeTaken(
+                    ongoingTestStatus.data?.timeSpent ?: 0L
+                ),
                 counterColor = MaterialTheme.colorScheme.onBackground,
                 radius = 30.dp,
                 mainColor = MaterialTheme.colorScheme.primary,
-                percentage = 10f,
-                onClick = {}
+                percentage = 0f,
+                onClick = {
+                    ongoingTestStatus.data?.let {
+                        testResultsViewModel.completeTestTimer(it)
+                    } ?: testResultsViewModel.startTest() }
             )
         }
 

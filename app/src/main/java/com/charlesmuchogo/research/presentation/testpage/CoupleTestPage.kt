@@ -47,6 +47,7 @@ import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
 
 class CoupleTestPage : Screen {
     @Composable
@@ -63,15 +64,13 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)
     val clinicsStatus = testResultsViewModel.getClinicsStatus.collectAsStateWithLifecycle().value
-    val uploadResultsStatus =
-        testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
+    val uploadResultsStatus = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
 
     val userImage = testResultsViewModel.userImage.collectAsStateWithLifecycle().value
     val partnerImage = testResultsViewModel.partnerImage.collectAsStateWithLifecycle().value
     val selectingPartnerImage =  testResultsViewModel.selectingPartnerImage.collectAsStateWithLifecycle().value
     val selectedClinic =   testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
-
-
+    val ongoingTestStatus =   testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
 
 
@@ -91,12 +90,17 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
             TestProgress(
-                content = "20:00",
+                content = convertMillisecondsToTimeTaken(
+                    ongoingTestStatus.data?.timeSpent ?: 0L
+                ),
                 counterColor = MaterialTheme.colorScheme.onBackground,
                 radius = 30.dp,
                 mainColor = MaterialTheme.colorScheme.primary,
                 percentage = 10f,
-                onClick = {}
+                onClick = {
+                    ongoingTestStatus.data?.let {
+                        testResultsViewModel.completeTestTimer(it)
+                    } ?: testResultsViewModel.startTest() }
             )
         }
 

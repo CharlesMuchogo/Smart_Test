@@ -45,3 +45,11 @@ fun decodeExceptionMessage(e: Exception): String {
     }
     return "Something went wrong. Try again"
 }
+
+fun convertMillisecondsToTimeTaken(milliseconds: Long): String {
+    val hours = (milliseconds / (1000 * 60 * 60)).toString().padStart(2, '0')
+    val minutes =
+        ((milliseconds % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0')
+    val seconds = ((milliseconds % (1000 * 60)) / 1000).toString().padStart(2, '0')
+    return "$hours:$minutes:$seconds"
+}

@@ -7,13 +7,22 @@ import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
 import com.charlesmuchogo.research.domain.models.Clinic
+import com.charlesmuchogo.research.domain.models.TestProgress
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +33,7 @@ constructor(
     private val database: AppDatabase,
 ) : ViewModel() {
 
+    private var tickingTime = MutableStateFlow(0L)
 
     var currentTab = MutableStateFlow(0)
         private  set
@@ -60,8 +70,7 @@ constructor(
         selectedClinic.value = clinic
     }
 
-
-
+    private var hasResumedTest = false
 
 
     val testResultsStatus = MutableStateFlow(
@@ -88,11 +97,20 @@ constructor(
         ),
     )
 
+    val ongoingTestStatus = MutableStateFlow(
+        Results<TestProgress>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL,
+        ),
+    )
+
     init {
         getTestResults()
         getClinics()
         fetchTestResults()
         fetchClinics()
+        getOngoingTest()
     }
 
     private fun getClinics() {
@@ -149,5 +167,66 @@ constructor(
                 uploadResultsStatus.value = it
             }
         }
+    }
+
+    private var job: Job? = null
+
+    private fun startCounter(progress: TestProgress): Deferred<Job> {
+        return viewModelScope.async {
+            job?.cancel()
+            job = CoroutineScope(Dispatchers.Default).launch {
+                while (isActive) {
+                    delay(1000L)
+                    tickingTime.value += 1000L
+                    database.testProgressDao().updateTestProgress(progress.copy(timeSpent = tickingTime.value))
+                }
+            }
+            job!!
+        }
+    }
+
+    fun startTest() {
+        viewModelScope.launch {
+            val currentTimeStamp = Clock.System.now().toEpochMilliseconds()
+            val progress = TestProgress(
+                id = currentTimeStamp,
+                startTime = currentTimeStamp,
+                timeSpent = 0L,
+                active = true
+            )
+            println("Inserting test progress -> ")
+            database.testProgressDao().insertTestProgress(progress)
+            startCounter(progress)
+        }
+    }
+
+    private fun getOngoingTest(){
+        viewModelScope.launch {
+            ongoingTestStatus.value = Results.loading()
+            database.testProgressDao().getActiveTestProgress().catch {
+                ongoingTestStatus.value =Results.error()
+            }.collect{
+                if (!hasResumedTest && it != null) {
+                   resumeTest(progress = it)
+                }
+                ongoingTestStatus.value = Results.success(it)
+            }
+        }
+    }
+
+    fun completeTestTimer(progress: TestProgress){
+        viewModelScope.launch {
+            job?.cancel()
+            tickingTime.value = 0L
+            database.testProgressDao().updateTestProgress(progress.copy(active = false))
+        }
+    }
+
+    private fun resumeTest(progress: TestProgress) {
+        val currentTime = Clock.System.now().toEpochMilliseconds()
+        val startTime = progress.startTime
+        tickingTime.value = currentTime - startTime
+        val testState = startCounter(progress)
+        hasResumedTest = testState.isActive
     }
 }

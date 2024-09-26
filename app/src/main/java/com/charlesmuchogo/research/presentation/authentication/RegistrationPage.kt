@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -79,9 +80,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     "Create an account",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold, letterSpacing = 1.5.sp),
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     "Please enter your details to continue.",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = Normal),

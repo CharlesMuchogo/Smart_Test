@@ -73,6 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //datetime
+    implementation(libs.kotlinX.dateTime)
+
     // navigation
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
