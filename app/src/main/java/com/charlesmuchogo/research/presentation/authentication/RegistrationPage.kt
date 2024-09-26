@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -72,7 +73,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
         ) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -239,4 +240,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun RegistrationScreenPreview(){
+    RegistrationScreen()
 }
