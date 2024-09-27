@@ -214,7 +214,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
                             ResultStatus.SUCCESS -> {
                                 Text("Log in")
-                                navigator.replaceAll(HomePage())
+                                navigator.replaceAll(MoreDetailsPage())
                             }
 
                             ResultStatus.LOADING -> {

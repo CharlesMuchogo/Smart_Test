@@ -42,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.R
+import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
@@ -63,32 +64,18 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val loginStatus = authenticationViewModel.loginStatus.collectAsState().value
-
-    var email by remember { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var rememberMe by remember { mutableStateOf(true) }
-    var passwordVisible by remember { mutableStateOf(false) }
+    val loginPageState = authenticationViewModel.loginPageState
 
 
-    Scaffold(
-        bottomBar = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp)){
-                Text(text = "Don't have an account?", style = MaterialTheme.typography.bodyLarge)
-                 TextButton(onClick = { navigator.push(RegistrationPage())}){
-                    Text(text = "Sign up", style = MaterialTheme.typography.bodyLarge)
-                }
-            }
-        }
-    ){ padding ->
+
+    Scaffold{ padding ->
 
         LazyColumn(
             verticalArrangement = Arrangement.Center,
-            modifier = modifier.fillMaxSize().padding(padding).padding(horizontal = 12.dp),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
@@ -122,9 +109,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Email",
-                    value = email,
-                    onValueChanged = { email = it },
-                    error = null,
+                    value = loginPageState.email,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
+                    error = loginPageState.emailError,
                     placeholder = "johndoe@email.com",
                     keyboardType = KeyboardType.Email,
                 )
@@ -133,19 +120,19 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Password",
-                    value = password,
-                    onValueChanged = { password = it },
-                    error = null,
+                    value = loginPageState.password,
+                    onValueChanged = {authenticationViewModel.onAction(LoginAction.OnPasswordChange(it)) },
+                    error = loginPageState.passwordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = passwordVisible,
+                    passwordVisible = loginPageState.showPassword,
                     imeAction = ImeAction.Done,
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!loginPageState.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (loginPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
@@ -161,8 +148,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
-                            checked = rememberMe,
-                            onCheckedChange = { isChecked -> rememberMe = isChecked },
+                            checked = loginPageState.rememberMe,
+                            onCheckedChange = { isChecked -> authenticationViewModel.onAction(LoginAction.OnRememberMeChange(isChecked)) },
                         )
                         Text(
                             "Remember me",
@@ -198,26 +185,20 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
                 AppButton(
                     onClick = {
-                        authenticationViewModel.login(
-                            loginRequestDTO =
-                                LoginRequestDTO(
-                                    email = email.lowercase().trim(),
-                                    password = password,
-                                ),
-                        )
+                        authenticationViewModel.onAction(LoginAction.OnLogin)
                     },
                     content = {
                         when (loginStatus.status) {
-                            ResultStatus.INITIAL,
-
-                            ResultStatus.ERROR,
-                            -> {
+                            ResultStatus.INITIAL,ResultStatus.ERROR-> {
                                 Text("Log in")
                             }
 
                             ResultStatus.SUCCESS -> {
                                 Text("Log in")
-                                navigator.replaceAll(HomePage())
+                                loginStatus.data?.let { response ->
+                                    navigator.replaceAll(if(response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage() else HomePage())
+                                }
+
                             }
 
                             ResultStatus.LOADING -> {
@@ -226,6 +207,23 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         }
                     },
                 )
+
+
+
+            }
+
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)){
+                    Text(text = "Don't have an account?", style = MaterialTheme.typography.bodyLarge)
+                    TextButton(onClick = { navigator.push(RegistrationPage())}){
+                        Text(text = "Sign up", style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
             }
         }
     }

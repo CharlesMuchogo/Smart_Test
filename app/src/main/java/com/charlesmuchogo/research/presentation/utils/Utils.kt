@@ -46,6 +46,12 @@ fun decodeExceptionMessage(e: Exception): String {
     return "Something went wrong. Try again"
 }
 
+private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
+
+fun isValidEmail(email: String): Boolean {
+    return email.matches(emailRegex)
+}
+
 fun convertMillisecondsToTimeTaken(milliseconds: Long): String {
     val hours = (milliseconds / (1000 * 60 * 60)).toString().padStart(2, '0')
     val minutes =
