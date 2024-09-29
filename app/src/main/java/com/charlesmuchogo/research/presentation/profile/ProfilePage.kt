@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.School
@@ -125,7 +127,8 @@ fun ProfileListView(
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
 
-    val darkTheme = false
+    val darkTheme = profile.darkTheme
+    val hideResults = profile.hideResults
 
     if (showLogoutDialog) {
         AppAlertDialog(
@@ -285,13 +288,32 @@ fun ProfileListView(
                         .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
+
+
                     ProfileCard(
                         modifier = Modifier,
                         label = "Dark Theme",
                         prefixIcon = if (darkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        onClick = { },
+                        onClick = {
+                            authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
+                        },
                         trailingIcon = {
                             Switch(checked = darkTheme, onCheckedChange = {
+                                authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
+                            })
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Keep Results History",
+                        prefixIcon = if (profile.hideResults) Icons.Default.Lock else Icons.Default.LockOpen,
+                        onClick = {
+                             authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
+                        },
+                        trailingIcon = {
+                            Switch(checked = !hideResults, onCheckedChange = {
+                                authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
                             })
                         },
                     )

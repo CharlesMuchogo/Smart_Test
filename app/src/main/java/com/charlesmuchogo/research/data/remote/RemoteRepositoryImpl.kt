@@ -50,10 +50,10 @@ class RemoteRepositoryImpl(
                         }
                     emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
                 } else {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
                             response.body<LoginResponseDTO>()
-                        }
+                    }
+
                     emit(apiResponse)
                 }
             } catch (e: Exception) {

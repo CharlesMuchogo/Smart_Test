@@ -136,10 +136,12 @@ constructor(
             is LoginAction.OnSignup -> {
 
             }
+
+           else -> {}
         }
     }
 
-    suspend fun getFcmToken(): String {
+    private suspend fun getFcmToken(): String {
         val deferred = CompletableDeferred<String>()
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
@@ -205,6 +207,12 @@ constructor(
                 }.collect {
                     profileStatus.value = Results.success(it)
                 }
+        }
+    }
+
+    fun updateUser(user: User){
+        viewModelScope.launch {
+            database.userDao().updateUser(user)
         }
     }
 

@@ -2,6 +2,7 @@ package com.charlesmuchogo.research.presentation.testpage
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -71,7 +72,8 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
     val ongoingTestStatus =
         testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
-    val percentage = ((ongoingTestStatus.data?.timeSpent?: 0L ).toFloat() / 1_200_000.toFloat() ) * 100
+    val percentage =
+        ((ongoingTestStatus.data?.timeSpent ?: 0L).toFloat() / 1_200_000.toFloat()) * 100
 
     val stroke = Stroke(
         width = 2f,
@@ -87,192 +89,202 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
         }
     })
 
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
     ) {
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            TestProgress(
-                content = convertMillisecondsToTimeTaken(
-                    ongoingTestStatus.data?.timeSpent ?: 0L
-                ),
-                counterColor = MaterialTheme.colorScheme.onBackground,
-                radius = 30.dp,
-                mainColor = MaterialTheme.colorScheme.primary,
-                percentage = percentage,
-                onClick = {
-                    ongoingTestStatus.data?.let {
-                        testResultsViewModel.completeTestTimer(it)
-                    } ?: testResultsViewModel.startTest()
-                }
-            )
-        }
 
-        item {
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(vertical = 24.dp)
-                    .drawBehind {
-                        drawRoundRect(
-                            color = color,
-                            style = stroke
-                        )
-                    }
-                    .clickable(
-                        onClick = {
-                            testResultsViewModel.updateSelectingPartnerImage(false)
-                            imagePicker.captureImage()
-                        },
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null
-                    )
-            ) {
-                if (userImage != null) {
-                    val bitmap =
-                        BitmapFactory.decodeByteArray(userImage, 0, userImage.size)
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Captured test image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "Take photo of my test")
-                    }
-                }
-
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .padding(vertical = 24.dp)
-                    .drawBehind {
-                        drawRoundRect(
-                            color = color,
-                            style = stroke
-                        )
-                    }
-                    .clickable(
-                        onClick = {
-                            testResultsViewModel.updateSelectingPartnerImage(true)
-                            imagePicker.captureImage()
-                        },
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        },
-                        indication = null
-                    )
-            ) {
-                if (partnerImage != null) {
-                    val bitmap =
-                        BitmapFactory.decodeByteArray(partnerImage, 0, partnerImage.size)
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Captured test image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Take photo of my partner test",
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-            }
-
-        }
-
-        item {
-            clinicsStatus.data?.let { clinics ->
-                AppDropDown(
-                    options = clinics,
-                    label = { Text(text = "Select a clinic") },
-                    selectedOption = TextFieldState(
-                        text = selectedClinic?.name ?: "Select a clinic ",
-                        isSelected = selectedClinic != null,
-                        error = null
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                TestProgress(
+                    content = convertMillisecondsToTimeTaken(
+                        ongoingTestStatus.data?.timeSpent ?: 0L
                     ),
-                    onOptionSelected = {
-                        testResultsViewModel.updateSelectedClinic(it)
-                    }) {
-                    Text("${it.name} - ${it.address}", style = MaterialTheme.typography.bodyLarge)
+                    counterColor = MaterialTheme.colorScheme.onBackground,
+                    radius = 30.dp,
+                    mainColor = MaterialTheme.colorScheme.primary,
+                    percentage = percentage,
+                    onClick = {
+                        ongoingTestStatus.data?.let {
+                            testResultsViewModel.completeTestTimer(it)
+                        } ?: testResultsViewModel.startTest()
+                    }
+                )
+            }
+
+            item {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .padding(vertical = 24.dp)
+                        .drawBehind {
+                            drawRoundRect(
+                                color = color,
+                                style = stroke
+                            )
+                        }
+                        .clickable(
+                            onClick = {
+                                testResultsViewModel.updateSelectingPartnerImage(false)
+                                imagePicker.captureImage()
+                            },
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            indication = null
+                        )
+                ) {
+                    if (userImage != null) {
+                        val bitmap =
+                            BitmapFactory.decodeByteArray(userImage, 0, userImage.size)
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Captured test image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(text = "Take photo of my test")
+                        }
+                    }
+
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .padding(vertical = 24.dp)
+                        .drawBehind {
+                            drawRoundRect(
+                                color = color,
+                                style = stroke
+                            )
+                        }
+                        .clickable(
+                            onClick = {
+                                testResultsViewModel.updateSelectingPartnerImage(true)
+                                imagePicker.captureImage()
+                            },
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            },
+                            indication = null
+                        )
+                ) {
+                    if (partnerImage != null) {
+                        val bitmap =
+                            BitmapFactory.decodeByteArray(partnerImage, 0, partnerImage.size)
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Captured test image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Take photo of my partner test",
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                }
+
+            }
+
+            item {
+                clinicsStatus.data?.let { clinics ->
+                    AppDropDown(
+                        options = clinics,
+                        label = { Text(text = "Select a clinic") },
+                        selectedOption = TextFieldState(
+                            text = selectedClinic?.name ?: "Select a clinic ",
+                            isSelected = selectedClinic != null,
+                            error = null
+                        ),
+                        onOptionSelected = {
+                            testResultsViewModel.updateSelectedClinic(it)
+                        }) {
+                        Text(
+                            "${it.name} - ${it.address}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
-        }
 
-        item {
-            uploadResultsStatus.message?.let {
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error)
-                )
-            }
-
-            uploadResultsStatus.data?.message?.let {
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
-                )
-            }
-        }
-
-        item {
-            AppButton(onClick = {
-                if (userImage != null && partnerImage != null) {
-                    testResultsViewModel.updateResults(
-                        UploadTestResultsDTO(
-                            image = userImage,
-                            partnerImage = partnerImage,
-                            careOption = selectedClinic?.name
-                        )
+            item {
+                uploadResultsStatus.message?.let {
+                    Text(
+                        text = it,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error)
                     )
                 }
 
-            }) {
-                when (uploadResultsStatus.status) {
-                    ResultStatus.LOADING -> {
-                        AppLoginButtonContent(message = "Submitting...")
+                uploadResultsStatus.data?.message?.let {
+                    Text(
+                        text = it,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                    )
+                }
+            }
+
+            item {
+                AppButton(onClick = {
+                    if (userImage != null && partnerImage != null) {
+                        testResultsViewModel.updateResults(
+                            UploadTestResultsDTO(
+                                image = userImage,
+                                partnerImage = partnerImage,
+                                careOption = selectedClinic?.name
+                            )
+                        )
                     }
 
-                    ResultStatus.INITIAL,
-                    ResultStatus.SUCCESS,
-                    ResultStatus.ERROR -> {
-                        Text(text = "Submit results")
+                }) {
+                    when (uploadResultsStatus.status) {
+                        ResultStatus.LOADING -> {
+                            AppLoginButtonContent(message = "Submitting...")
+                        }
+
+                        ResultStatus.INITIAL,
+                        ResultStatus.SUCCESS,
+                        ResultStatus.ERROR -> {
+                            Text(text = "Submit results")
+                        }
                     }
                 }
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

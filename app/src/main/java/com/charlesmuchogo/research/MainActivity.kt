@@ -25,11 +25,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
-            SmartTestTheme(dynamicColor = false, darkTheme = false) {
+            val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
+            val profileStatus =   authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
+
+
+            SmartTestTheme(dynamicColor = false, darkTheme = profileStatus.data?.darkTheme ?: false) {
+
                 RequestPermissions()
-                val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-                val profileStatus =
-                    authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
+
                 when (profileStatus.status) {
                     ResultStatus.INITIAL,
                     ResultStatus.LOADING,
