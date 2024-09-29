@@ -32,6 +32,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.authentication.LoginPage
 import com.charlesmuchogo.research.presentation.testpage.TestPage
 import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
@@ -42,6 +43,7 @@ class HomePage : Screen {
     override fun Content() {
 
         val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
+        val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
         val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
         val navigator = LocalAppNavigator.currentOrThrow
 
@@ -53,6 +55,10 @@ class HomePage : Screen {
                     navigator.replaceAll(LoginPage())
                 }
             }
+        }
+
+        LaunchedEffect(key1 = true) {
+            testResultsViewModel.fetchTestResults()
         }
         TabNavigator(
             tab = BottomNavigationTabs.InstructionsTab,
@@ -114,13 +120,15 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
         MaterialTheme.colorScheme.onBackground
     }
 
-    Column(modifier = Modifier.weight(1f).clickable(
-        interactionSource = remember {
-            MutableInteractionSource()
-        },
-        indication = null,
-        onClick = { tabNavigator.current = tab }
-    ), horizontalAlignment = Alignment.CenterHorizontally){
+    Column(modifier = Modifier
+        .weight(1f)
+        .clickable(
+            interactionSource = remember {
+                MutableInteractionSource()
+            },
+            indication = null,
+            onClick = { tabNavigator.current = tab }
+        ), horizontalAlignment = Alignment.CenterHorizontally){
         Icon(
             painter =
             if (isSelected) {

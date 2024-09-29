@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.domain.models.TabRowItem
@@ -35,13 +36,13 @@ import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
 
 class TestPage : Screen {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class,)
     @Composable
     override fun Content() {
         val navigator = LocalAppNavigator.currentOrThrow
         val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
         val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
+        val hasNavigated = testResultsViewModel.hasNavigatedTOInformationalScreen.collectAsStateWithLifecycle().value
         val testResults = testResultsViewModel.testResultsStatus.collectAsStateWithLifecycle().value
         val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
 
@@ -51,9 +52,9 @@ class TestPage : Screen {
         }
 
         LaunchedEffect(testResults.status) {
-
-            if(testResults.status == ResultStatus.SUCCESS && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
-               // navigator.push(PendingTestPage())
+            if(testResults.status == ResultStatus.SUCCESS && !hasNavigated && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
+               navigator.push(PendingTestPage())
+                testResultsViewModel.updateHasNavigated(true)
             }
         }
 

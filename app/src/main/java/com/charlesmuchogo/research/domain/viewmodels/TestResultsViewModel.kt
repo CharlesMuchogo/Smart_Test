@@ -35,6 +35,13 @@ constructor(
 
     private var tickingTime = MutableStateFlow(0L)
 
+    var hasNavigatedTOInformationalScreen = MutableStateFlow(false)
+        private  set
+
+    fun updateHasNavigated(hasNavigated: Boolean) {
+        hasNavigatedTOInformationalScreen.value = hasNavigated
+    }
+
     var currentTab = MutableStateFlow(0)
         private  set
 
@@ -134,7 +141,7 @@ constructor(
         }
     }
 
-    private fun fetchTestResults() {
+    fun fetchTestResults() {
         viewModelScope.launch {
             remoteRepository.fetchTestResults().collect {
                 it.data?.let { results ->

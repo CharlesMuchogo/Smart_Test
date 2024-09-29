@@ -25,6 +25,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -181,8 +183,11 @@ constructor(
         viewModelScope.launch {
             completeRegistrationState.value = Results.loading()
           remoteRepository.completeRegistration(detailsDTO = details).collect{ results ->
-              results.data?.let {
-                  database.userDao().updateUser(user = it.user)
+              results.data?.user?.let {user ->
+                  val loggedInUser = database.userDao().getUser().firstOrNull()
+                  loggedInUser?.let {
+                      database.userDao().updateUser(user = user.copy(token = loggedInUser.token))
+                  }
               }
               completeRegistrationState.value = results
           }

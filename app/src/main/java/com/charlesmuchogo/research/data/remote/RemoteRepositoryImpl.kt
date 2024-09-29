@@ -70,7 +70,7 @@ class RemoteRepositoryImpl(
                         setBody(registrationRequestDTO)
                     }
 
-                if (response.status != HttpStatusCode.Created) {
+                if (response.status != HttpStatusCode.OK) {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {
                             response.body<ErrorDTO>()

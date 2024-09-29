@@ -17,15 +17,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.R
+import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
 
 
@@ -41,6 +45,17 @@ class PendingTestPage : Screen {
 @Composable
 fun PendingTestScreen() {
     val navigator = LocalAppNavigator.currentOrThrow
+    val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
+
+    LaunchedEffect(key1 = true) {
+        testResultsViewModel.updateHasNavigated(true)
+    }
+
+    DisposableEffect(key1 =true) {
+        onDispose {
+            testResultsViewModel.updateHasNavigated(false)
+        }
+    }
     Scaffold(topBar = {
         TopAppBar(title = { }, navigationIcon = {
 
