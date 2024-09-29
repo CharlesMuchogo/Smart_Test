@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -21,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,6 +49,7 @@ class HomePage : Screen {
         val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
         val navigator = LocalAppNavigator.currentOrThrow
 
+        val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
         LaunchedEffect(authenticationEventState.status) {
             authenticationEventState.data?.let {
@@ -65,6 +68,7 @@ class HomePage : Screen {
         ) {
             val tabNavigator = LocalTabNavigator.current
             Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
                     CenterAlignedTopAppBar(title = {
                         Text(
@@ -93,6 +97,7 @@ class HomePage : Screen {
                 },
                 bottomBar = {
                     BottomAppBar(
+                        scrollBehavior = scrollBehavior,
                         containerColor = MaterialTheme.colorScheme.background,
                     ) {
                         TabNavigationItem(BottomNavigationTabs.InstructionsTab)
@@ -139,7 +144,6 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
             contentDescription = tab.options.title,
             tint = color,
         )
-
         Text(modifier = Modifier.padding(top = 4.dp), text = tab.options.title, style = MaterialTheme.typography.labelLarge.copy(color = color, fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium ))
     }
 }
