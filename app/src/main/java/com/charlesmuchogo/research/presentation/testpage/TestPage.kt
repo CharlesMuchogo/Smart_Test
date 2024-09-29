@@ -31,6 +31,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.Results
 
 class TestPage : Screen {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,8 +42,20 @@ class TestPage : Screen {
         val navigator = LocalAppNavigator.currentOrThrow
         val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
         val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
+        val testResults = testResultsViewModel.testResultsStatus.collectAsStateWithLifecycle().value
         val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
 
+
+        LaunchedEffect(key1 = true) {
+            testResultsViewModel.getOngoingTest()
+        }
+
+        LaunchedEffect(testResults.status) {
+
+            if(testResults.status == ResultStatus.SUCCESS && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
+                navigator.push(PendingTestPage())
+            }
+        }
 
         LaunchedEffect(currentTab) {
             pagerState.animateScrollToPage(currentTab)

@@ -110,7 +110,7 @@ constructor(
         getClinics()
         fetchTestResults()
         fetchClinics()
-        getOngoingTest()
+
     }
 
     private fun getClinics() {
@@ -164,6 +164,9 @@ constructor(
         viewModelScope.launch {
             uploadResultsStatus.value = Results.loading()
             remoteRepository.uploadResults(resultsDTO).collect{
+                it.data?.result?.let { result ->
+                    database.testResultsDao().insertTestResult(result)
+                }
                 uploadResultsStatus.value = it
             }
         }
@@ -200,7 +203,7 @@ constructor(
         }
     }
 
-    private fun getOngoingTest(){
+     fun getOngoingTest(){
         viewModelScope.launch {
             ongoingTestStatus.value = Results.loading()
             database.testProgressDao().getActiveTestProgress().catch {

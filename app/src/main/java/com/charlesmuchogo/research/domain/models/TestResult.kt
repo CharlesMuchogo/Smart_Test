@@ -12,6 +12,7 @@ data class TestResult(
     val care_option: String,
     val date: String,
     val image: String,
+    val status: String = "pending",
     val partnerImage: String,
     val partnerResults: String,
     val results: String,

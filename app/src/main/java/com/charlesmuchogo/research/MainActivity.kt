@@ -14,6 +14,7 @@ import com.charlesmuchogo.research.presentation.authentication.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.utils.ProvideAppNavigator
+import com.charlesmuchogo.research.presentation.utils.RequestPermissions
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import dagger.hilt.android.AndroidEntryPoint
 import ui.theme.SmartTestTheme
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
         //enableEdgeToEdge()
         setContent {
             SmartTestTheme(dynamicColor = false, darkTheme = false) {
-                //RequestPermissions()
+                RequestPermissions()
                 val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
                 val profileStatus =
                     authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value

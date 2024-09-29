@@ -32,7 +32,7 @@ fun RequestPermissions() {
     ActivityCompat.requestPermissions(
         context,
         arrayOf(
-            Manifest.permission.CAMERA
+            Manifest.permission.POST_NOTIFICATIONS
         ),
         PERMISSION_REQUEST_CODE
     )

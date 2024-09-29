@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.domain.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,7 +20,9 @@ import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.isValidEmail
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -103,6 +106,7 @@ constructor(
                 )
 
                 if (emailError == null && passwordError == null) {
+
                     login(
                         loginRequestDTO = LoginRequestDTO(
                             email = loginPageState.email.lowercase().trim(),
@@ -133,10 +137,27 @@ constructor(
         }
     }
 
+    suspend fun getFcmToken(): String {
+        val deferred = CompletableDeferred<String>()
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val fcmToken = task.result
+                    Log.d("FCM Token", "FcmToken: $fcmToken")
+                    deferred.complete(fcmToken ?: "")
+                } else {
+                    Log.e("FCM Token", "Failed to get token: ${task.exception}")
+                    deferred.complete("")
+                }
+            }
+        return deferred.await()
+    }
+
     fun login(loginRequestDTO: LoginRequestDTO) {
         viewModelScope.launch {
             loginStatus.value = Results.loading()
-            remoteRepository.login(loginRequestDTO).collect { results ->
+            val token = getFcmToken()
+            remoteRepository.login(loginRequestDTO.copy(deviceId = token)).collect { results ->
                 results.data?.let { result ->
                     database.userDao().insertUser(user = result.user.copy(token = result.token))
                 }

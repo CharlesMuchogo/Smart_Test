@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -66,9 +67,6 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
     val ongoingTestStatus = testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
 
-
-
-
     imagePicker.RegisterPicker(onImagePicked = { image ->
         testResultsViewModel.updateUserImage(image)
     })
@@ -104,7 +102,11 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                         .width(250.dp)
                         .height(250.dp)
                         .padding(vertical = 24.dp)
-                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onBackground, shape =RoundedCornerShape(8.dp) )
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = RoundedCornerShape(8.dp)
+                        )
                         .clickable(
                             onClick = { imagePicker.captureImage() },
                             interactionSource = remember {
@@ -165,6 +167,16 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                 ) {
                     Text(it, color = MaterialTheme.colorScheme.error)
                 }
+            }
+        }
+
+        item {
+            uploadResultsStatus.message?.let {
+                Text(text = it, style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error))
+            }
+
+            uploadResultsStatus.data?.message?.let {
+                Text(text = it, style = MaterialTheme.typography.bodyMedium.copy(color = Color.Green))
             }
         }
 

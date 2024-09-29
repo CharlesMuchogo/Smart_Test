@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class LoginRequestDTO(
     val email: String,
     val password: String,
+    val deviceId: String? = null,
 )

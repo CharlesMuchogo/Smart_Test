@@ -13,7 +13,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -79,7 +78,7 @@ class HomePage : Screen {
                             icon = {
                                 Icon(
                                     imageVector = Icons.Filled.Add,
-                                    contentDescription = "Extended floating action button."
+                                    contentDescription = "Take a test"
                                 )
                             },
                             text = { Text(text = "Take a test") },
