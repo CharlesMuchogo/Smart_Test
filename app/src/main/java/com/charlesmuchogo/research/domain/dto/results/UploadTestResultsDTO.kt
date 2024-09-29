@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UploadTestResultsDTO(
     val image: ByteArray,
     val partnerImage: ByteArray? = null,
-    val careOption: Long? = null,
+    val careOption: String? = null,
 )

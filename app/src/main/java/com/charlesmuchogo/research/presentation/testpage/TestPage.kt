@@ -53,7 +53,7 @@ class TestPage : Screen {
         LaunchedEffect(testResults.status) {
 
             if(testResults.status == ResultStatus.SUCCESS && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
-                navigator.push(PendingTestPage())
+               // navigator.push(PendingTestPage())
             }
         }
 

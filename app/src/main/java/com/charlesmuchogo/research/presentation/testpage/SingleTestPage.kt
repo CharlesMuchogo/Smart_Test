@@ -2,7 +2,6 @@ package com.charlesmuchogo.research.presentation.testpage
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Icon
@@ -26,10 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,22 +62,32 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)
     val clinicsStatus = testResultsViewModel.getClinicsStatus.collectAsStateWithLifecycle().value
-    val uploadResultsStatus =   testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
-    val userImage =   testResultsViewModel.userImage.collectAsStateWithLifecycle().value
-    val selectedClinic =   testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
-    val ongoingTestStatus = testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
+    val uploadResultsStatus =
+        testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
+    val userImage = testResultsViewModel.userImage.collectAsStateWithLifecycle().value
+    val selectedClinic = testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
+    val ongoingTestStatus =
+        testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
+
+    val percentage = ((ongoingTestStatus.data?.timeSpent?: 0L ).toFloat() / 1_200_000.toFloat() ) * 100
+
+    val stroke = Stroke(
+        width = 2f,
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+    )
+    val color =  MaterialTheme.colorScheme.onBackground
 
 
     imagePicker.RegisterPicker(onImagePicked = { image ->
         testResultsViewModel.updateUserImage(image)
     })
 
-    println("Time Spent ${ongoingTestStatus.data?.timeSpent}")
+    println("percentage is ${(ongoingTestStatus.data?.timeSpent)} ${((ongoingTestStatus.data?.timeSpent?: 0).toFloat() / 12000000.toFloat() ) * 100 }")
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 16.dp)
     ) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
@@ -87,26 +98,28 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                 counterColor = MaterialTheme.colorScheme.onBackground,
                 radius = 30.dp,
                 mainColor = MaterialTheme.colorScheme.primary,
-                percentage = 0f,
+                percentage = percentage,
                 onClick = {
                     ongoingTestStatus.data?.let {
                         testResultsViewModel.completeTestTimer(it)
-                    } ?: testResultsViewModel.startTest() }
+                    } ?: testResultsViewModel.startTest()
+                }
             )
         }
 
         item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
                 Box(
                     modifier = Modifier
-                        .width(250.dp)
+                        .fillMaxWidth()
                         .height(250.dp)
                         .padding(vertical = 24.dp)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                        .drawBehind {
+                            drawRoundRect(
+                                color = color,
+                                style = stroke
+                            )
+                        }
                         .clickable(
                             onClick = { imagePicker.captureImage() },
                             interactionSource = remember {
@@ -147,7 +160,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                     options = clinics,
                     label = { Text(text = "Select a clinic") },
                     selectedOption = TextFieldState(
-                        text = selectedClinic?.name ?: "Select a clinic ",
+                        text = selectedClinic?.name ?: "Select a clinic",
                         isSelected = selectedClinic != null,
                         error = null
                     ),
@@ -172,11 +185,19 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
 
         item {
             uploadResultsStatus.message?.let {
-                Text(text = it, style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error))
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error)
+                )
             }
 
             uploadResultsStatus.data?.message?.let {
-                Text(text = it, style = MaterialTheme.typography.bodyMedium.copy(color = Color.Green))
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                )
             }
         }
 
@@ -186,7 +207,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                     testResultsViewModel.updateResults(
                         UploadTestResultsDTO(
                             image = it,
-                            careOption = selectedClinic?.id
+                            careOption = selectedClinic?.name
                         )
                     )
                 }
@@ -195,6 +216,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                     ResultStatus.LOADING -> {
                         AppLoginButtonContent(message = "Submitting...")
                     }
+
                     ResultStatus.INITIAL,
                     ResultStatus.SUCCESS,
                     ResultStatus.ERROR -> {
@@ -202,6 +224,10 @@ fun SingleTestScreen(modifier: Modifier = Modifier) {
                     }
                 }
             }
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
