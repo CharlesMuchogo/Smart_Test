@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,25 +15,44 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.yalantis.ucrop.UCrop
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ImagePicker(private val context: Context) {
 
-    private lateinit var takePicture: ManagedActivityResultLauncher<Void?, Bitmap?>
+    private lateinit var takePicture: ManagedActivityResultLauncher<Uri, Boolean>
     private lateinit var cropImageLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
     private lateinit var permissionLauncher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>
 
+    private lateinit var photoFile: File
+    private lateinit var photoUri: Uri
+
     @Composable
     fun RegisterPicker(onImagePicked: (ByteArray) -> Unit) {
+
+        photoUri = remember { mutableStateOf(createImageUri()) }.value
+
+        val (currentPhotoFile, setPhotoFile) = remember { mutableStateOf<File?>(null) }
+        val (currentPhotoUri, setPhotoUri) = remember { mutableStateOf<Uri?>(null) }
+
+
         permissionLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
             if (permissions[Manifest.permission.CAMERA] == true) {
-                takePicture.launch()
+                val (file, uri) = createImageFile()
+                setPhotoFile(file)
+                setPhotoUri(uri)
+                takePicture.launch(photoUri)
             } else {
                 Toast.makeText(context, "Allow Camera permissions to continue", Toast.LENGTH_LONG).show()
             }
@@ -40,15 +60,12 @@ class ImagePicker(private val context: Context) {
 
 
         takePicture = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.TakePicturePreview(),
-            onResult = { newImage ->
-                newImage?.let {
-                    val byteArrayOutputStream = ByteArrayOutputStream()
-                    it.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-                    val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
-
-                    val imageUri = getImageUriFromByteArray(byteArray)
-                    startCrop(imageUri)
+            contract = ActivityResultContracts.TakePicture(),
+            onResult = { success ->
+                if (success) {
+                    currentPhotoUri?.let { uri ->
+                        startCrop(uri)
+                    }
                 }
             }
         )
@@ -73,10 +90,41 @@ class ImagePicker(private val context: Context) {
     }
 
 
+    private fun createImageFile(): Pair<File, Uri> {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            file
+        )
+        return Pair(file, uri)
+    }
+
+
+    private fun createImageUri(): Uri {
+        val imageName = "captured_image_${System.currentTimeMillis()}.jpg"
+        val imageFile = File(context.cacheDir, imageName)
+        return FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            imageFile
+        )
+    }
+
 
     fun captureImage() {
         if (allPermissionsGranted()) {
-            takePicture.launch()
+            val (file, uri) = createImageFile()
+            photoFile = file
+            photoUri = uri
+            takePicture.launch(photoUri)
         } else {
             // Request permissions
             permissionLauncher.launch(arrayOf(
