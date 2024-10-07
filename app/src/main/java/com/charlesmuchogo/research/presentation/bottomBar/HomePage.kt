@@ -102,6 +102,7 @@ class HomePage : Screen {
                     ) {
                         TabNavigationItem(BottomNavigationTabs.InstructionsTab)
                         TabNavigationItem(BottomNavigationTabs.HistoryTab)
+                        TabNavigationItem(BottomNavigationTabs.ClinicsTab)
                         TabNavigationItem(BottomNavigationTabs.ProfileTab)
                     }
                 },

@@ -48,9 +48,9 @@ class Http(
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 360000
-                socketTimeoutMillis = 360000
-                connectTimeoutMillis = 360000
+                requestTimeoutMillis = 360_000L
+                socketTimeoutMillis = 360_000L
+                connectTimeoutMillis = 360_000L
             }
 
             install(ContentNegotiation) {
