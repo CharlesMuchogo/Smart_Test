@@ -69,7 +69,7 @@ fun ClinicsListView(modifier: Modifier = Modifier, clinics: List<Clinic>) {
         .fillMaxSize()
         .padding(horizontal = 8.dp)){
         items(clinics){
-            Text(text = it.name)
+            ClinicCard(clinic = it)
         }
     }
 }

@@ -52,7 +52,7 @@ class ImagePicker(private val context: Context) {
                 val (file, uri) = createImageFile()
                 setPhotoFile(file)
                 setPhotoUri(uri)
-                takePicture.launch(photoUri)
+                takePicture.launch(uri)
             } else {
                 Toast.makeText(context, "Allow Camera permissions to continue", Toast.LENGTH_LONG).show()
             }
@@ -124,7 +124,7 @@ class ImagePicker(private val context: Context) {
             val (file, uri) = createImageFile()
             photoFile = file
             photoUri = uri
-            takePicture.launch(photoUri)
+            takePicture.launch(uri)
         } else {
             // Request permissions
             permissionLauncher.launch(arrayOf(

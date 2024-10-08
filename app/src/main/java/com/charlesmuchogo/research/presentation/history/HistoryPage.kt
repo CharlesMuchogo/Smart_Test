@@ -80,7 +80,7 @@ fun TestResultsListView(
 ) {
     LazyColumn(modifier = modifier.padding(horizontal = 12.dp)) {
         items(results) { result ->
-            RoutesCard(result = result)
+            HistoryCard(result = result)
         }
     }
 }

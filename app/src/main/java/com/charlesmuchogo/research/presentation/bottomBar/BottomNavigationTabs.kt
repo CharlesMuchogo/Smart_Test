@@ -13,6 +13,8 @@ import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
 internal sealed class BottomNavigationTabs {
     internal object InstructionsTab : Tab {
+        private fun readResolve(): Any = InstructionsTab
+
         @Composable
         override fun Content() {
             InstructionsScreen()
@@ -34,6 +36,8 @@ internal sealed class BottomNavigationTabs {
     }
 
     internal object HistoryTab : Tab {
+        private fun readResolve(): Any = HistoryTab
+
         @Composable
         override fun Content() {
             HistoryScreen()
@@ -55,6 +59,8 @@ internal sealed class BottomNavigationTabs {
     }
 
     internal object ClinicsTab : Tab {
+        private fun readResolve(): Any = ClinicsTab
+
         @Composable
         override fun Content() {
             ClinicsScreen()
@@ -75,6 +81,8 @@ internal sealed class BottomNavigationTabs {
             }
     }
     internal object ProfileTab : Tab {
+        private fun readResolve(): Any = ProfileTab
+
         @Composable
         override fun Content() {
             ProfileScreen()

@@ -1,5 +1,5 @@
 
-package com.charlesmuchogo.research.presentation.history
+package com.charlesmuchogo.research.presentation.clinics
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,10 +33,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.charlesmuchogo.research.domain.models.TestResult
+import com.charlesmuchogo.research.domain.models.Clinic
 
 @Composable
-fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
+fun ClinicCard(modifier: Modifier = Modifier, clinic: Clinic) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -48,7 +50,7 @@ fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
             .clickable {
 
             }
-            .testTag(result.id.toString())
+            .testTag(clinic.id.toString())
     ) {
 
         Column(
@@ -63,31 +65,13 @@ fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Schedule,
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .size(20.dp),
-                        contentDescription = null
-                    )
-
-                    Text(
-                        result.status,
-                        fontWeight = FontWeight.Medium,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                }
 
                 Text(
-                    text = result.date,
+                    clinic.name,
                     fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
+
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -111,43 +95,40 @@ fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Person,
+                        imageVector = Icons.Default.LocationOn,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .size(20.dp),
                         contentDescription = null
                     )
                     Text(
-                        if (result.image.isNotBlank() && result.results.isNotBlank()) result.results else "N/A",
-                        fontWeight = FontWeight.Medium,
+                        clinic.address.ifBlank { "N/A" },
+                        fontWeight = FontWeight.Light,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
 
 
-                if (result.partnerImage.isNotBlank()) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = Icons.Default.People,
+                            imageVector = Icons.Default.Phone,
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .size(20.dp),
                             contentDescription = null
                         )
                         Text(
-                            result.partnerResults.ifBlank { "N/A" },
-                            fontWeight = FontWeight.Medium,
+                            clinic.contacts.ifBlank { "N/A" },
+                            fontWeight = FontWeight.Light,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
-                }
-
             }
         }
     }
