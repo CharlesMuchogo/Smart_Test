@@ -187,6 +187,7 @@ class RemoteRepositoryImpl(
     override suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>> {
         return flow {
             try {
+                println("Care option: ${results.careOption}")
                 val response =
                     Http(appDatabase = appDatabase).client.post("/api/mobile/results") {
                         setBody(

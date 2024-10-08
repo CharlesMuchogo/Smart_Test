@@ -24,8 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -46,17 +48,7 @@ class TestInfoPage : Screen {
 @Composable
 fun TestInfoScreen() {
     val navigator = LocalAppNavigator.currentOrThrow
-    val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 
-    LaunchedEffect(key1 = true) {
-        testResultsViewModel.updateHasNavigated(true)
-    }
-
-    DisposableEffect(key1 =true) {
-        onDispose {
-            testResultsViewModel.updateHasNavigated(false)
-        }
-    }
     Scaffold(topBar = {
         TopAppBar(title = { }, navigationIcon = {
 
@@ -72,7 +64,7 @@ fun TestInfoScreen() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding).padding(horizontal = 8.dp)
         ) {
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,13 +89,25 @@ fun TestInfoScreen() {
                 }
 
                 item {
-                    Text(text = "Your test was submitted successfully. Please wait for the confirmation of the results.", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium))
+                    Text( modifier = Modifier.padding(bottom = 12.dp), text = "Your test was submitted successfully. Please wait for the confirmation of the results.", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary))
                 }
 
                 item {
                         Text(
-                            text = "Please note that ",
-                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium)
+                            text = "If your test result is positive, please follow up with a clinic checkup for further guidance and support.",
+                            textAlign = TextAlign.Center,
+                            lineHeight = 22.sp,
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium)
+                        )
+
+                }
+
+                item {
+                        Text(
+                            text = "If your test result is negative and you've engaged in activities that may lead to HIV exposure recently, consider testing again after 3 months.",
+                            textAlign = TextAlign.Center,
+                            lineHeight = 22.sp,
+                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium)
                         )
 
                 }

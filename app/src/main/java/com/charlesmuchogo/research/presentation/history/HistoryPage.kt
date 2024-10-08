@@ -78,7 +78,7 @@ fun TestResultsListView(
     modifier: Modifier = Modifier,
     results: List<TestResult>,
 ) {
-    LazyColumn(modifier = modifier.padding(horizontal = 12.dp)) {
+    LazyColumn(modifier = modifier.padding(horizontal = 8.dp)) {
         items(results) { result ->
             HistoryCard(result = result)
         }

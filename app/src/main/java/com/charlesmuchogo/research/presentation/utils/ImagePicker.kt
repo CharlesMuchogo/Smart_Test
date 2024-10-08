@@ -152,7 +152,7 @@ class ImagePicker(private val context: Context) {
 
         val uCrop = UCrop.of(sourceUri, destinationUri)
             .withAspectRatio(4f, 3f)
-            .withMaxResultSize(300, 300)
+            .withMaxResultSize(1000, 1000)
             .withOptions(options)
             .getIntent(context)
 

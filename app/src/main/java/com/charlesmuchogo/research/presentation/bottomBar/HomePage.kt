@@ -101,8 +101,8 @@ class HomePage : Screen {
                         containerColor = MaterialTheme.colorScheme.background,
                     ) {
                         TabNavigationItem(BottomNavigationTabs.InstructionsTab)
-                        TabNavigationItem(BottomNavigationTabs.HistoryTab)
                         TabNavigationItem(BottomNavigationTabs.ClinicsTab)
+                        TabNavigationItem(BottomNavigationTabs.HistoryTab)
                         TabNavigationItem(BottomNavigationTabs.ProfileTab)
                     }
                 },

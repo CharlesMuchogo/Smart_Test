@@ -44,6 +44,7 @@ class TestPage : Screen {
         val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
         val hasNavigated = testResultsViewModel.hasNavigatedTOInformationalScreen.collectAsStateWithLifecycle().value
         val testResults = testResultsViewModel.testResultsStatus.collectAsStateWithLifecycle().value
+        val uploadTestState = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
         val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
 
 
@@ -51,9 +52,15 @@ class TestPage : Screen {
             testResultsViewModel.getOngoingTest()
         }
 
+        LaunchedEffect(key1 = uploadTestState.status) {
+            if(uploadTestState.status == ResultStatus.SUCCESS){
+                navigator.push(TestInfoPage())
+           }
+        }
+
         LaunchedEffect(testResults.status) {
             if(testResults.status == ResultStatus.SUCCESS && !hasNavigated && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
-               navigator.push(PendingTestPage())
+              navigator.push(PendingTestPage())
                 testResultsViewModel.updateHasNavigated(true)
             }
         }
