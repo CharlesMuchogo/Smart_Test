@@ -41,12 +41,9 @@ constructor(
         private set
 
     val loginStatus = MutableStateFlow(
-        Results<LoginResponseDTO>(
-            data = null,
-            message = null,
-            status = ResultStatus.INITIAL,
-        ),
+        Results.initial<LoginResponseDTO>(),
     )
+
     val registrationStatus = MutableStateFlow(
         Results<LoginResponseDTO>(
             data = null,

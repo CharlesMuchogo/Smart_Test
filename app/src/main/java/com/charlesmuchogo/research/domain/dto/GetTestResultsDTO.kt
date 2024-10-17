@@ -8,3 +8,7 @@ data class GetTestResultsDTO(
     val message: String,
     val results: List<TestResult>,
 )
+@Serializable
+data class DeleteTestResultsDTO(
+    val message: String,
+)

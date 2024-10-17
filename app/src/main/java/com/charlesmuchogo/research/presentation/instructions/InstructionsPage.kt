@@ -22,6 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
+import com.charlesmuchogo.research.presentation.instructions.pdfViewer.PdfViewerScreen
 
 class InstructionsPage : Screen {
     @Composable
@@ -50,176 +51,181 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             }
 
             item {
-
-                // First Heading
-                Text(
-                    text = FIRST_HEADING,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // First Instructions
-                Text(
-                    text = FIRST_INSTRUCTIONS,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-
-                // Second Instructions
-                Text(
-                    text = SECOND_INSTRUCTIONS,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-                Image(
-                    painter = painterResource(R.drawable.pdf1),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Second Heading
-                Text(
-                    text = SECOND_HEADING,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // Step Two Instructions
-                Text(
-                    text = STEP_TWO_INSTRUCTIONS,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-                Image(
-                    painter = painterResource(R.drawable.pdf2),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Third Heading
-                Text(
-                    text = THIRD_HEADING,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // Step Three Instructions
-                Text(
-                    text = STEP_THREE_INSTRUCTIONS,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-                Image(
-                    painter = painterResource(R.drawable.pdf3),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Recommendations Heading
-                Text(
-                    text = RECOMENDATIONS_HEADING,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // Recommendations
-                Text(
-                    text = RECOMENDATIONS,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Image(
-                    painter = painterResource(R.drawable.pdf4),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Important Information
-                Text(
-                    text = IMPORTANT_INFORMATION,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-
-                // Precautions Heading
-                Text(
-                    text = PRECAUTIONS_HEAD,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-                Image(
-                    painter = painterResource(R.drawable.pdf5),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                // Precautions
-                Text(
-                    text = PRECAUTIONS,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-
-                // Reading Heading
-                Text(
-                    text = READING_HEAD,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // Reading
-                Text(
-                    text = READING,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-
-                // Interpretation Heading
-                Text(
-                    text = INTERPRETATION_HEADING,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-
-                // Interpretation Negative
-                Text(
-                    text = INTERPRETATION_NEGATIVE,
-                    style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
-                )
-
-                // Positive Test Head
-                Text(
-                    text = POSITIVE_TEST_HEAD,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
+                PdfViewerScreen(Modifier.fillParentMaxHeight(0.7f) )
             }
 
+            /*
+                        item {
+
+                            // First Heading
+                            Text(
+                                text = FIRST_HEADING,
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // First Instructions
+                            Text(
+                                text = FIRST_INSTRUCTIONS,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+
+                            // Second Instructions
+                            Text(
+                                text = SECOND_INSTRUCTIONS,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+                            Image(
+                                painter = painterResource(R.drawable.pdf1),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Second Heading
+                            Text(
+                                text = SECOND_HEADING,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // Step Two Instructions
+                            Text(
+                                text = STEP_TWO_INSTRUCTIONS,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+                            Image(
+                                painter = painterResource(R.drawable.pdf2),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Third Heading
+                            Text(
+                                text = THIRD_HEADING,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // Step Three Instructions
+                            Text(
+                                text = STEP_THREE_INSTRUCTIONS,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+                            Image(
+                                painter = painterResource(R.drawable.pdf3),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Recommendations Heading
+                            Text(
+                                text = RECOMENDATIONS_HEADING,
+                                style = MaterialTheme.typography.titleLarge.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // Recommendations
+                            Text(
+                                text = RECOMENDATIONS,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                            Image(
+                                painter = painterResource(R.drawable.pdf4),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Important Information
+                            Text(
+                                text = IMPORTANT_INFORMATION,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+
+                            // Precautions Heading
+                            Text(
+                                text = PRECAUTIONS_HEAD,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                            Image(
+                                painter = painterResource(R.drawable.pdf5),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Precautions
+                            Text(
+                                text = PRECAUTIONS,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+
+                            // Reading Heading
+                            Text(
+                                text = READING_HEAD,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // Reading
+                            Text(
+                                text = READING,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+
+                            // Interpretation Heading
+                            Text(
+                                text = INTERPRETATION_HEADING,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+
+                            // Interpretation Negative
+                            Text(
+                                text = INTERPRETATION_NEGATIVE,
+                                style = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Justify)
+                            )
+
+                            // Positive Test Head
+                            Text(
+                                text = POSITIVE_TEST_HEAD,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                         */
 
         }
     }

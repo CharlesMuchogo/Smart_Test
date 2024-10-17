@@ -1,28 +1,35 @@
-
 package com.charlesmuchogo.research.presentation.history
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,10 +42,11 @@ import com.charlesmuchogo.research.domain.models.TestResult
 
 @Composable
 fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
+    var showMoreActions by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(140.dp)
             .padding(vertical = 4.dp)
             .shadow(1.dp, shape = RoundedCornerShape(5))
             .clip(
@@ -81,16 +89,20 @@ fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
                     )
                 }
 
-                Text(
-                    text = result.date,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelMedium,
-                )
+                IconButton(onClick = { showMoreActions = !showMoreActions }) {
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+                }
+
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = result.date,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(vertical = 12.dp),
+                style = MaterialTheme.typography.labelMedium,
+            )
 
             HorizontalDivider(
                 modifier = Modifier
@@ -147,7 +159,22 @@ fun HistoryCard(modifier: Modifier = Modifier, result: TestResult) {
                         )
                     }
                 }
+            }
 
+            AnimatedVisibility(visible = showMoreActions) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = { showMoreActions = !showMoreActions}) {
+                        Text(text = "Cancel", color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.SemiBold)
+                    }
+
+                    TextButton(onClick = { }) {
+                        Text(text = "Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.SemiBold)
+                    }
+                }
             }
         }
     }
