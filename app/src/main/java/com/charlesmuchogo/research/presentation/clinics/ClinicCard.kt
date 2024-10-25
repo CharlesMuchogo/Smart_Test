@@ -69,7 +69,7 @@ fun ClinicCard(modifier: Modifier = Modifier, clinic: Clinic) {
                 Text(
                     clinic.name,
                     fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleMedium,
                 )
 
             }

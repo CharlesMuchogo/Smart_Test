@@ -1,5 +1,8 @@
 package com.charlesmuchogo.research.presentation.common
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -13,9 +16,11 @@ fun AppAlertDialog(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
-    icon: ImageVector,
+    icon: ImageVector = Icons.Default.Info,
+    confirmContent: @Composable() () -> Unit = { Text("Confirm") }
 ) {
     AlertDialog(
+        shape = RoundedCornerShape(8),
         icon = {
             Icon(icon, contentDescription = "AlertDialog Icon")
         },
@@ -34,7 +39,7 @@ fun AppAlertDialog(
                     onConfirmation()
                 },
             ) {
-                Text("Confirm")
+                confirmContent.invoke()
             }
         },
         dismissButton = {

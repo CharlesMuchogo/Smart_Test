@@ -38,8 +38,7 @@ class MainActivity : ComponentActivity() {
 
                 when (profileStatus.status) {
                     ResultStatus.INITIAL,
-                    ResultStatus.LOADING,
-                    -> { }
+                    ResultStatus.LOADING -> { }
 
                     ResultStatus.ERROR -> {
                         Navigator(

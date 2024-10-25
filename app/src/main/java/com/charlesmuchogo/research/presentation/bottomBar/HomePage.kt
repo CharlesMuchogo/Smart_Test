@@ -51,7 +51,6 @@ class HomePage : Screen {
         val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
         val navigator = LocalAppNavigator.currentOrThrow
 
-        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         LaunchedEffect(authenticationEventState.status) {
             authenticationEventState.data?.let {
@@ -70,10 +69,8 @@ class HomePage : Screen {
         ) {
             val tabNavigator = LocalTabNavigator.current
             Scaffold(
-                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
                     CenterAlignedTopAppBar(
-                        scrollBehavior = scrollBehavior ,
                         title = {
                         Text(
                             tabNavigator.current.options.title,
@@ -82,7 +79,7 @@ class HomePage : Screen {
                     })
                 },
                 floatingActionButton = {
-                    if (tabNavigator.current != BottomNavigationTabs.ProfileTab) {
+                    if (tabNavigator.current == BottomNavigationTabs.InstructionsTab) {
                         ExtendedFloatingActionButton(
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,

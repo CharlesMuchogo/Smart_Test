@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
+import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
 import com.charlesmuchogo.research.domain.models.Clinic
+import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.models.TestProgress
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -31,9 +33,17 @@ class TestResultsViewModel
 constructor(
     private val remoteRepository: RemoteRepository,
     private val database: AppDatabase,
+    private val snackBarViewModel: SnackBarViewModel
 ) : ViewModel() {
 
     private var tickingTime = MutableStateFlow(0L)
+
+    var showDeleteTestDialog = MutableStateFlow(false)
+        private  set
+
+    fun updateShowDeleteTestDialog(show: Boolean) {
+        showDeleteTestDialog.value = show
+    }
 
     var hasNavigatedTOInformationalScreen = MutableStateFlow(false)
         private  set
@@ -87,6 +97,9 @@ constructor(
             status = ResultStatus.INITIAL,
         ),
     )
+
+    val deleteTestResultsStatus = MutableStateFlow(Results.initial<DeleteTestResultsDTO>())
+    val snackBarNotification = MutableStateFlow(Results.initial<SnackBarItem>())
 
     val getClinicsStatus = MutableStateFlow(
         Results<List<Clinic>>(
@@ -239,5 +252,40 @@ constructor(
         tickingTime.value = currentTime - startTime
         val testState = startCounter(progress)
         hasResumedTest = testState.isActive
+    }
+
+    fun deleteTest(testResult: TestResult) {
+      viewModelScope.launch {
+          deleteTestResultsStatus.value = Results.loading()
+          remoteRepository.deleteResult(testResult.uuid).collect{ results ->
+
+              results.data?.let {
+                  database.testResultsDao().deleteResult(testResult)
+                  showSnackBarNotification(
+                      SnackBarItem(message = it.message)
+                  )
+              }
+
+              results.message?.let { msg ->
+                  showSnackBarNotification(
+                      SnackBarItem(message = msg, isError = true)
+                  )
+              }
+
+              updateShowDeleteTestDialog(false)
+              deleteTestResultsStatus.value = results
+          }
+      }
+    }
+
+
+
+    private fun showSnackBarNotification(snackBarItem: SnackBarItem) {
+        viewModelScope.launch {
+            delay(100L)
+            snackBarNotification.value = Results.success(snackBarItem)
+            delay(5000L)
+            snackBarNotification.value = Results.initial()
+        }
     }
 }

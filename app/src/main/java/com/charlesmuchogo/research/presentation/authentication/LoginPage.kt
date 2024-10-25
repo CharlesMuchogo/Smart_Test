@@ -207,9 +207,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         }
                     },
                 )
-
-
-
             }
 
             item {

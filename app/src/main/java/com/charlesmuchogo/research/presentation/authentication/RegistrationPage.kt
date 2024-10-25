@@ -60,13 +60,6 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
     val registrationPageState = authenticationViewModel.loginPageState
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
 
     Scaffold { padding ->
         LazyColumn(
