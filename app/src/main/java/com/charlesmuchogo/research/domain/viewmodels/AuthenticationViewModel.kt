@@ -166,7 +166,7 @@ constructor(
                     if (loginPageState.password.isBlank()) "Password is required" else null
 
 
-                if (loginPageState.password.isNotBlank() && loginPageState.confirmPassword.isNotBlank() && loginPageState.password.isNotBlank() != loginPageState.confirmPassword.isNotBlank()) {
+                if (loginPageState.password != loginPageState.confirmPassword) {
                     passwordError = "Passwords do not match"
                     confirmPasswordError = "Passwords do not match"
                 }

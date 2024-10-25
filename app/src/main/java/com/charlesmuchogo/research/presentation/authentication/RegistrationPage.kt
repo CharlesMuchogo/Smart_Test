@@ -207,11 +207,11 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                         when (registrationStatus.status) {
                             ResultStatus.INITIAL,
                             ResultStatus.ERROR -> {
-                                Text("Log in")
+                                Text("Sign up")
                             }
 
                             ResultStatus.SUCCESS -> {
-                                Text("Log in")
+                                Text("Sign up")
                                 navigator.replaceAll(MoreDetailsPage())
                             }
 
