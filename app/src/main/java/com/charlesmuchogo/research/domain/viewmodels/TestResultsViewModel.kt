@@ -135,6 +135,7 @@ constructor(
         viewModelScope.launch {
             remoteRepository.fetchClinics().collect {
                 it.data?.let { dto ->
+                    database.clinicsDao().deleteClinics()
                     database.clinicsDao().insertClinics(dto.clinics)
                 }
             }

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.bottomBar.HomePage
@@ -57,7 +58,8 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val registrationStatus = authenticationViewModel.registrationStatus.collectAsState().value
+    val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
+    val registrationPageState = authenticationViewModel.loginPageState
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
@@ -95,18 +97,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                     AppTextField(
                         modifier = Modifier.weight(1f),
                         label = "First Name",
-                        value = firstName,
-                        onValueChanged = { firstName = it },
-                        error = null,
+                        value = registrationPageState.firstName,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnFirstNameChange(it))},
+                        error = registrationPageState.firstNameError,
                         placeholder = "John",
                         keyboardType = KeyboardType.Text,
                     )
+
                     AppTextField(
                         modifier = Modifier.weight(1f),
                         label = "Last Name",
-                        value = lastName,
-                        onValueChanged = { lastName = it },
-                        error = null,
+                        value = registrationPageState.lastname,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnLastNameChange(it)) },
+                        error = registrationPageState.lastnameError,
                         placeholder = "Doe",
                         keyboardType = KeyboardType.Text,
                     )
@@ -117,9 +120,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Phone Number",
-                    value = phone,
-                    onValueChanged = { phone = it },
-                    error = null,
+                    value = registrationPageState.phoneNumber,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPhoneNumberChange(it))},
+                    error = registrationPageState.phoneNumberError,
                     placeholder = "07123456789",
                     keyboardType = KeyboardType.Phone,
                 )
@@ -128,9 +131,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Email",
-                    value = email,
-                    onValueChanged = { email = it },
-                    error = null,
+                    value = registrationPageState.email,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
+                    error = registrationPageState.emailError,
                     placeholder = "johndoe@email.com",
                     keyboardType = KeyboardType.Email,
                 )
@@ -139,19 +142,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Password",
-                    value = password,
-                    onValueChanged = { password = it },
-                    error = null,
+                    value = registrationPageState.password,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPasswordChange(it))},
+                    error = registrationPageState.passwordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = passwordVisible,
+                    passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Next,
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!registrationPageState.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (registrationPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
@@ -162,19 +165,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Confirm Password",
-                    value = confirmPassword,
-                    onValueChanged = { confirmPassword = it },
-                    error = null,
+                    value = registrationPageState.confirmPassword,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnConfirmPasswordChange(it)) },
+                    error = registrationPageState.confirmPasswordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = passwordVisible,
+                    passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Done,
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!registrationPageState.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (registrationPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
@@ -194,7 +197,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
                 AppButton(
                     onClick = {
-                        authenticationViewModel.register(
+                        authenticationViewModel.onAction(LoginAction.OnSignup)
+
+                        /*authenticationViewModel.register(
                             registrationRequestDTO =
                             RegistrationRequestDTO(
                                 firstName = firstName,
@@ -203,7 +208,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                                 email = email.lowercase().trim(),
                                 password = password,
                             ),
-                        )
+                        )*/
                     },
                     content = {
                         when (registrationStatus.status) {

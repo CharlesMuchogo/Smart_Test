@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -49,7 +51,7 @@ class HomePage : Screen {
         val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
         val navigator = LocalAppNavigator.currentOrThrow
 
-        val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         LaunchedEffect(authenticationEventState.status) {
             authenticationEventState.data?.let {
@@ -70,7 +72,9 @@ class HomePage : Screen {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
-                    CenterAlignedTopAppBar(title = {
+                    CenterAlignedTopAppBar(
+                        scrollBehavior = scrollBehavior ,
+                        title = {
                         Text(
                             tabNavigator.current.options.title,
                             style = MaterialTheme.typography.titleLarge,
@@ -97,7 +101,6 @@ class HomePage : Screen {
                 },
                 bottomBar = {
                     BottomAppBar(
-                        scrollBehavior = scrollBehavior,
                         containerColor = MaterialTheme.colorScheme.background,
                     ) {
                         TabNavigationItem(BottomNavigationTabs.InstructionsTab)
