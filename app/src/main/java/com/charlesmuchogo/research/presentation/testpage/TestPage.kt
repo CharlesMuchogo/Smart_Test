@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.testpage
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,27 +25,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.PendingTestPage
+import com.charlesmuchogo.research.presentation.navigation.TestInfoPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
-import com.charlesmuchogo.research.presentation.utils.Results
-
-class TestPage : Screen {
-
-    @Composable
-    override fun Content() {
-        TestScreen()
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TestScreen(modifier: Modifier = Modifier) {
-    val navigator = LocalAppNavigator.currentOrThrow
+fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
     val hasNavigated = testResultsViewModel.hasNavigatedTOInformationalScreen.collectAsStateWithLifecycle().value
@@ -61,13 +49,13 @@ fun TestScreen(modifier: Modifier = Modifier) {
 
     LaunchedEffect(key1 = uploadTestState.status) {
         if(uploadTestState.status == ResultStatus.SUCCESS){
-            navigator.push(TestInfoPage())
+            navController.navigate(TestInfoPage)
         }
     }
 
     LaunchedEffect(testResults.status) {
         if(testResults.status == ResultStatus.SUCCESS && !hasNavigated && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
-            navigator.push(PendingTestPage())
+            navController.navigate(PendingTestPage)
             testResultsViewModel.updateHasNavigated(true)
         }
     }
@@ -80,10 +68,12 @@ fun TestScreen(modifier: Modifier = Modifier) {
         testResultsViewModel.updateCurrentTab(tab = pagerState.currentPage)
     }
 
-    Scaffold(topBar = {
+    Scaffold(
+        modifier = modifier,
+        topBar = {
         CenterAlignedTopAppBar(
             navigationIcon = {
-                IconButton(onClick = { navigator.pop() }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                 }
             },
@@ -145,11 +135,13 @@ fun TestScreen(modifier: Modifier = Modifier) {
                     0 ->
                         SingleTestScreen(
                             modifier = Modifier,
+                            navController = navController
                         )
 
                     1 ->
                         CoupleTestScreen(
                             modifier = Modifier,
+                            navController = navController
                         )
                 }
             }

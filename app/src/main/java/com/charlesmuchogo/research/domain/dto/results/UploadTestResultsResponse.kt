@@ -1,7 +1,6 @@
 package com.charlesmuchogo.research.domain.dto.results
 
 import com.charlesmuchogo.research.domain.models.TestResult
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

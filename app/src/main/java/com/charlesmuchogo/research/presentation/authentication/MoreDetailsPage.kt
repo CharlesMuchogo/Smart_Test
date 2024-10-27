@@ -30,33 +30,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.HomePage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class MoreDetailsPage : Screen {
-    @Composable
-    override fun Content() {
-        MoreDetailsScreen()
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoreDetailsScreen(modifier: Modifier = Modifier) {
+fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavController) {
     val activity = (LocalContext.current as? Activity)
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val completeRegistrationState = authenticationViewModel.completeRegistrationState.collectAsState().value
-    val navigator = LocalAppNavigator.currentOrThrow
     var testedBefore by remember { mutableStateOf(true) }
 
     val levelsOfEducation = listOf(
@@ -199,7 +190,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier) {
 
                             ResultStatus.SUCCESS -> {
                                 Text("Continue")
-                                navigator.replaceAll(HomePage())
+                                navController.navigate(HomePage)
                             }
 
                             ResultStatus.LOADING -> {

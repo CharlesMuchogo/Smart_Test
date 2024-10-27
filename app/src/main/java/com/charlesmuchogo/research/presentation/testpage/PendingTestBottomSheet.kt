@@ -26,25 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
 
 
-class PendingTestPage : Screen {
-    @Composable
-    override fun Content() {
-        PendingTestScreen()
-    }
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PendingTestScreen() {
-    val navigator = LocalAppNavigator.currentOrThrow
+fun PendingTestScreen(navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 
     LaunchedEffect(key1 = true) {
@@ -60,8 +51,9 @@ fun PendingTestScreen() {
         TopAppBar(title = { }, navigationIcon = {
 
             IconButton(onClick = {
-                navigator.pop()
-                navigator.pop()
+                navController.popBackStack()
+                navController.popBackStack()
+
             }) {
                 Icon(imageVector = Icons.Default.Close, contentDescription = "Exit")
             }
@@ -109,10 +101,4 @@ fun PendingTestScreen() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PendingTestScreenPreview() {
-    PendingTestScreen()
 }

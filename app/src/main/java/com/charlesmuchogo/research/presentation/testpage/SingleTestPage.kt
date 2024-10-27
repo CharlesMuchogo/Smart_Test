@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudUpload
@@ -35,30 +34,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
-import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
 
-class SingleTestPage : Screen {
-    @Composable
-    override fun Content() {
-        CenteredColumn {
-            Text(text = "Single Test Page")
-        }
-    }
-}
 
 @Composable
-fun SingleTestScreen(modifier: Modifier = Modifier) {
+fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)

@@ -24,11 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,30 +35,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.ForgotPasswordPage
+import com.charlesmuchogo.research.presentation.navigation.HomePage
+import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class LoginPage : Screen {
-    @Composable
-    override fun Content() {
-        LoginScreen(modifier = Modifier, navController = rememberNavController() )
-    }
-}
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
-    val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val loginStatus = authenticationViewModel.loginStatus.collectAsState().value
     val loginPageState = authenticationViewModel.loginPageState
@@ -169,7 +155,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         Modifier
                             .padding(top = 16.dp)
                             .clickable {
-                                navigator.push(ForgotPasswordPage())
+                                navController.navigate(ForgotPasswordPage)
                             },
                     )
                 }
@@ -198,7 +184,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             ResultStatus.SUCCESS -> {
                                 Text("Log in")
                                 loginStatus.data?.let { response ->
-                                    navigator.replaceAll(if(response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage() else HomePage())
+                                    navController.navigate(if(response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage else HomePage)
                                 }
 
                             }
@@ -219,7 +205,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)){
                     Text(text = "Don't have an account?", style = MaterialTheme.typography.bodyLarge)
-                    TextButton(onClick = { navigator.push(RegistrationPage())}){
+                    TextButton(onClick = { navController.navigate(RegistrationPage)}){
                         Text(text = "Sign up", style = MaterialTheme.typography.bodyLarge)
                     }
                 }

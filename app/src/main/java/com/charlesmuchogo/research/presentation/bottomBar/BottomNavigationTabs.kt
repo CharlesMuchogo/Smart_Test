@@ -3,14 +3,13 @@ package com.charlesmuchogo.research.presentation.bottomBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
+/*
 internal sealed class BottomNavigationTabs {
     internal object InstructionsTab : Tab {
         private fun readResolve(): Any = InstructionsTab
@@ -113,3 +112,6 @@ fun bottomBarTabFilledIcon(item: Tab) =
         (3u).toUShort() -> painterResource(R.drawable.baseline_person_24)
         else -> painterResource(R.drawable.baseline_info_24)
     }
+
+
+ */

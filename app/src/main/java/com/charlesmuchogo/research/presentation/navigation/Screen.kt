@@ -9,7 +9,13 @@ object AuthController
 object LoginPage
 
 @Serializable
+object ForgotPasswordPage
+
+@Serializable
 object RegistrationPage
+
+@Serializable
+object MoreDetailsPage
 
 @Serializable
 object HomePage
@@ -28,4 +34,10 @@ object ClinicsPage
 
 @Serializable
 object InstructionsPage
+
+@Serializable
+object PendingTestPage
+
+@Serializable
+object TestInfoPage
 

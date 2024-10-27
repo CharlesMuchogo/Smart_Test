@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
@@ -46,17 +46,10 @@ import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
 
-class CoupleTestPage : Screen {
-    @Composable
-    override fun Content() {
-        CenteredColumn {
-            Text(text = "Couples Test Page")
-        }
-    }
-}
+
 
 @Composable
-fun CoupleTestScreen(modifier: Modifier = Modifier) {
+fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)

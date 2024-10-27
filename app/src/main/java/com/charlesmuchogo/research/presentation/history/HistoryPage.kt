@@ -21,26 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class HistoryPage : Screen {
-    @Composable
-    override fun Content() {
-        CenteredColumn(modifier = Modifier) {
-            Text(text = "History Page")
-        }
-    }
-}
+
 
 @Composable
-fun HistoryScreen(modifier: Modifier = Modifier) {
+fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 
     val testResultsStatus =

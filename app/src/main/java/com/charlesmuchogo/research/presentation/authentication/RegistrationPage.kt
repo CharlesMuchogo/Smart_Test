@@ -20,10 +20,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
@@ -34,29 +30,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
+
 import com.charlesmuchogo.research.domain.actions.LoginAction
-import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class RegistrationPage : Screen {
-    @Composable
-    override fun Content() {
-        RegistrationScreen(modifier = Modifier)
-    }
-}
-
 @Composable
-fun RegistrationScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
     val registrationPageState = authenticationViewModel.loginPageState
@@ -212,7 +198,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
                             ResultStatus.SUCCESS -> {
                                 Text("Sign up")
-                                navigator.replaceAll(MoreDetailsPage())
+                                navController.navigate(MoreDetailsPage)
                             }
 
                             ResultStatus.LOADING -> {
@@ -232,7 +218,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                         .padding(vertical = 16.dp)
                 ) {
                     Text(text = "Have an account?", style = MaterialTheme.typography.bodyLarge)
-                    TextButton(onClick = { navigator.pop() }) {
+                    TextButton(onClick = { navController.popBackStack()}) {
                         Text(text = "Sign in", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
@@ -241,8 +227,3 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
-@Composable
-fun RegistrationScreenPreview(){
-    RegistrationScreen()
-}

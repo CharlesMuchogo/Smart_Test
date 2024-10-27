@@ -17,22 +17,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.presentation.common.CenteredColumn
+import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
+import com.charlesmuchogo.research.presentation.navigation.TestPage
 
-class InstructionsPage : Screen {
-    @Composable
-    override fun Content() {
-        CenteredColumn(modifier = Modifier) {
-            Text(text = "Instructions Page")
-        }
-    }
-}
 
 @Composable
-fun InstructionsScreen(modifier: Modifier = Modifier) {
+fun InstructionsScreen(modifier: Modifier = Modifier, navController: NavController ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +34,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -281,6 +274,12 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
                 HeaderText(text = sentence20)
                 RegularBodyText(text = sentence6)
             }
+
+            item {
+                AppButton(onClick = {navController.navigate(TestPage)}) {
+                    Text("Take a test")
+                }
+            }
         }
     }
 }
@@ -307,8 +306,3 @@ fun HeaderText(
     )
 }
 
-@Preview
-@Composable
-fun InstructionsScreenPreview() {
-    InstructionsScreen()
-}

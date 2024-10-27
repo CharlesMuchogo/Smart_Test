@@ -4,24 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
-import cafe.adriel.voyager.navigator.Navigator
 
-val LocalAppNavigator: ProvidableCompositionLocal<Navigator?> = staticCompositionLocalOf { null }
 
-@Composable
-fun ProvideAppNavigator(
-    navigator: Navigator,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(LocalAppNavigator provides navigator) {
-        content()
-    }
-}
 
 const val PERMISSION_REQUEST_CODE = 123
 

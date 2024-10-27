@@ -77,11 +77,6 @@ dependencies {
     //datetime
     implementation(libs.kotlinX.dateTime)
 
-    // navigation
-    implementation(libs.voyager.navigator)
-    implementation(libs.voyager.transitions)
-    implementation(libs.voyager.tab.navigator)
-
     // Dagger hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

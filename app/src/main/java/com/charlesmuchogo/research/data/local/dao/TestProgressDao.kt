@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.charlesmuchogo.research.domain.models.TestProgress
-import com.charlesmuchogo.research.domain.models.TestResult
 import kotlinx.coroutines.flow.Flow
 
 @Dao
