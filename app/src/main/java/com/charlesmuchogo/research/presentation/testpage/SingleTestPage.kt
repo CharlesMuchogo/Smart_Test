@@ -203,7 +203,8 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
             }
 
             item {
-                AppButton(onClick = {
+                AppButton(
+                    onClick = {
                     userImage?.let {
                         testResultsViewModel.updateResults(
                             UploadTestResultsDTO(

@@ -39,6 +39,8 @@ import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.navigation.HomePage
+import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
@@ -190,7 +192,11 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
 
                             ResultStatus.SUCCESS -> {
                                 Text("Continue")
-                                navController.navigate(HomePage)
+                                navController.navigate(HomePage){
+                                    popUpTo(MoreDetailsPage) {
+                                        inclusive = true
+                                    }
+                                }
                             }
 
                             ResultStatus.LOADING -> {

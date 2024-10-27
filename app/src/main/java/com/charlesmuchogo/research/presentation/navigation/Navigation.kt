@@ -26,6 +26,7 @@ fun Navigation() {
         navController = navController,
         startDestination = AuthController,
     ) {
+
         composable<AuthController> {
             AuthControllerScreen(navController = navController)
         }

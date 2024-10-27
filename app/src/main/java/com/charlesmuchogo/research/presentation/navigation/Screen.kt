@@ -3,6 +3,10 @@ package com.charlesmuchogo.research.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
+object AuthenticationPages
+
+
+@Serializable
 object AuthController
 
 @Serializable

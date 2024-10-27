@@ -35,6 +35,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.PopUpToBuilder
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
@@ -43,6 +45,7 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.navigation.ForgotPasswordPage
 import com.charlesmuchogo.research.presentation.navigation.HomePage
+import com.charlesmuchogo.research.presentation.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -56,7 +59,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
 
 
-    Scaffold{ padding ->
+    Scaffold { padding ->
 
         LazyColumn(
             verticalArrangement = Arrangement.Center,
@@ -109,7 +112,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 AppTextField(
                     label = "Password",
                     value = loginPageState.password,
-                    onValueChanged = {authenticationViewModel.onAction(LoginAction.OnPasswordChange(it)) },
+                    onValueChanged = {
+                        authenticationViewModel.onAction(
+                            LoginAction.OnPasswordChange(
+                                it
+                            )
+                        )
+                    },
                     error = loginPageState.passwordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
@@ -137,7 +146,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = loginPageState.rememberMe,
-                            onCheckedChange = { isChecked -> authenticationViewModel.onAction(LoginAction.OnRememberMeChange(isChecked)) },
+                            onCheckedChange = { isChecked ->
+                                authenticationViewModel.onAction(
+                                    LoginAction.OnRememberMeChange(isChecked)
+                                )
+                            },
                         )
                         Text(
                             "Remember me",
@@ -147,10 +160,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     Text(
                         "Forgot password?",
                         style =
-                            MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = SemiBold,
-                                color = MaterialTheme.colorScheme.primary,
-                            ),
+                        MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
+                        ),
                         modifier =
                         Modifier
                             .padding(top = 16.dp)
@@ -177,14 +190,20 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     },
                     content = {
                         when (loginStatus.status) {
-                            ResultStatus.INITIAL,ResultStatus.ERROR-> {
+                            ResultStatus.INITIAL, ResultStatus.ERROR -> {
                                 Text("Log in")
                             }
 
                             ResultStatus.SUCCESS -> {
                                 Text("Log in")
                                 loginStatus.data?.let { response ->
-                                    navController.navigate(if(response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage else HomePage)
+                                    navController.navigate(
+                                        route = if (response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage else HomePage
+                                    ) {
+                                        popUpTo(LoginPage) {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
 
                             }
@@ -203,9 +222,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp)){
-                    Text(text = "Don't have an account?", style = MaterialTheme.typography.bodyLarge)
-                    TextButton(onClick = { navController.navigate(RegistrationPage)}){
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(
+                        text = "Don't have an account?",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    TextButton(onClick = { navController.navigate(RegistrationPage) }) {
                         Text(text = "Sign up", style = MaterialTheme.typography.bodyLarge)
                     }
                 }

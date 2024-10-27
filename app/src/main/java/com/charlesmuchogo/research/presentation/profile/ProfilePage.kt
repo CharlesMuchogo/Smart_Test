@@ -55,6 +55,8 @@ import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.presentation.navigation.LoginPage
+import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.navigation.ProfilePage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
@@ -107,7 +109,11 @@ fun ProfileListView(
             onConfirmation = {
                 showLogoutDialog = false
                 authenticationViewModel.logout()
-                navController.navigate(LoginPage)
+                navController.navigate(LoginPage){
+                    popUpTo(ProfilePage) {
+                        inclusive = true
+                    }
+                }
             },
             dialogTitle = "Log out",
             dialogText = "You are about to log out",

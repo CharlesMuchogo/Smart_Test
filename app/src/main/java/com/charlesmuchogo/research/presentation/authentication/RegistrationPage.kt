@@ -37,7 +37,9 @@ import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
+import com.charlesmuchogo.research.presentation.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 @Composable
@@ -177,17 +179,6 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 AppButton(
                     onClick = {
                         authenticationViewModel.onAction(LoginAction.OnSignup)
-
-                        /*authenticationViewModel.register(
-                            registrationRequestDTO =
-                            RegistrationRequestDTO(
-                                firstName = firstName,
-                                lastName = lastName,
-                                phone = phone,
-                                email = email.lowercase().trim(),
-                                password = password,
-                            ),
-                        )*/
                     },
                     content = {
                         when (registrationStatus.status) {
@@ -198,7 +189,11 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
 
                             ResultStatus.SUCCESS -> {
                                 Text("Sign up")
-                                navController.navigate(MoreDetailsPage)
+                                navController.navigate(MoreDetailsPage){
+                                    popUpTo(RegistrationPage) {
+                                        inclusive = true
+                                    }
+                                }
                             }
 
                             ResultStatus.LOADING -> {

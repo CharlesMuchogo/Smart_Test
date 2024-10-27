@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.dp
 fun AppButton(
     modifier: Modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(),
     onClick: () -> Unit,
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     Button(
         shape = RoundedCornerShape(12),
         onClick = onClick,
         modifier = modifier.height(54.dp),
+        enabled = enabled
     ) {
         content()
     }
