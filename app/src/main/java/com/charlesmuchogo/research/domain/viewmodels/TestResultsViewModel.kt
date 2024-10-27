@@ -109,6 +109,14 @@ constructor(
         ),
     )
 
+    val searchClinicsStatus = MutableStateFlow(
+        Results<List<Clinic>>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL,
+        ),
+    )
+
     val uploadResultsStatus = MutableStateFlow(
         Results<UploadTestResultsResponse>(
             data = null,
@@ -130,7 +138,7 @@ constructor(
         getClinics()
         fetchTestResults()
         fetchClinics()
-
+        searchClinics("")
     }
 
     private fun getClinics() {
@@ -152,6 +160,17 @@ constructor(
                     database.clinicsDao().insertClinics(dto.clinics)
                 }
             }
+        }
+    }
+
+    fun searchClinics(searchTerm: String) {
+        viewModelScope.launch {
+           database.clinicsDao().searchClinics(searchTerm = searchTerm).catch {
+               it.printStackTrace()
+           }.collect{ clinics ->
+               searchClinicsStatus.value = Results.success(clinics)
+           }
+
         }
     }
 

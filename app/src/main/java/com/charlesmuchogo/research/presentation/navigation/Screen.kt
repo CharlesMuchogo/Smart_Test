@@ -37,6 +37,9 @@ object HistoryPage
 object ClinicsPage
 
 @Serializable
+object SearchClinicsPage
+
+@Serializable
 object InstructionsPage
 
 @Serializable

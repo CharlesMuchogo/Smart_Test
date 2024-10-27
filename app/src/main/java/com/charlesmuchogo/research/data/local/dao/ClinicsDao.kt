@@ -15,6 +15,10 @@ interface ClinicsDao {
     @Query("SELECT * FROM Clinics ORDER BY name ASC")
     fun getClinics(): Flow<List<Clinic>>
 
+
+    @Query("SELECT * FROM Clinics WHERE name LIKE '%' || :searchTerm || '%' OR  address LIKE  '%' || :searchTerm || '%' OR  contacts LIKE  '%' || :searchTerm || '%'  ORDER BY name ASC")
+    fun searchClinics(searchTerm: String): Flow<List<Clinic>>
+
     @Query("DELETE FROM Clinics")
     suspend fun deleteClinics()
 }

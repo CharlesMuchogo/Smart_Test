@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -37,6 +39,7 @@ import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
+import com.charlesmuchogo.research.presentation.navigation.SearchClinicsPage
 import com.charlesmuchogo.research.presentation.navigation.TestPage
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
@@ -48,8 +51,6 @@ fun HomeScreen(navController: NavController) {
         mutableIntStateOf(0)
     }
 
-
-    val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 
     LaunchedEffect(key1 = true) {
@@ -141,7 +142,18 @@ fun HomeScreen(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title)
+                },
+                actions = {
+                    if(selectedItemIndex == 1){
+                        IconButton(onClick = {
+                            navController.navigate(SearchClinicsPage)
+                        }) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                        }
+                    }
                 }
+
+
             )
         }
     ) { paddingValues ->

@@ -10,6 +10,8 @@ import com.charlesmuchogo.research.presentation.authentication.LoginScreen
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
 import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
+import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
+import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
@@ -54,6 +56,12 @@ fun Navigation() {
 
         composable<ProfilePage> {
             ProfileScreen(navController = navController)
+        }
+        composable<ClinicsPage> {
+            ClinicsScreen()
+        }
+        composable<SearchClinicsPage> {
+            SearchClinicsScreen(navController = navController)
         }
 
         composable<TestPage> {
