@@ -39,6 +39,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.charlesmuchogo.research.R
@@ -55,12 +57,12 @@ import com.charlesmuchogo.research.presentation.utils.ResultStatus
 class LoginPage : Screen {
     @Composable
     override fun Content() {
-        LoginScreen(modifier = Modifier)
+        LoginScreen(modifier = Modifier, navController = rememberNavController() )
     }
 }
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val loginStatus = authenticationViewModel.loginStatus.collectAsState().value

@@ -5,7 +5,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
@@ -13,6 +16,8 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -42,74 +47,84 @@ import com.charlesmuchogo.research.presentation.testpage.TestPage
 import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
 
 class HomePage : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
+
     @Composable
     override fun Content() {
+        HomeScreen()
+    }
+}
 
-        val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-        val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
-        val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
-        val navigator = LocalAppNavigator.currentOrThrow
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(modifier: Modifier = Modifier) {
+    val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
+    val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
+    val authenticationEventState = authenticationViewModel.authenticationEventState.collectAsStateWithLifecycle().value
+    val navigator = LocalAppNavigator.currentOrThrow
 
 
-        LaunchedEffect(authenticationEventState.status) {
-            authenticationEventState.data?.let {
-                if (it.logout) {
-                    authenticationViewModel.logout()
-                    navigator.replaceAll(LoginPage())
-                }
+    LaunchedEffect(authenticationEventState.status) {
+        authenticationEventState.data?.let {
+            if (it.logout) {
+                authenticationViewModel.logout()
+                navigator.replaceAll(LoginPage())
             }
         }
+    }
 
-        LaunchedEffect(key1 = true) {
-            testResultsViewModel.fetchTestResults()
-        }
-        TabNavigator(
-            tab = BottomNavigationTabs.InstructionsTab,
-        ) {
-            val tabNavigator = LocalTabNavigator.current
-            Scaffold(
-                topBar = {
-                    CenterAlignedTopAppBar(
-                        title = {
+    LaunchedEffect(key1 = true) {
+        testResultsViewModel.fetchTestResults()
+    }
+    TabNavigator(
+        tab = BottomNavigationTabs.InstructionsTab,
+    ) {
+        val tabNavigator = LocalTabNavigator.current
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
                         Text(
                             tabNavigator.current.options.title,
                             style = MaterialTheme.typography.titleLarge,
                         )
                     })
-                },
-                floatingActionButton = {
-                    if (tabNavigator.current == BottomNavigationTabs.InstructionsTab) {
-                        ExtendedFloatingActionButton(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                            onClick = {
-                                navigator.push(TestPage())
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Take a test"
-                                )
-                            },
-                            text = { Text(text = "Take a test") },
-                        )
-                    }
-                },
-                bottomBar = {
-                    BottomAppBar(
-                        containerColor = MaterialTheme.colorScheme.background,
-                    ) {
-                        TabNavigationItem(BottomNavigationTabs.InstructionsTab)
-                        TabNavigationItem(BottomNavigationTabs.ClinicsTab)
-                        TabNavigationItem(BottomNavigationTabs.HistoryTab)
-                        TabNavigationItem(BottomNavigationTabs.ProfileTab)
-                    }
-                },
-            ) { paddingValues ->
-                Box(modifier = Modifier.padding(paddingValues)) {
-                    CurrentScreen()
+            },
+            floatingActionButton = {
+
+                FloatingActionButton(
+                    modifier = Modifier
+                        .offset(y = 60.dp)
+                        .size(42.dp),
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        navigator.push(TestPage())
+                    },
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp,
+                    ),
+                    shape = CircleShape,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Add Task",
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(24.dp),
+                    )
                 }
+            },
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = MaterialTheme.colorScheme.background,
+                ) {
+                    TabNavigationItem(BottomNavigationTabs.InstructionsTab)
+                    TabNavigationItem(BottomNavigationTabs.ClinicsTab)
+                    TabNavigationItem(BottomNavigationTabs.HistoryTab)
+                    TabNavigationItem(BottomNavigationTabs.ProfileTab)
+                }
+            },
+        ) { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues)) {
+                CurrentScreen()
             }
         }
     }

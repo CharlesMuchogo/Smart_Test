@@ -19,7 +19,7 @@ hiltAndroidCompiler = "2.51.1"
 hiltCompiler = "1.1.0"
 coil = "2.7.0"
 ucrop = "2.2.9-native"
-
+composeNavigation = "2.8.3"
 
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
@@ -45,6 +45,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+
+
+
+
 kotlinX-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }

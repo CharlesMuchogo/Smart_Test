@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
             modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
@@ -62,11 +63,28 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
                 )
             }
 
+
+            item {
+                HeaderText(
+                    text = sentence1,
+                    style = MaterialTheme.typography.bodyLarge
+                        .copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                )
+            }
+
             item {
                 Image(
                     painter = painterResource(R.drawable.two),
                     contentDescription = "Image"
                 )
+            }
+
+
+            item {
+                RegularBodyText(text = sentence2)
             }
 
             item {
@@ -76,9 +94,9 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
                 )
             }
 
-                item {
-                    RegularBodyText(text = sentence21)
-                }
+            item {
+                RegularBodyText(text = sentence21)
+            }
 
 
             item {
@@ -101,7 +119,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence23)
             }
 
 
@@ -115,7 +133,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence27)
             }
 
 
@@ -130,7 +148,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence28)
             }
 
 
@@ -145,7 +163,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence26)
             }
 
 
@@ -160,7 +178,7 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence24)
             }
 
 
@@ -175,8 +193,9 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence25)
             }
+
 
 
 
@@ -187,13 +206,15 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
                 )
             }
 
-
-
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence3)
             }
 
 
+
+            item {
+                HeaderText(text = sentence7)
+            }
 
             item {
                 Image(
@@ -202,13 +223,19 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
                 )
             }
 
-
+            item {
+                RegularBodyText(text = sentence8)
+            }
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence9)
             }
 
 
+
+            item {
+                HeaderText(text = sentence15)
+            }
 
             item {
                 Image(
@@ -220,10 +247,22 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence16)
+            }
+
+            item {
+                HeaderText(text = sentence19)
+            }
+            item {
+                RegularBodyText(text = sentence18)
             }
 
 
+
+
+            item {
+                HeaderText(text = sentence12)
+            }
 
             item {
                 Image(
@@ -234,10 +273,14 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 
 
             item {
-                RegularBodyText(text = sentence22)
+                RegularBodyText(text = sentence13)
             }
 
 
+            item {
+                HeaderText(text = sentence20)
+                RegularBodyText(text = sentence6)
+            }
         }
     }
 }
@@ -245,9 +288,22 @@ fun InstructionsScreen(modifier: Modifier = Modifier) {
 @Composable
 fun RegularBodyText(modifier: Modifier = Modifier, text: String) {
     Text(
-        modifier = Modifier,
-        text = text, style = MaterialTheme.typography.bodyMedium
+        modifier = modifier.padding(bottom = 8.dp),
+        text = text, style = MaterialTheme.typography.bodyLarge
             .copy(fontWeight = FontWeight.Normal)
+    )
+}
+
+@Composable
+fun HeaderText(
+    modifier: Modifier = Modifier,
+    text: String,
+    style: TextStyle = MaterialTheme.typography.bodyLarge
+        .copy(fontWeight = FontWeight.SemiBold)
+) {
+    Text(
+        modifier = modifier.padding(bottom = 8.dp),
+        text = text, style = style
     )
 }
 
