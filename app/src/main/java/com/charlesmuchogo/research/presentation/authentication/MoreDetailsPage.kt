@@ -40,7 +40,6 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.navigation.HomePage
 import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
-import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 

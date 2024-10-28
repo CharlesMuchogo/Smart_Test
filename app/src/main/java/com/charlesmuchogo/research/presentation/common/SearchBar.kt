@@ -27,7 +27,6 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     onExit: () -> Unit,
 ) {
-    Box {
         TextField(
             value = value,
             placeholder = {
@@ -67,5 +66,5 @@ fun SearchBar(
                 modifier
                     .testTag(description),
         )
-    }
+
 }

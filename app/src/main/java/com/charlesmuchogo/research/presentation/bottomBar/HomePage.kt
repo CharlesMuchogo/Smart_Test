@@ -13,14 +13,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,7 +46,6 @@ import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
 import com.charlesmuchogo.research.presentation.navigation.SearchClinicsPage
 import com.charlesmuchogo.research.presentation.navigation.TestPage
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
-import javax.annotation.meta.When
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,12 +95,13 @@ fun HomeScreen(navController: NavController) {
             }
         },
         bottomBar = {
-            NavigationBar(
+            BottomAppBar(
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 containerColor = MaterialTheme.colorScheme.background
             ) {
                 BottomNavigationItem.bottomNavigationItems.forEachIndexed { index, item ->
                     NavigationBarItem(
+                        interactionSource = remember { MutableInteractionSource() },
                         modifier = Modifier
                             .testTag(item.title)
                             .offset(
@@ -224,4 +222,6 @@ fun HomeScreen(navController: NavController) {
 
     }
 }
+
+
 
