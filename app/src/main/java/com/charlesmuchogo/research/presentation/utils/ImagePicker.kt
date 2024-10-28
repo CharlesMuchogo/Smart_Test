@@ -19,6 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -73,13 +76,8 @@ class ImagePicker(private val context: Context) {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.let { intent ->
                     val croppedUri = UCrop.getOutput(intent)
-                    croppedUri?.let {
-                        // Convert cropped image to ByteArray and pass it back
-                        val inputStream = context.contentResolver.openInputStream(it)
-                        val byteArray = inputStream?.readBytes()
-                        byteArray?.let { croppedBytes ->
-                            onImagePicked(croppedBytes)
-                        }
+                    croppedUri?.let { uri ->
+                        compressAndReturnImage(uri, onImagePicked)
                     }
                 }
             }
@@ -156,14 +154,13 @@ class ImagePicker(private val context: Context) {
         cropImageLauncher.launch(uCrop)
     }
 
-    private fun getImageUriFromByteArray(byteArray: ByteArray): Uri {
-        val tempFile = File.createTempFile("capturedImage", ".png", context.cacheDir)
-        tempFile.writeBytes(byteArray)
-        return FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.provider",
-            tempFile
-        )
+
+    private fun compressAndReturnImage(uri: Uri, onImagePicked: (ByteArray) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val compressionThreshold = 300 * 1024L
+            val compressedBytes = ImageCompressor(context).compressImage(uri, compressionThreshold)
+            compressedBytes?.let { onImagePicked(it) }
+        }
     }
 }
 

@@ -33,7 +33,7 @@ val OnSurfaceVariantLight = Color(0xff424940)
 val OutlineLight = Color(0xff72796f)
 val orangeLight = Color(0xffff3C33)
 val yellowLight = Color(0xffffB900)
-val blueLight = Color(0xff28b4e1)
+val greenLight = Color(0xff48d861)
 
 // DARK
 val GreenPrimaryDark = Color(0xff7d7cee)
@@ -80,7 +80,7 @@ val yellow = Color(0xfffb6e1e)
 val lightYellow = Color(0xfffae8b9)
 
 val green = Color(0xff48d861)
-val lightGreen = Color(0xffE0F6F1)
+val lightGreen = Color(0xff19C463)
 
 val lightGray = Color(0xffBEBEBE)
 val darkGray = Color(0xffc0bfbf)

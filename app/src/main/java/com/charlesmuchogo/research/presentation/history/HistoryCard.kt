@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -42,7 +43,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
+import com.charlesmuchogo.research.presentation.common.AppStatusButton
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import ui.theme.lightGreen
+import ui.theme.lightYellow
 
 @Composable
 fun HistoryCard(
@@ -53,6 +57,12 @@ fun HistoryCard(
     var showMoreActions by remember { mutableStateOf(false) }
     val showDeleteDialog by historyViewModel.showDeleteTestDialog.collectAsState()
     val deleteHistoryState by historyViewModel.deleteTestResultsStatus.collectAsState()
+    val color  = when(result.results.uppercase()){
+        "NEGATIVE" -> lightGreen
+        "POSITIVE" -> MaterialTheme.colorScheme.error
+        "INVALID" -> lightYellow
+        else -> MaterialTheme.colorScheme.tertiary
+    }
 
     if (showDeleteDialog) {
         AppAlertDialog(
@@ -121,7 +131,7 @@ fun HistoryCard(
                     )
 
                     Text(
-                        result.status,
+                        text = result.status,
                         fontWeight = FontWeight.Medium,
                         style = MaterialTheme.typography.bodyMedium,
                     )
@@ -150,54 +160,22 @@ fun HistoryCard(
                 color = MaterialTheme.colorScheme.secondaryContainer
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                AppStatusButton(
+                    onClick = {},
+                    label = if (result.image.isNotBlank() && result.results.isNotBlank()) result.results else "N/A",
+                    containerColor = color
+                )
 
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
+                IconButton(onClick = {}) {
                     Icon(
-                        imageVector = Icons.Default.Person,
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .size(20.dp),
-                        contentDescription = null
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Share",
+                        modifier = Modifier.size(22.dp)
                     )
-                    Text(
-                        if (result.image.isNotBlank() && result.results.isNotBlank()) result.results else "N/A",
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-                }
-
-
-                if (result.partnerImage.isNotBlank()) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.People,
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(20.dp),
-                            contentDescription = null
-                        )
-                        Text(
-                            result.partnerResults.ifBlank { "N/A" },
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
                 }
             }
+
 
             AnimatedVisibility(visible = showMoreActions) {
                 Row(
