@@ -26,14 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.charlesmuchogo.research.domain.models.Clinic
+import com.charlesmuchogo.research.presentation.utils.openDialer
 
 @Composable
 fun ClinicCard(modifier: Modifier = Modifier, clinic: Clinic) {
+    val context = LocalContext.current
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -110,6 +114,12 @@ fun ClinicCard(modifier: Modifier = Modifier, clinic: Clinic) {
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable(role = Role.Button, onClick = {
+                            openDialer(
+                                phoneNumber = clinic.contacts,
+                                context = context
+                            )
+                        })
                     ) {
                         Icon(
                             imageVector = Icons.Default.Phone,

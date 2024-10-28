@@ -3,6 +3,10 @@ package com.charlesmuchogo.research.presentation.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
@@ -44,4 +48,14 @@ fun convertMillisecondsToTimeTaken(milliseconds: Long): String {
         ((milliseconds % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0')
     val seconds = ((milliseconds % (1000 * 60)) / 1000).toString().padStart(2, '0')
     return "$hours:$minutes:$seconds"
+}
+
+fun openDialer(phoneNumber: String, context: Context) {
+    try {
+        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+        dialIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.applicationContext.startActivity(dialIntent)
+    } catch (e: Exception) {
+        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+    }
 }
