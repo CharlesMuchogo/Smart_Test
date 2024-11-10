@@ -106,6 +106,9 @@ constructor(
                 loginPageState = loginPageState.copy(rememberMe = action.rememberMe)
             }
 
+            is LoginAction.OnTermsAndConditionsChange -> {
+                loginPageState = loginPageState.copy(termsAndConditions = action.agree)
+            }
 
             is LoginAction.OnAgeChange -> {
                 loginPageState = loginPageState.copy(age = action.value)

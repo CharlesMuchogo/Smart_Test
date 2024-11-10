@@ -9,6 +9,7 @@ data class LoginState(
     val confirmPassword: String = "",
     val showPassword: Boolean = false,
     val rememberMe: Boolean = true,
+    val termsAndConditions: Boolean = false,
 
     val age: String = "",
     val gender: String = "",

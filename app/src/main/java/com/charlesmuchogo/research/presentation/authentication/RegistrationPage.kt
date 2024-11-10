@@ -1,5 +1,7 @@
 package com.charlesmuchogo.research.presentation.authentication
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,12 +23,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +44,8 @@ import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
+import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
 @Composable
 fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
@@ -45,6 +53,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
     val registrationPageState = authenticationViewModel.loginPageState
+    val  context = LocalContext.current
 
     Scaffold { padding ->
         LazyColumn(
@@ -164,6 +173,23 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
             }
 
             item {
+                Row(verticalAlignment = Alignment.CenterVertically){
+                    Checkbox(
+                        checked = registrationPageState.termsAndConditions,
+                        onCheckedChange = { authenticationViewModel.onAction(LoginAction.OnTermsAndConditionsChange(agree = !registrationPageState.termsAndConditions)) },
+                    )
+                    Text("I agree to the ", style = MaterialTheme.typography.bodyMedium)
+                    Text(modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            openInAppBrowser(context = context, url = TERMS_AND_CONDITIONS_URL)
+                        }
+                    ), text = "Terms and Conditions", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = SemiBold, color = MaterialTheme.colorScheme.primary,textDecoration = TextDecoration.Underline))
+                }
+            }
+
+            item {
                 registrationStatus.message?.let {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -174,6 +200,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 }
 
                 AppButton(
+                    enabled = registrationPageState.termsAndConditions,
                     onClick = {
                         authenticationViewModel.onAction(LoginAction.OnSignup)
                     },

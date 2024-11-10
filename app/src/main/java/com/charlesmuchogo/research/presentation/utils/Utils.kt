@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
@@ -59,3 +60,13 @@ fun openDialer(phoneNumber: String, context: Context) {
         Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
     }
 }
+
+fun openInAppBrowser(context: Context, url: String) {
+    val customTabsIntent = CustomTabsIntent.Builder()
+        .setShowTitle(true)
+        .setUrlBarHidingEnabled(true)
+        .build()
+    customTabsIntent.launchUrl(context, Uri.parse(url))
+}
+
+const val TERMS_AND_CONDITIONS_URL = "https://smarttest.charlesmuchogo.com/api/privacy_policy"

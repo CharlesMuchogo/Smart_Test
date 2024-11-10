@@ -73,6 +73,7 @@ fun HomeScreen(navController: NavController) {
             ) {
 
                 FloatingActionButton(
+
                     modifier = Modifier
                         .offset(y = 72.dp, x = 16.dp)
                         .size(52.dp),

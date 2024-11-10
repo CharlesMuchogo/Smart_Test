@@ -101,7 +101,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     value = loginPageState.email,
                     onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
                     error = loginPageState.emailError,
-                    placeholder = "johndoe@email.com 0r 0712345678",
+                    placeholder = "johndoe@email.com or 0712345678",
                     keyboardType = KeyboardType.Email,
                 )
             }
