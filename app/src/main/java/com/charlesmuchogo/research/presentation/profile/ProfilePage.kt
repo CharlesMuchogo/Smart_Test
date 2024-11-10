@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,7 +58,10 @@ import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.presentation.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.navigation.ProfilePage
+import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
+import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
 
 @Composable
@@ -98,6 +103,7 @@ fun ProfileListView(
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
+    val  context = LocalContext.current
 
     val darkTheme = profile.darkTheme
     val hideResults = profile.hideResults
@@ -291,6 +297,35 @@ fun ProfileListView(
                             Switch(checked = !hideResults, onCheckedChange = {
                                 authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
                             })
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Privacy policy",
+                        prefixIcon = Icons.Default.Info,
+                        onClick = {
+                            openInAppBrowser(context = context, url = PRIVACY_POLICY_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
+                        },
+                    )
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Terms and conditions",
+                        prefixIcon = Icons.Default.Security,
+                        onClick = {
+                            openInAppBrowser(context = context, url = TERMS_AND_CONDITIONS_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
                         },
                     )
 

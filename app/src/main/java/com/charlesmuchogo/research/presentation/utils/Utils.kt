@@ -69,4 +69,5 @@ fun openInAppBrowser(context: Context, url: String) {
     customTabsIntent.launchUrl(context, Uri.parse(url))
 }
 
-const val TERMS_AND_CONDITIONS_URL = "https://smarttest.charlesmuchogo.com/api/privacy_policy"
+const val PRIVACY_POLICY_URL = "https://smarttest.charlesmuchogo.com/privacy_policy"
+const val TERMS_AND_CONDITIONS_URL = "https://smarttest.charlesmuchogo.com/terms_and_conditions"
