@@ -58,7 +58,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
 
     Scaffold { padding ->
-
         LazyColumn(
             verticalArrangement = Arrangement.Center,
             modifier = modifier

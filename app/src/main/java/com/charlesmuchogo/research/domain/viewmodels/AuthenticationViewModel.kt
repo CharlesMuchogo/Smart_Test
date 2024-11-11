@@ -203,9 +203,6 @@ constructor(
 
                 var emailError = if (loginPageState.email.isBlank()) "Email is required" else null
 
-                if (loginPageState.email.isNotBlank() && !isValidEmail(loginPageState.email)) emailError =
-                    "Enter a valid email address"
-
                 val passwordError =
                     if (loginPageState.password.isBlank()) "Password is required" else null
 
