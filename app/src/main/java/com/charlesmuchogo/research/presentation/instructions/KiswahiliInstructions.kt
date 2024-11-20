@@ -275,7 +275,7 @@ fun KiswahiliInstructions(modifier: Modifier = Modifier, onClick: () -> Unit) {
             item {
                 //navController.navigate(TestPage)
                 AppButton(onClick = onClick) {
-                    Text("Take a test")
+                    Text("Anzisha kipimo")
                 }
             }
         }

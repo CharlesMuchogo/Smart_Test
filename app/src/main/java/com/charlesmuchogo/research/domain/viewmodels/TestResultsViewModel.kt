@@ -203,6 +203,11 @@ constructor(
     fun updateResults(resultsDTO: UploadTestResultsDTO){
         viewModelScope.launch {
             uploadResultsStatus.value = Results.loading()
+
+            ongoingTestStatus.value.data?.let {
+                completeTestTimer(it)
+            }
+
             remoteRepository.uploadResults(resultsDTO).collect{
                 it.data?.result?.let { result ->
                     database.testResultsDao().insertTestResult(result)
