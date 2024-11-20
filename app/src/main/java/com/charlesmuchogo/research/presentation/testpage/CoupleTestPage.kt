@@ -63,8 +63,8 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
     val ongoingTestStatus =
         testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
-    val percentage =
-        ((ongoingTestStatus.data?.timeSpent ?: 0L).toFloat() / 1_200_000.toFloat()) * 100
+    val timeSpent = ongoingTestStatus.data?.timeSpent?: 0L
+    val percentage = (timeSpent.toFloat() / 1_200_000.toFloat()) * 100
 
     val stroke = Stroke(
         width = 2f,
@@ -102,9 +102,14 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                     mainColor = MaterialTheme.colorScheme.primary,
                     percentage = percentage,
                     onClick = {
-                        ongoingTestStatus.data?.let {
-                            testResultsViewModel.completeTestTimer(it)
-                        } ?: testResultsViewModel.startTest()
+
+                        if(ongoingTestStatus.data == null){
+                            scheduleHourlyNotificationWork(context = context)
+                            testResultsViewModel.startTest()
+                        }else{
+                            testResultsViewModel.completeTestTimer(ongoingTestStatus.data)
+                        }
+
                     }
                 )
             }
@@ -247,7 +252,9 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
             }
 
             item {
-                AppButton(onClick = {
+                AppButton(
+                    enabled = timeSpent > 1_200_000L,
+                    onClick = {
                     if (userImage != null && partnerImage != null) {
                         testResultsViewModel.updateResults(
                             UploadTestResultsDTO(

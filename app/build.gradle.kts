@@ -15,10 +15,10 @@ android {
 
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.0.0"
+        versionCode = 6
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.inappmessaging.display)
     implementation(libs.navigation.compose)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -109,4 +110,10 @@ dependencies {
 
     //Browser
     implementation(libs.inappbrowser)
+
+    //lottie
+    implementation(libs.lottie)
+
+    //workmanager
+    implementation(libs.androidx.work.runtime.ktx)
 }

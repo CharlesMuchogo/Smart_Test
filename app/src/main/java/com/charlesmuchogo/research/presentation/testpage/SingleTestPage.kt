@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.testpage
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.charlesmuchogo.research.NotificationWorker
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
@@ -45,6 +50,7 @@ import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
+import java.util.concurrent.TimeUnit
 
 
 @Composable
@@ -57,10 +63,12 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
         testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
     val userImage = testResultsViewModel.userImage.collectAsStateWithLifecycle().value
     val selectedClinic = testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
-    val ongoingTestStatus =
-        testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
+    val ongoingTestStatus = testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
-    val percentage = ((ongoingTestStatus.data?.timeSpent?: 0L ).toFloat() / 1_200_000.toFloat() ) * 100
+    val timeSpent = ongoingTestStatus.data?.timeSpent?: 0L
+
+
+    val percentage = (timeSpent.toFloat() / 1_200_000.toFloat() ) * 100
 
     val stroke = Stroke(
         width = 2f,
@@ -95,9 +103,13 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
                     mainColor = MaterialTheme.colorScheme.primary,
                     percentage = percentage,
                     onClick = {
-                        ongoingTestStatus.data?.let {
-                            testResultsViewModel.completeTestTimer(it)
-                        } ?: testResultsViewModel.startTest()
+
+                        if(ongoingTestStatus.data == null){
+                            scheduleHourlyNotificationWork(context = context)
+                            testResultsViewModel.startTest()
+                        }else{
+                            testResultsViewModel.completeTestTimer(ongoingTestStatus.data)
+                        }
                     }
                 )
             }
@@ -204,7 +216,9 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
 
             item {
                 AppButton(
+                    enabled = timeSpent > 1_200_000L ,
                     onClick = {
+
                     userImage?.let {
                         testResultsViewModel.updateResults(
                             UploadTestResultsDTO(
@@ -233,4 +247,12 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
             }
         }
     }
+}
+
+fun scheduleHourlyNotificationWork(context: Context) {
+    val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+        .setInitialDelay(20L, TimeUnit.MINUTES)
+        .build()
+
+    WorkManager.getInstance(context).enqueue(workRequest)
 }
