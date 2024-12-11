@@ -1,5 +1,8 @@
 package com.charlesmuchogo.research.domain.states
 
+import com.charlesmuchogo.research.presentation.utils.genders
+import com.charlesmuchogo.research.presentation.utils.levelsOfEducation
+
 data class LoginState(
     val firstName: String = "",
     val lastname: String = "",

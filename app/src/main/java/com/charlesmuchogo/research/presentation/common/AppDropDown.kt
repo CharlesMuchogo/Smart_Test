@@ -103,9 +103,9 @@ fun <T> AppDropDown(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = selectedOption.error,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.Start
             )
         }
     }

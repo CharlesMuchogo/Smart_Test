@@ -23,9 +23,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.charlesmuchogo.research" />
-                  <option name="mobileSdkAppId" value="1:121837678657:android:8ad8e6a115636a17b296c0" />
-                  <option name="projectId" value="fir-demo-fb995" />
-                  <option name="projectNumber" value="121837678657" />
+                  <option name="mobileSdkAppId" value="1:841400667450:android:0ee45682d84d08db555403" />
+                  <option name="projectId" value="smarttest-db7bd" />
+                  <option name="projectNumber" value="841400667450" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

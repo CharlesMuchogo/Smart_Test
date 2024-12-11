@@ -65,36 +65,6 @@ fun HomeScreen(navController: NavController) {
 
 
     Scaffold(
-        floatingActionButton = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-
-                FloatingActionButton(
-
-                    modifier = Modifier
-                        .offset(y = 72.dp, x = 16.dp)
-                        .size(52.dp),
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    onClick = {
-                        navController.navigate(TestPage)
-                    },
-                    elevation = FloatingActionButtonDefaults.elevation(
-                        defaultElevation = 0.dp,
-                    ),
-                    shape = CircleShape,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Add Task",
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-            }
-        },
         bottomBar = {
             BottomAppBar(
                 contentColor = MaterialTheme.colorScheme.onBackground,
@@ -104,16 +74,7 @@ fun HomeScreen(navController: NavController) {
                     NavigationBarItem(
                         interactionSource = remember { MutableInteractionSource() },
                         modifier = Modifier
-                            .testTag(item.title)
-                            .offset(
-                                x = when (index) {
-                                    0 -> 0.dp
-                                    1 -> (-24).dp
-                                    2 -> 24.dp
-                                    3 -> 0.dp
-                                    else -> 0.dp
-                                },
-                            ),
+                            .testTag(item.title),
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index

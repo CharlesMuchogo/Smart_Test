@@ -27,11 +27,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -65,6 +67,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 .padding(padding)
                 .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
+
         ) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -73,22 +76,27 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.icon),
+                        painter = painterResource(R.drawable.login),
                         contentDescription = null,
+                        contentScale = ContentScale.Crop,
                         modifier =
                         Modifier
-                            .size(width = 150.dp, height = 150.dp)
+                            .fillParentMaxHeight(0.3f)
                             .clip(RoundedCornerShape(8.dp))
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 24.dp),
                     )
                 }
                 Text(
-                    "Log in to your account",
+                    text = "Log in to your account",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    "Welcome back! Please enter your details to continue.",
+                    text = "Welcome back! Please enter your details to continue.",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = Normal),
                 )
                 Spacer(modifier = Modifier.height(12.dp))

@@ -19,6 +19,7 @@ import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
+import com.charlesmuchogo.research.presentation.utils.isValidDate
 import com.charlesmuchogo.research.presentation.utils.isValidEmail
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -148,6 +149,31 @@ constructor(
 
             LoginAction.OnUpdateDetails -> {
 
+                loginPageState = loginPageState.copy(
+                    ageError = if (loginPageState.age.isBlank()) "Select your date of birth" else null,
+                    educationLevelError = if (loginPageState.educationLevel.isBlank()) "Select your education level" else null,
+                    genderError = if (loginPageState.gender.isBlank()) "Select your gender" else null,
+                )
+
+                if (loginPageState.age.isNotBlank()) {
+                    loginPageState = loginPageState.copy(
+                        ageError = if (!isValidDate(loginPageState.age)) "Invalid date of birth" else null
+                    )
+                }
+
+                if (loginPageState.ageError != null || loginPageState.genderError != null || loginPageState.educationLevelError != null) {
+                    return
+                }
+
+                updateUserDetails(
+                    details = UpdateUserDetailsDTO(
+                        testedBefore = loginPageState.hasTestedBefore,
+                        educationLevel = loginPageState.educationLevel,
+                        gender = loginPageState.gender,
+                        age = loginPageState.age
+                    )
+                )
+
             }
 
 
@@ -241,7 +267,7 @@ constructor(
         return deferred.await()
     }
 
-    fun login(loginRequestDTO: LoginRequestDTO) {
+    private fun login(loginRequestDTO: LoginRequestDTO) {
         viewModelScope.launch {
             loginStatus.value = Results.loading()
             val token = getFcmToken()
@@ -254,7 +280,7 @@ constructor(
         }
     }
 
-    fun register(registrationRequestDTO: RegistrationRequestDTO) {
+    private fun register(registrationRequestDTO: RegistrationRequestDTO) {
         viewModelScope.launch {
             registrationStatus.value = Results.loading()
             remoteRepository.signUp(registrationRequestDTO).collect { results ->
@@ -266,7 +292,7 @@ constructor(
         }
     }
 
-    fun updateUserDetails(details: UpdateUserDetailsDTO) {
+    private fun updateUserDetails(details: UpdateUserDetailsDTO) {
         viewModelScope.launch {
             completeRegistrationState.value = Results.loading()
             remoteRepository.completeRegistration(detailsDTO = details).collect { results ->

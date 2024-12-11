@@ -95,11 +95,11 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 TestProgress(
-                    content = convertMillisecondsToTimeTaken(
-                        ongoingTestStatus.data?.timeSpent ?: 0L
+                    content = if (timeSpent == 0L) "Click here to start a timer!" else convertMillisecondsToTimeTaken(
+                        timeSpent
                     ),
                     counterColor = MaterialTheme.colorScheme.onBackground,
-                    radius = 30.dp,
+                    radius = 32.dp,
                     mainColor = MaterialTheme.colorScheme.primary,
                     percentage = percentage,
                     onClick = {
