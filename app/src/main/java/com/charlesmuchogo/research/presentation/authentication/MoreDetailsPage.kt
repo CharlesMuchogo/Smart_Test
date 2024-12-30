@@ -40,7 +40,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
-import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
@@ -56,10 +55,6 @@ import com.charlesmuchogo.research.presentation.utils.convertTimestampToDate
 import com.charlesmuchogo.research.presentation.utils.genders
 import com.charlesmuchogo.research.presentation.utils.levelsOfEducation
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.toLocalDateTime
 
 
 @OptIn(ExperimentalMaterial3Api::class)

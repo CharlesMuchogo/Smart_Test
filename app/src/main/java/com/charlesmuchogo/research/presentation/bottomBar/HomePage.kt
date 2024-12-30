@@ -4,19 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +37,6 @@ import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
 import com.charlesmuchogo.research.presentation.navigation.SearchClinicsPage
-import com.charlesmuchogo.research.presentation.navigation.TestPage
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
 

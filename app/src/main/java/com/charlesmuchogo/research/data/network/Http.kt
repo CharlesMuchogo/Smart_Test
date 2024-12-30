@@ -75,7 +75,7 @@ class Http(
     }
 
     companion object {
-        fun httpUrlBuilder(): String = "https://smarttest.charlesmuchogo.com"
+        fun httpUrlBuilder(): String = "https://smarttest.muchogoc.com"
             /*"http://192.168.0.102:9000"*/
     }
 }
