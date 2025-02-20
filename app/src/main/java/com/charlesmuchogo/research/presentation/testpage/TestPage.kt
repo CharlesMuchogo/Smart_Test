@@ -30,6 +30,7 @@ import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.navigation.PendingTestPage
 import com.charlesmuchogo.research.presentation.navigation.TestInfoPage
+import com.charlesmuchogo.research.presentation.navigation.TestPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,26 +38,18 @@ import com.charlesmuchogo.research.presentation.utils.ResultStatus
 fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
-    val hasNavigated = testResultsViewModel.hasNavigatedTOInformationalScreen.collectAsStateWithLifecycle().value
-    val testResults = testResultsViewModel.testResultsStatus.collectAsStateWithLifecycle().value
     val uploadTestState = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
     val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
 
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = Unit) {
         testResultsViewModel.getOngoingTest()
     }
 
     LaunchedEffect(key1 = uploadTestState.status) {
         if(uploadTestState.status == ResultStatus.SUCCESS){
+            navController.popBackStack(TestPage, inclusive = true)
             navController.navigate(TestInfoPage)
-        }
-    }
-
-    LaunchedEffect(testResults.status) {
-        if(testResults.status == ResultStatus.SUCCESS && !hasNavigated && testResults.data?.firstOrNull { it.status.lowercase() == "pending" } != null){
-            navController.navigate(PendingTestPage)
-            testResultsViewModel.updateHasNavigated(true)
         }
     }
 

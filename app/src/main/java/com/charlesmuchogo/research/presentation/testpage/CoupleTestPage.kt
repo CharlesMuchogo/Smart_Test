@@ -64,7 +64,10 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
         testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
     val timeSpent = ongoingTestStatus.data?.timeSpent?: 0L
-    val percentage = (timeSpent.toFloat() / 1_200_000.toFloat()) * 100
+
+    val totalTimeDuration = testResultsViewModel.totalDuration
+
+    val percentage = (timeSpent.toFloat() / totalTimeDuration.toFloat() ) * 100
 
     val stroke = Stroke(
         width = 2f,
@@ -95,7 +98,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 Spacer(modifier = Modifier.height(24.dp))
                 TestProgress(
                     content = if (timeSpent == 0L) "Click here to start a timer!" else convertMillisecondsToTimeTaken(
-                        timeSpent
+                        milliseconds = totalTimeDuration - timeSpent
                     ),
                     counterColor = MaterialTheme.colorScheme.onBackground,
                     radius = 32.dp,
@@ -254,7 +257,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
 
             item {
                 AppButton(
-                    enabled = timeSpent > 1_200_000L,
+                    enabled = timeSpent >= totalTimeDuration,
                     onClick = {
                     if (userImage != null && partnerImage != null) {
                         testResultsViewModel.updateResults(

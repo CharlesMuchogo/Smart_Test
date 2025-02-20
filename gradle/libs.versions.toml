@@ -1,6 +1,6 @@
 [versions]
 agp = "8.5.2"
-kotlin = "2.0.20"
+kotlin = "2.1.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -11,27 +11,28 @@ composeBom = "2024.09.00"
 media3Exoplayer = "1.4.1"
 kotlinxDateTime = "0.6.1"
 ktor-client = "2.3.12"
-accompanist-systemUIController = "0.34.0"
 material = "1.7.2"
 hiltAndroid = "2.51.1"
 hiltAndroidCompiler = "2.51.1"
 hiltCompiler = "1.1.0"
 coil = "2.7.0"
+playServicesAuth = "21.3.0"
+playServicesLocation = "21.3.0"
+slf4jNop = "2.0.9"
 ucrop = "2.2.9-native"
 composeNavigation = "2.8.4"
-workRuntimeKtx = "2.9.1"
+workRuntimeKtx = "2.10.0"
 
-roomCommon = "2.6.1"
-roomKtx = "2.6.1"
-roomRuntime = "2.4.3"
+roomRuntime = "2.6.1"
 googleGmsGoogleServices = "4.4.2"
-firebaseMessaging = "24.0.1"
-firebaseInappmessagingDisplay = "21.0.0"
+firebaseMessaging = "24.1.0"
+firebaseInappmessagingDisplay = "21.0.1"
 browser = "1.8.0"
 lottieVersion = "6.6.0"
-firebaseAuth = "23.1.0"
-firebaseCrashlytics = "19.2.1"
-googleFirebaseCrashlytics = "3.0.2"
+firebaseAuth = "23.2.0"
+firebaseCrashlytics = "19.4.0"
+googleFirebaseCrashlytics = "3.0.3"
+ksp = "2.1.10-1.0.29"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,8 +61,10 @@ kotlinX-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCompiler" }
+
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
@@ -80,6 +83,9 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" }
 
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNop" }
 ucrop-compose = {module = "com.github.yalantis:ucrop", version.ref = "ucrop"}
 inappbrowser = {module = "androidx.browser:browser", version.ref = "browser"}
 lottie = {module = "com.airbnb.android:lottie", version.ref = "lottieVersion"}
@@ -93,6 +99,7 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlinX-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+android-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 
 

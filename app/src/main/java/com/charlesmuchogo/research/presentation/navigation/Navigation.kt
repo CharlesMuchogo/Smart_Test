@@ -1,9 +1,11 @@
 package com.charlesmuchogo.research.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.authentication.ForgotPasswordScreen
 import com.charlesmuchogo.research.presentation.authentication.LoginScreen
@@ -20,9 +22,8 @@ import com.charlesmuchogo.research.presentation.testpage.TestScreen
 
 
 @Composable
-fun Navigation() {
+fun Navigation(navController: NavHostController) {
 
-    val navController = rememberNavController()
 
     NavHost(
         navController = navController,
@@ -68,12 +69,64 @@ fun Navigation() {
             TestScreen(navController = navController)
         }
 
-        composable<PendingTestPage> {
+        composable<PendingTestPage>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+        ) {
             PendingTestScreen(navController = navController)
         }
-        composable<TestInfoPage> {
+        composable<TestInfoPage>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+        ) {
             TestInfoScreen(navController = navController)
         }
 
     }
 }
+
+const val ANIMATION_DURATION = 400

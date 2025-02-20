@@ -43,7 +43,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiHelper(): ApiHelper = ApiHelper()
+    fun provideApiHelper(appDatabase: AppDatabase): ApiHelper = ApiHelper(appDatabase)
 
     @Provides
     @Singleton

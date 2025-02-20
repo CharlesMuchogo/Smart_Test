@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.history
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +31,7 @@ import com.charlesmuchogo.research.presentation.common.SnackBarContent
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
@@ -68,7 +69,6 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
     )  {
         Box(
             modifier = modifier
-                .padding(it)
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.secondaryContainer)
         ) {

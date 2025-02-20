@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.charlesmuchogo.research.domain.** { *; }
+-keep class com.charlesmuchogo.research.data.network.Http.** { *; }
+-keep class com.charlesmuchogo.research.data.remote.** { *; }
+-keep class com.charlesmuchogo.research.presentation.navigation.** { *; }

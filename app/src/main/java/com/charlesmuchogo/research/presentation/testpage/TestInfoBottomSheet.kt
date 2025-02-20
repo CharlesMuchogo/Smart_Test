@@ -3,10 +3,13 @@ package com.charlesmuchogo.research.presentation.testpage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,9 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
-
-
-
+import com.charlesmuchogo.research.presentation.common.AppButton
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,9 +39,7 @@ fun TestInfoScreen(navController: NavController) {
 
     Scaffold(topBar = {
         TopAppBar(title = { }, navigationIcon = {
-
             IconButton(onClick = {
-                navController.popBackStack()
                 navController.popBackStack()
             }) {
                 Icon(imageVector = Icons.Default.Close, contentDescription = "Exit")
@@ -47,57 +47,63 @@ fun TestInfoScreen(navController: NavController) {
 
         })
     }) { padding ->
-        Box(
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                12.dp,
+            ),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding).padding(horizontal = 8.dp)
+                .padding(padding)
+                .padding(horizontal = 12.dp)
         ) {
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(
-                    8.dp,
-                ),
+
+            Image(
+                painter = painterResource(id = R.drawable.wait),
                 modifier = Modifier
-                    .fillMaxSize()
-            ) {
+                    .fillMaxHeight(0.4f),
+                contentScale = ContentScale.Fit,
+                contentDescription = "picture"
+            )
 
-                item {
-                    Spacer(modifier = Modifier.fillMaxSize(0.3f))
-                }
-                item {
-                    Image(
-                        painter = painterResource(id = R.drawable.reminder),
-                        modifier = Modifier
-                            .fillParentMaxWidth(0.4f)
-                            .fillParentMaxHeight(0.4f),
-                        contentDescription = "picture"
-                    )
-                }
 
-                item {
-                    Text( modifier = Modifier.padding(bottom = 12.dp), text = "Your test was submitted successfully. Please wait for the confirmation of the results.", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary))
-                }
 
-                item {
-                        Text(
-                            text = "If your test result is positive, please follow up with a clinic checkup for further guidance and support.",
-                            textAlign = TextAlign.Center,
-                            lineHeight = 22.sp,
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium)
-                        )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp, top = 24.dp),
+                text = "We are reviewing your test!",
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium)
+            )
 
-                }
 
-                item {
-                        Text(
-                            text = "If your test result is negative and you've engaged in activities that may lead to HIV exposure recently, consider testing again after 3 months.",
-                            textAlign = TextAlign.Center,
-                            lineHeight = 22.sp,
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium)
-                        )
+            Text(
+                text = "\uD83D\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.",
+                textAlign = TextAlign.Start,
+                lineHeight = 22.sp,
+                modifier = Modifier.padding(bottom = 8.dp),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+            )
 
-                }
+            Text(
+                text = "✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.",
+                textAlign = TextAlign.Start,
+                lineHeight = 22.sp,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+            )
+
+
+            Spacer(Modifier.weight(1f))
+
+            AppButton(
+                shape = MaterialTheme.shapes.extraLarge,
+                onClick = { navController.popBackStack() }) {
+                Text("Done")
             }
         }
+
+
     }
 }

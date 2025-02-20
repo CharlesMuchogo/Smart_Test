@@ -5,22 +5,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppButton(
+    enabled: Boolean = true,
     modifier: Modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(),
     onClick: () -> Unit,
-    enabled: Boolean = true,
+    shape: Shape? = MaterialTheme.shapes.medium,
+    height: Dp = 54.dp,
     content: @Composable () -> Unit,
-) {
+
+    ) {
     Button(
-        shape = RoundedCornerShape(12),
+        enabled = enabled,
+        shape = shape ?: ButtonDefaults.shape,
         onClick = onClick,
-        modifier = modifier.height(54.dp),
-        enabled = enabled
+        modifier = modifier.height(height),
     ) {
         content()
     }

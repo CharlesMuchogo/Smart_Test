@@ -31,7 +31,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             )
 
             val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.drawable.notification)
                 .setContentTitle(remoteMessage.notification?.title ?: "Hello")
                 .setContentText(remoteMessage.notification?.body ?: "How are you today?")
                 .setPriority(NotificationCompat.PRIORITY_MAX)

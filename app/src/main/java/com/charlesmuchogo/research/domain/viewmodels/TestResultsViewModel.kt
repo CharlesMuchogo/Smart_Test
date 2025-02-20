@@ -89,6 +89,7 @@ constructor(
 
     private var hasResumedTest = false
 
+    val totalDuration = 20 * 60 * 1000L
 
     val testResultsStatus = MutableStateFlow(
         Results<List<TestResult>>(
@@ -225,8 +226,20 @@ constructor(
             job = CoroutineScope(Dispatchers.Default).launch {
                 while (isActive) {
                     delay(1000L)
-                    tickingTime.value += 1000L
-                    database.testProgressDao().updateTestProgress(progress.copy(timeSpent = tickingTime.value))
+                    val newTimeSpent = tickingTime.value + 1000L
+
+                    if (newTimeSpent >= totalDuration) {
+                        tickingTime.value = totalDuration
+                        database.testProgressDao().updateTestProgress(
+                            progress.copy(timeSpent = totalDuration)
+                        )
+                        break
+                    } else {
+                        tickingTime.value = newTimeSpent
+                        database.testProgressDao().updateTestProgress(
+                            progress.copy(timeSpent = newTimeSpent)
+                        )
+                    }
                 }
             }
             job!!
@@ -242,7 +255,6 @@ constructor(
                 timeSpent = 0L,
                 active = true
             )
-            println("Inserting test progress -> ")
             database.testProgressDao().insertTestProgress(progress)
             startCounter(progress)
         }
@@ -273,9 +285,15 @@ constructor(
     private fun resumeTest(progress: TestProgress) {
         val currentTime = Clock.System.now().toEpochMilliseconds()
         val startTime = progress.startTime
-        tickingTime.value = currentTime - startTime
-        val testState = startCounter(progress)
-        hasResumedTest = testState.isActive
+        val elapsed = currentTime - startTime
+        tickingTime.value = elapsed
+
+        if (elapsed >= totalDuration) {
+            hasResumedTest = false
+        } else {
+            val testState = startCounter(progress)
+            hasResumedTest = testState.isActive
+        }
     }
 
     fun deleteTest(testResult: TestResult) {
