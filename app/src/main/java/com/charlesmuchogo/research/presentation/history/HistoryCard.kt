@@ -34,15 +34,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.presentation.common.AppStatusButton
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import okhttp3.internal.ws.RealWebSocket
 import ui.theme.lightGreen
 import ui.theme.lightYellow
 
@@ -69,14 +72,14 @@ fun HistoryCard(
                 historyViewModel.deleteTest(testResult = result)
                 showMoreActions = !showMoreActions
             },
-            dialogTitle = "Delete Test",
-            dialogText = "This action cannot be undone",
+            dialogTitle = stringResource(R.string.deleteTest),
+            dialogText = stringResource(R.string.cannotBeunDone),
             confirmContent = {
                 when (deleteHistoryState.status) {
                     ResultStatus.SUCCESS,
                     ResultStatus.ERROR,
                     ResultStatus.INITIAL -> {
-                        Text("Confirm")
+                        Text(stringResource(R.string.confirm))
                     }
 
                     ResultStatus.LOADING -> {
@@ -183,7 +186,7 @@ fun HistoryCard(
                 ) {
                     TextButton(onClick = { showMoreActions = !showMoreActions }) {
                         Text(
-                            text = "Cancel",
+                            text = stringResource(R.string.Cancel),
                             color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -191,7 +194,7 @@ fun HistoryCard(
 
                     TextButton(onClick = {  historyViewModel.updateShowDeleteTestDialog(show = !showDeleteDialog) }) {
                         Text(
-                            text = "Delete",
+                            text = stringResource(R.string.Delete) ,
                             color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.SemiBold
                         )

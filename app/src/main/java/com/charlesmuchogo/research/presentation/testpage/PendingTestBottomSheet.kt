@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -74,7 +75,7 @@ fun PendingTestScreen(navController: NavController) {
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Your test is under review",
+                    text = stringResource(R.string.testUnderReview),
                     style = MaterialTheme.typography.headlineSmall.copy(
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Medium
@@ -84,7 +85,7 @@ fun PendingTestScreen(navController: NavController) {
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Hang tight! We’re reviewing your results and will get back to you soon.",
+                    text = stringResource(R.string.waitForReview),
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Normal)
                 )
@@ -92,7 +93,7 @@ fun PendingTestScreen(navController: NavController) {
                 Spacer(modifier = Modifier.weight(1f))
 
                 AppButton( shape = MaterialTheme.shapes.extraLarge,onClick = { navController.popBackStack() }) {
-                    Text("Okay")
+                    Text(text = stringResource(R.string.okay))
                 }
             }
         }

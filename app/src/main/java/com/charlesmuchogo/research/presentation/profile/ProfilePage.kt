@@ -48,11 +48,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
@@ -120,8 +122,8 @@ fun ProfileListView(
                     }
                 }
             },
-            dialogTitle = "Log out",
-            dialogText = "You are about to log out",
+            dialogTitle = stringResource(R.string.logOut),
+            dialogText = stringResource(R.string.logOutDescription),
             icon = Icons.Default.Info,
         )
     }
@@ -274,7 +276,7 @@ fun ProfileListView(
 
                     ProfileCard(
                         modifier = Modifier,
-                        label = "Dark Theme",
+                        label = stringResource(R.string.darkTheme),
                         prefixIcon = if (darkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
                         onClick = {
                             authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
@@ -288,7 +290,7 @@ fun ProfileListView(
 
                     ProfileCard(
                         modifier = Modifier,
-                        label = "Keep Results History",
+                        label = stringResource(R.string.keepHistory),
                         prefixIcon = if (profile.hideResults) Icons.Default.Lock else Icons.Default.LockOpen,
                         onClick = {
                              authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
@@ -302,7 +304,7 @@ fun ProfileListView(
 
                     ProfileCard(
                         modifier = Modifier,
-                        label = "Privacy policy",
+                        label = stringResource(R.string.privacyPolicy),
                         prefixIcon = Icons.Default.Info,
                         onClick = {
                             openInAppBrowser(context = context, url = PRIVACY_POLICY_URL)
@@ -316,7 +318,7 @@ fun ProfileListView(
                     )
                     ProfileCard(
                         modifier = Modifier,
-                        label = "Terms and conditions",
+                        label = stringResource(R.string.termsAndConditions),
                         prefixIcon = Icons.Default.Security,
                         onClick = {
                             openInAppBrowser(context = context, url = TERMS_AND_CONDITIONS_URL)
@@ -331,7 +333,7 @@ fun ProfileListView(
 
                     ProfileCard(
                         modifier = Modifier,
-                        label = "Log Out",
+                        label = stringResource(R.string.logOut),
                         prefixIcon = Icons.AutoMirrored.Filled.Logout,
                         onClick = {
                             showLogoutDialog = true

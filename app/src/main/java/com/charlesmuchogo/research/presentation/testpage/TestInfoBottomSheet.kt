@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -73,14 +74,14 @@ fun TestInfoScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp, top = 24.dp),
-                text = "We are reviewing your test!",
+                text = stringResource(R.string.weAreReviewingYourTest) ,
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium)
             )
 
 
             Text(
-                text = "\uD83D\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.",
+                text = stringResource(R.string.positiveTestResult),
                 textAlign = TextAlign.Start,
                 lineHeight = 22.sp,
                 modifier = Modifier.padding(bottom = 8.dp),
@@ -88,7 +89,7 @@ fun TestInfoScreen(navController: NavController) {
             )
 
             Text(
-                text = "✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.",
+                text = stringResource(R.string.negativeTestResult),
                 textAlign = TextAlign.Start,
                 lineHeight = 22.sp,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
@@ -100,7 +101,7 @@ fun TestInfoScreen(navController: NavController) {
             AppButton(
                 shape = MaterialTheme.shapes.extraLarge,
                 onClick = { navController.popBackStack() }) {
-                Text("Done")
+                Text(text = stringResource(R.string.okay))
             }
         }
 

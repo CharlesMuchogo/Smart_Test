@@ -273,7 +273,6 @@ fun KiswahiliInstructions(modifier: Modifier = Modifier, onClick: () -> Unit) {
             }
 
             item {
-                //navController.navigate(TestPage)
                 AppButton(onClick = onClick) {
                     Text("Anzisha kipimo")
                 }

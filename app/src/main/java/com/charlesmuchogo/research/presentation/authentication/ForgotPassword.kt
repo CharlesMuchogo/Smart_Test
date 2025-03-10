@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -45,7 +46,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
                         Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                     }
                 },
-                title = { Text("Forgot Password?") },
+                title = { Text(text = stringResource(R.string.forgot_password)) },
             )
         },
     ) { paddingValues ->
@@ -81,7 +82,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
                     onClick = {
                     },
                     content = {
-                        Text("Reset password")
+                        Text(stringResource(R.string.Resetpassword))
                     },
                 )
             }
