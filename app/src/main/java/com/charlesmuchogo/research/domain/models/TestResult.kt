@@ -10,8 +10,10 @@ data class TestResult(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val care_option: String,
+    val uuid: String,
     val date: String,
     val image: String,
+    val status: String = "pending",
     val partnerImage: String,
     val partnerResults: String,
     val results: String,

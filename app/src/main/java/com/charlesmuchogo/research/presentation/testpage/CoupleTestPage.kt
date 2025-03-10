@@ -2,63 +2,52 @@ package com.charlesmuchogo.research.presentation.testpage
 
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
-import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
-import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.convertMillisecondsToTimeTaken
 
-class CoupleTestPage : Screen {
-    @Composable
-    override fun Content() {
-        CenteredColumn {
-            Text(text = "Couples Test Page")
-        }
-    }
-}
 
 @Composable
-fun CoupleTestScreen(modifier: Modifier = Modifier) {
+fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)
@@ -68,12 +57,23 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
 
     val userImage = testResultsViewModel.userImage.collectAsStateWithLifecycle().value
     val partnerImage = testResultsViewModel.partnerImage.collectAsStateWithLifecycle().value
-    val selectingPartnerImage =  testResultsViewModel.selectingPartnerImage.collectAsStateWithLifecycle().value
-    val selectedClinic =   testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
+    val selectingPartnerImage =
+        testResultsViewModel.selectingPartnerImage.collectAsStateWithLifecycle().value
+    val selectedClinic = testResultsViewModel.selectedClinic.collectAsStateWithLifecycle().value
+    val ongoingTestStatus =
+        testResultsViewModel.ongoingTestStatus.collectAsStateWithLifecycle().value
 
+    val timeSpent = ongoingTestStatus.data?.timeSpent?: 0L
 
+    val totalTimeDuration = testResultsViewModel.totalDuration
 
+    val percentage = (timeSpent.toFloat() / totalTimeDuration.toFloat() ) * 100
 
+    val stroke = Stroke(
+        width = 2f,
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+    )
+    val color = MaterialTheme.colorScheme.onBackground
 
     imagePicker.RegisterPicker(onImagePicked = { image ->
         if (selectingPartnerImage) {
@@ -83,39 +83,53 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
         }
     })
 
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
     ) {
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            TestProgress(
-                content = "20:00",
-                counterColor = MaterialTheme.colorScheme.onBackground,
-                radius = 30.dp,
-                mainColor = MaterialTheme.colorScheme.primary,
-                percentage = 10f,
-                onClick = {}
-            )
-        }
 
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                TestProgress(
+                    content = if (timeSpent == 0L) "Click here to start a timer!" else convertMillisecondsToTimeTaken(
+                        milliseconds = totalTimeDuration - timeSpent
+                    ),
+                    counterColor = MaterialTheme.colorScheme.onBackground,
+                    radius = 32.dp,
+                    mainColor = MaterialTheme.colorScheme.primary,
+                    percentage = percentage,
+                    onClick = {
+
+                        if(ongoingTestStatus.data == null){
+                            scheduleHourlyNotificationWork(context = context)
+                            testResultsViewModel.startTest()
+                        }else{
+                            testResultsViewModel.completeTestTimer(ongoingTestStatus.data)
+                        }
+
+                    }
+                )
+            }
+
+            item {
+
                 Box(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .height(250.dp)
                         .padding(vertical = 24.dp)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                        .drawBehind {
+                            drawRoundRect(
+                                color = color,
+                                style = stroke
+                            )
+                        }
                         .clickable(
                             onClick = {
                                 testResultsViewModel.updateSelectingPartnerImage(false)
@@ -150,15 +164,18 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
                     }
 
                 }
+
                 Box(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .height(250.dp)
                         .padding(vertical = 24.dp)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                        .drawBehind {
+                            drawRoundRect(
+                                color = color,
+                                style = stroke
+                            )
+                        }
                         .clickable(
                             onClick = {
                                 testResultsViewModel.updateSelectingPartnerImage(true)
@@ -196,62 +213,79 @@ fun CoupleTestScreen(modifier: Modifier = Modifier) {
                     }
 
                 }
-            }
-        }
 
-        item {
-            clinicsStatus.data?.let { clinics ->
-                AppDropDown(
-                    options = clinics,
-                    label = { Text(text = "Select a clinic") },
-                    selectedOption = TextFieldState(
-                        text = selectedClinic?.name ?: "Select a clinic ",
-                        isSelected = selectedClinic != null,
-                        error = null
-                    ),
-                    onOptionSelected = {
-                        testResultsViewModel.updateSelectedClinic(it)
-                    }) {
-                    Text("${it.name} - ${it.address}", style = MaterialTheme.typography.bodyLarge)
-                }
             }
-        }
 
-        item {
-            uploadResultsStatus.message?.let {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Text(it, color = MaterialTheme.colorScheme.error)
-                }
-            }
-        }
-
-        item {
-            AppButton(onClick = {
-                if (userImage != null && partnerImage != null) {
-                    testResultsViewModel.updateResults(
-                        UploadTestResultsDTO(
-                            image = userImage,
-                            partnerImage = partnerImage,
-                            careOption = selectedClinic?.id
+            item {
+                clinicsStatus.data?.let { clinics ->
+                    AppDropDown(
+                        options = clinics,
+                        label = { Text(text = "Select a clinic") },
+                        selectedOption = TextFieldState(
+                            text = selectedClinic?.name ?: "Select a clinic ",
+                            isSelected = selectedClinic != null,
+                            error = null
+                        ),
+                        onOptionSelected = {
+                            testResultsViewModel.updateSelectedClinic(it)
+                        }) {
+                        Text(
+                            "${it.name} - ${it.address}",
+                            style = MaterialTheme.typography.bodyLarge
                         )
+                    }
+                }
+            }
+
+            item {
+                uploadResultsStatus.message?.let {
+                    Text(
+                        text = it,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error)
                     )
                 }
 
-            }) {
-                when (uploadResultsStatus.status) {
-                    ResultStatus.LOADING -> {
-                        AppLoginButtonContent(message = "Submitting...")
+                uploadResultsStatus.data?.message?.let {
+                    Text(
+                        text = it,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                    )
+                }
+            }
+
+            item {
+                AppButton(
+                    enabled = timeSpent >= totalTimeDuration,
+                    onClick = {
+                    if (userImage != null && partnerImage != null) {
+                        testResultsViewModel.updateResults(
+                            UploadTestResultsDTO(
+                                image = userImage,
+                                partnerImage = partnerImage,
+                                careOption = selectedClinic?.name
+                            )
+                        )
                     }
 
-                    ResultStatus.INITIAL,
-                    ResultStatus.SUCCESS,
-                    ResultStatus.ERROR -> {
-                        Text(text = "Submit results")
+                }) {
+                    when (uploadResultsStatus.status) {
+                        ResultStatus.LOADING -> {
+                            AppLoginButtonContent(message = "Submitting...")
+                        }
+
+                        ResultStatus.INITIAL,
+                        ResultStatus.SUCCESS,
+                        ResultStatus.ERROR -> {
+                            Text(text = "Submit results")
+                        }
                     }
                 }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }

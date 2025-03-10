@@ -96,6 +96,14 @@ fun AppTextField(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
+        } else {
+            error?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            }
         }
     }
 }

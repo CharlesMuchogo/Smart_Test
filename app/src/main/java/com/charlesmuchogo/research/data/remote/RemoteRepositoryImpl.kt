@@ -3,6 +3,7 @@ package com.charlesmuchogo.research.data.remote
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
+import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.ErrorDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
@@ -16,9 +17,11 @@ import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsRespon
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -45,17 +48,15 @@ class RemoteRepositoryImpl(
                     }
 
                 if (response.status != HttpStatusCode.OK) {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
                             response.body<ErrorDTO>()
                         }
-
                     emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
                 } else {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
+                    val apiResponse = apiHelper.safeApiCall(response.status) {
                             response.body<LoginResponseDTO>()
-                        }
+                    }
+
                     emit(apiResponse)
                 }
             } catch (e: Exception) {
@@ -72,7 +73,7 @@ class RemoteRepositoryImpl(
                         setBody(registrationRequestDTO)
                     }
 
-                if (response.status != HttpStatusCode.Created) {
+                if (response.status != HttpStatusCode.OK) {
                     val apiResponse =
                         apiHelper.safeApiCall(response.status) {
                             response.body<ErrorDTO>()
@@ -186,9 +187,43 @@ class RemoteRepositoryImpl(
         }.flowOn(Dispatchers.Main)
     }
 
+    override suspend fun deleteResult(uuid: String): Flow<Results<DeleteTestResultsDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(appDatabase = appDatabase).client.delete("/api/mobile/results") {
+                        contentType(ContentType.Application.Json)
+                        parameter("uuid", uuid)
+                    }
+
+                if (response.status != HttpStatusCode.OK) {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
+
+                    emit(
+                        Results.error(
+                            apiResponse.data?.message ?: "Error deleting test. Try again"
+                        )
+                    )
+                } else {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<DeleteTestResultsDTO>()
+                        }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
+    }
+
     override suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>> {
         return flow {
             try {
+                println("Care option: ${results.careOption}")
                 val response =
                     Http(appDatabase = appDatabase).client.post("/api/mobile/results") {
                         setBody(
@@ -245,7 +280,6 @@ class RemoteRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-
                 emit(Results.error(decodeExceptionMessage(e)))
             }
         }.flowOn(Dispatchers.Default)

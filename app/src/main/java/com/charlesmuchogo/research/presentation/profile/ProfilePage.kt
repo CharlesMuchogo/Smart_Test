@@ -20,22 +20,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.School
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,45 +47,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.authentication.LoginPage
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.LoginPage
+import com.charlesmuchogo.research.presentation.navigation.ProfilePage
+import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
+import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
-class ProfilePage : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val navigator = LocalAppNavigator.currentOrThrow
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = { navigator.pop() }) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
-                        }
-                    },
-                    title = {
-                        Text("Profile")
-                    },
-                )
-            },
-        ) {
-            ProfileScreen(modifier = Modifier.padding(it))
-        }
-    }
-}
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
     val profileViewModel = hiltViewModel<AuthenticationViewModel>()
     val profileState = profileViewModel.profileStatus.collectAsStateWithLifecycle().value
 
@@ -110,7 +89,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             }
 
             ResultStatus.SUCCESS -> {
-                profileState.data?.let { ProfileListView(profile = it) }
+                profileState.data?.let { ProfileListView(profile = it, navController = navController) }
             }
         }
     }
@@ -120,12 +99,14 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
 fun ProfileListView(
     profile: User,
     modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
-    val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
+    val  context = LocalContext.current
 
-    val darkTheme = false
+    val darkTheme = profile.darkTheme
+    val hideResults = profile.hideResults
 
     if (showLogoutDialog) {
         AppAlertDialog(
@@ -133,7 +114,11 @@ fun ProfileListView(
             onConfirmation = {
                 showLogoutDialog = false
                 authenticationViewModel.logout()
-                navigator.replaceAll(LoginPage())
+                navController.navigate(LoginPage){
+                    popUpTo(ProfilePage) {
+                        inclusive = true
+                    }
+                }
             },
             dialogTitle = "Log out",
             dialogText = "You are about to log out",
@@ -285,14 +270,62 @@ fun ProfileListView(
                         .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
+
+
                     ProfileCard(
                         modifier = Modifier,
                         label = "Dark Theme",
                         prefixIcon = if (darkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        onClick = { },
+                        onClick = {
+                            authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
+                        },
                         trailingIcon = {
                             Switch(checked = darkTheme, onCheckedChange = {
+                                authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
                             })
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Keep Results History",
+                        prefixIcon = if (profile.hideResults) Icons.Default.Lock else Icons.Default.LockOpen,
+                        onClick = {
+                             authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
+                        },
+                        trailingIcon = {
+                            Switch(checked = !hideResults, onCheckedChange = {
+                                authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
+                            })
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Privacy policy",
+                        prefixIcon = Icons.Default.Info,
+                        onClick = {
+                            openInAppBrowser(context = context, url = PRIVACY_POLICY_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
+                        },
+                    )
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = "Terms and conditions",
+                        prefixIcon = Icons.Default.Security,
+                        onClick = {
+                            openInAppBrowser(context = context, url = TERMS_AND_CONDITIONS_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
                         },
                     )
 

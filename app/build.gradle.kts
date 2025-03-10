@@ -4,21 +4,22 @@ plugins {
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.jetbrains.kotlin.android)
 
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
     namespace = "com.charlesmuchogo.research"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 23
+        targetSdk = 35
+        versionCode = 9
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -26,15 +27,6 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -51,6 +43,16 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
 }
 
 dependencies {
@@ -65,6 +67,9 @@ dependencies {
     implementation(libs.material.icons.extended)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.inappmessaging.display)
+    implementation(libs.navigation.compose)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,16 +77,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.auth)
 
-    // navigation
-    implementation(libs.voyager.navigator)
-    implementation(libs.voyager.transitions)
-    implementation(libs.voyager.tab.navigator)
+
+    //datetime
+    implementation(libs.kotlinX.dateTime)
 
     // Dagger hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     // ktor
@@ -94,7 +100,7 @@ dependencies {
 
     // Room Components
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     // coil
@@ -107,4 +113,15 @@ dependencies {
     //exoplayer
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
+
+    //Browser
+    implementation(libs.inappbrowser)
+
+    //lottie
+    implementation(libs.lottie)
+
+    //workmanager
+    implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.slf4j.nop)
 }

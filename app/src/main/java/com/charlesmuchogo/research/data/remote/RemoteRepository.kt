@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.data.remote
 
+import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
@@ -18,6 +19,6 @@ interface RemoteRepository {
     suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>>
     suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>>
     suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>>
-
+    suspend fun deleteResult(uuid: String): Flow<Results<DeleteTestResultsDTO>>
     suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>>
 }

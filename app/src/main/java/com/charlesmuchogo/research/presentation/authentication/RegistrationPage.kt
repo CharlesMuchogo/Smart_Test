@@ -1,16 +1,21 @@
 package com.charlesmuchogo.research.presentation.authentication
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,50 +25,37 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
-import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import androidx.navigation.NavController
+import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.bottomBar.HomePage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
-
-class RegistrationPage : Screen {
-    @Composable
-    override fun Content() {
-        RegistrationScreen(modifier = Modifier)
-    }
-}
+import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
+import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
 @Composable
-fun RegistrationScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    val navigator = LocalAppNavigator.currentOrThrow
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val registrationStatus = authenticationViewModel.registrationStatus.collectAsState().value
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+    val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
+    val registrationPageState = authenticationViewModel.loginPageState
+    val  context = LocalContext.current
 
     Scaffold { padding ->
         LazyColumn(
@@ -72,6 +64,8 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             modifier
                 .fillMaxSize()
                 .padding(padding)
+                .consumeWindowInsets(padding)
+                .imePadding()
                 .padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.Start,
         ) {
@@ -79,9 +73,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     "Create an account",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold, letterSpacing = 1.5.sp),
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     "Please enter your details to continue.",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = Normal),
@@ -94,18 +88,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                     AppTextField(
                         modifier = Modifier.weight(1f),
                         label = "First Name",
-                        value = firstName,
-                        onValueChanged = { firstName = it },
-                        error = null,
+                        value = registrationPageState.firstName,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnFirstNameChange(it))},
+                        error = registrationPageState.firstNameError,
                         placeholder = "John",
                         keyboardType = KeyboardType.Text,
                     )
+
                     AppTextField(
                         modifier = Modifier.weight(1f),
                         label = "Last Name",
-                        value = lastName,
-                        onValueChanged = { lastName = it },
-                        error = null,
+                        value = registrationPageState.lastname,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnLastNameChange(it)) },
+                        error = registrationPageState.lastnameError,
                         placeholder = "Doe",
                         keyboardType = KeyboardType.Text,
                     )
@@ -116,9 +111,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Phone Number",
-                    value = phone,
-                    onValueChanged = { phone = it },
-                    error = null,
+                    value = registrationPageState.phoneNumber,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPhoneNumberChange(it))},
+                    error = registrationPageState.phoneNumberError,
                     placeholder = "07123456789",
                     keyboardType = KeyboardType.Phone,
                 )
@@ -127,9 +122,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Email",
-                    value = email,
-                    onValueChanged = { email = it },
-                    error = null,
+                    value = registrationPageState.email,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
+                    error = registrationPageState.emailError,
                     placeholder = "johndoe@email.com",
                     keyboardType = KeyboardType.Email,
                 )
@@ -138,19 +133,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Password",
-                    value = password,
-                    onValueChanged = { password = it },
-                    error = null,
+                    value = registrationPageState.password,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPasswordChange(it))},
+                    error = registrationPageState.passwordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = passwordVisible,
+                    passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Next,
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!registrationPageState.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (registrationPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
@@ -161,24 +156,41 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             item {
                 AppTextField(
                     label = "Confirm Password",
-                    value = confirmPassword,
-                    onValueChanged = { confirmPassword = it },
-                    error = null,
+                    value = registrationPageState.confirmPassword,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnConfirmPasswordChange(it)) },
+                    error = registrationPageState.confirmPasswordError,
                     placeholder = "*********",
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = passwordVisible,
+                    passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Done,
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!registrationPageState.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (registrationPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
                     },
                 )
+            }
+
+            item {
+                Row(verticalAlignment = Alignment.CenterVertically){
+                    Checkbox(
+                        checked = registrationPageState.termsAndConditions,
+                        onCheckedChange = { authenticationViewModel.onAction(LoginAction.OnTermsAndConditionsChange(agree = !registrationPageState.termsAndConditions)) },
+                    )
+                    Text("I agree to the ", style = MaterialTheme.typography.bodyMedium)
+                    Text(modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            openInAppBrowser(context = context, url = TERMS_AND_CONDITIONS_URL)
+                        }
+                    ), text = "Terms and Conditions", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = SemiBold, color = MaterialTheme.colorScheme.primary,textDecoration = TextDecoration.Underline))
+                }
             }
 
             item {
@@ -192,28 +204,24 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 }
 
                 AppButton(
+                    enabled = registrationPageState.termsAndConditions,
                     onClick = {
-                        authenticationViewModel.register(
-                            registrationRequestDTO =
-                            RegistrationRequestDTO(
-                                firstName = firstName,
-                                lastName = lastName,
-                                phone = phone,
-                                email = email.lowercase().trim(),
-                                password = password,
-                            ),
-                        )
+                        authenticationViewModel.onAction(LoginAction.OnSignup)
                     },
                     content = {
                         when (registrationStatus.status) {
                             ResultStatus.INITIAL,
                             ResultStatus.ERROR -> {
-                                Text("Log in")
+                                Text("Sign up")
                             }
 
                             ResultStatus.SUCCESS -> {
-                                Text("Log in")
-                                navigator.replaceAll(HomePage())
+                                Text("Sign up")
+                                navController.navigate(MoreDetailsPage){
+                                    popUpTo(RegistrationPage) {
+                                        inclusive = true
+                                    }
+                                }
                             }
 
                             ResultStatus.LOADING -> {
@@ -233,7 +241,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                         .padding(vertical = 16.dp)
                 ) {
                     Text(text = "Have an account?", style = MaterialTheme.typography.bodyLarge)
-                    TextButton(onClick = { navigator.pop() }) {
+                    TextButton(onClick = { navController.popBackStack()}) {
                         Text(text = "Sign in", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
@@ -242,8 +250,3 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
-@Composable
-fun RegistrationScreenPreview(){
-    RegistrationScreen()
-}

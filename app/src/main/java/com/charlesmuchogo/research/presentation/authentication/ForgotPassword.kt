@@ -26,30 +26,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppTextField
 
-class ForgotPasswordPage : Screen {
-    @Composable
-    override fun Content() {
-        ForgotPasswordScreen()
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForgotPasswordScreen(modifier: Modifier = Modifier) {
-    val navigator = LocalNavigator.currentOrThrow
+fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavController) {
     var email by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navigator.pop() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                     }
                 },

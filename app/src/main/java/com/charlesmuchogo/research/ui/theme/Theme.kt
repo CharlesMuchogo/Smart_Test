@@ -1,4 +1,4 @@
-package ui.theme
+package com.charlesmuchogo.research.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -13,7 +13,51 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.charlesmuchogo.research.ui.theme.ChirpTypography
+import ui.theme.BackgroundDark
+import ui.theme.BackgroundLight
+import ui.theme.ErrorContainerDark
+import ui.theme.ErrorContainerLight
+import ui.theme.ErrorDark
+import ui.theme.ErrorLight
+import ui.theme.GreenContainerDark
+import ui.theme.GreenContainerLight
+import ui.theme.GreenPrimaryDark
+import ui.theme.GreenPrimaryLight
+import ui.theme.GreenSecondaryContainerDark
+import ui.theme.GreenSecondaryContainerLight
+import ui.theme.GreenSecondaryDark
+import ui.theme.GreenSecondaryLight
+import ui.theme.GreenTertiaryContainerDark
+import ui.theme.GreenTertiaryContainerLight
+import ui.theme.GreenTertiaryDark
+import ui.theme.GreenTertiaryLight
+import ui.theme.OnBackgroundDark
+import ui.theme.OnBackgroundLight
+import ui.theme.OnErrorDark
+import ui.theme.OnErrorLight
+import ui.theme.OnGreenContainerDark
+import ui.theme.OnGreenContainerLight
+import ui.theme.OnGreenDark
+import ui.theme.OnGreenLight
+import ui.theme.OnGreenSecondaryContainerDark
+import ui.theme.OnGreenSecondaryContainerLight
+import ui.theme.OnGreenSecondaryDark
+import ui.theme.OnGreenSecondaryLight
+import ui.theme.OnGreenTertiaryContainerDark
+import ui.theme.OnGreenTertiaryContainerLight
+import ui.theme.OnGreenTertiaryDark
+import ui.theme.OnGreenTertiaryLight
+import ui.theme.OnSurfaceDark
+import ui.theme.OnSurfaceLight
+import ui.theme.OnSurfaceVariantDark
+import ui.theme.OnSurfaceVariantLight
+import ui.theme.OutlineDark
+import ui.theme.OutlineLight
+import ui.theme.SurfaceDark
+import ui.theme.SurfaceLight
+import ui.theme.SurfaceVariantDark
+import ui.theme.SurfaceVariantLight
+import ui.theme.lightGray
 
 val DarkColorScheme = darkColorScheme(
     primary = GreenPrimaryDark,

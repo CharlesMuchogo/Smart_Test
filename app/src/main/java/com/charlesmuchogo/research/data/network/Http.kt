@@ -48,9 +48,9 @@ class Http(
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 360000
-                socketTimeoutMillis = 360000
-                connectTimeoutMillis = 360000
+                requestTimeoutMillis = 180_000L
+                socketTimeoutMillis = 180_000L
+                connectTimeoutMillis = 180_000L
             }
 
             install(ContentNegotiation) {
@@ -75,6 +75,6 @@ class Http(
     }
 
     companion object {
-        fun httpUrlBuilder(): String = "http://13.244.41.201:9000"
+        fun httpUrlBuilder(): String = "https://smarttest.muchogoc.com"
     }
 }

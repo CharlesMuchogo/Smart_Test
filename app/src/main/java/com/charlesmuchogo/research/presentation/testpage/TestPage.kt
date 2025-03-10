@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.testpage
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,103 +25,117 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
-import com.charlesmuchogo.research.presentation.utils.LocalAppNavigator
+import com.charlesmuchogo.research.presentation.navigation.PendingTestPage
+import com.charlesmuchogo.research.presentation.navigation.TestInfoPage
+import com.charlesmuchogo.research.presentation.navigation.TestPage
+import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
-class TestPage : Screen {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val navigator = LocalAppNavigator.currentOrThrow
-        val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
-        val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
-        val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
+    val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
+    val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
+    val uploadTestState = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
+    val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
 
 
-        LaunchedEffect(currentTab) {
-            pagerState.animateScrollToPage(currentTab)
+    LaunchedEffect(key1 = Unit) {
+        testResultsViewModel.getOngoingTest()
+    }
+
+    LaunchedEffect(key1 = uploadTestState.status) {
+        if(uploadTestState.status == ResultStatus.SUCCESS){
+            navController.popBackStack(TestPage, inclusive = true)
+            navController.navigate(TestInfoPage)
         }
+    }
 
-        LaunchedEffect(pagerState.currentPage) {
-            testResultsViewModel.updateCurrentTab(tab = pagerState.currentPage)
-        }
+    LaunchedEffect(currentTab) {
+        pagerState.animateScrollToPage(currentTab)
+    }
 
-        Scaffold(topBar = {
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { navigator.pop() }) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
-                    }
-                },
-                title = { Text(text = "Take a test") },
-            )
-        }) { values ->
-            Column(modifier = Modifier
-                .padding(values)
-                .fillMaxSize()) {
-                TabRow(
-                    selectedTabIndex = currentTab,
-                ) {
-                    TabRowItem.testItems.forEachIndexed { index, item ->
-                        Tab(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            selected = index == currentTab,
-                            onClick = { testResultsViewModel.updateCurrentTab(tab = index) },
-                            text = {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        imageVector = if (currentTab == index) item.selectedIcon else item.unSelectedIcon,
-                                        tint =
-                                            if (currentTab ==
-                                                index
-                                            ) {
-                                                MaterialTheme.colorScheme.primary
-                                            } else {
-                                                MaterialTheme.colorScheme.onBackground
-                                            },
-                                        contentDescription = item.title,
-                                    )
+    LaunchedEffect(pagerState.currentPage) {
+        testResultsViewModel.updateCurrentTab(tab = pagerState.currentPage)
+    }
 
-                                    Text(
-                                        modifier = Modifier.padding(horizontal = 8.dp),
-                                        text = item.title,
-                                        style =
-                                            MaterialTheme.typography.bodyMedium.copy(
-                                                fontWeight = FontWeight.SemiBold,
-                                                color =
-                                                    if (currentTab ==
-                                                        index
-                                                    ) {
-                                                        MaterialTheme.colorScheme.primary
-                                                    } else {
-                                                        MaterialTheme.colorScheme.onBackground
-                                                    },
-                                            ),
-                                    )
-                                }
-                            },
-                        )
-                    }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+        CenterAlignedTopAppBar(
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                 }
+            },
+            title = { Text(text = "Take a test") },
+        )
+    }) { values ->
+        Column(modifier = Modifier
+            .padding(values)
+            .fillMaxSize()) {
+            TabRow(
+                selectedTabIndex = currentTab,
+            ) {
+                TabRowItem.testItems.forEachIndexed { index, item ->
+                    Tab(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        selected = index == currentTab,
+                        onClick = { testResultsViewModel.updateCurrentTab(tab = index) },
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = if (currentTab == index) item.selectedIcon else item.unSelectedIcon,
+                                    tint =
+                                    if (currentTab ==
+                                        index
+                                    ) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onBackground
+                                    },
+                                    contentDescription = item.title,
+                                )
 
-                HorizontalPager(
-                    state = pagerState,
-                ) { page ->
-                    when (page) {
-                        0 ->
-                            SingleTestScreen(
-                                modifier = Modifier,
-                            )
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                    text = item.title,
+                                    style =
+                                    MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color =
+                                        if (currentTab ==
+                                            index
+                                        ) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onBackground
+                                        },
+                                    ),
+                                )
+                            }
+                        },
+                    )
+                }
+            }
 
-                        1 ->
-                            CoupleTestScreen(
-                                modifier = Modifier,
-                            )
-                    }
+            HorizontalPager(
+                state = pagerState,
+            ) { page ->
+                when (page) {
+                    0 ->
+                        SingleTestScreen(
+                            modifier = Modifier,
+                            navController = navController
+                        )
+
+                    1 ->
+                        CoupleTestScreen(
+                            modifier = Modifier,
+                            navController = navController
+                        )
                 }
             }
         }

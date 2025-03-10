@@ -2,6 +2,7 @@ package com.charlesmuchogo.research.domain.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,4 +20,7 @@ data class User(
     val profilePhoto: String,
     val token: String? = null,
     val testedBefore: Boolean,
+    @SerialName("SaveResults")
+    val hideResults: Boolean = false,
+    val darkTheme: Boolean = false,
 )

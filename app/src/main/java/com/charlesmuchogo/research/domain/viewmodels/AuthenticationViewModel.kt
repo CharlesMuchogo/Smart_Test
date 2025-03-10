@@ -1,9 +1,14 @@
 package com.charlesmuchogo.research.domain.viewmodels
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
+import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
@@ -11,11 +16,17 @@ import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
 import com.charlesmuchogo.research.domain.events.AuthenticationEvent
 import com.charlesmuchogo.research.domain.models.User
+import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
+import com.charlesmuchogo.research.presentation.utils.isValidDate
+import com.charlesmuchogo.research.presentation.utils.isValidEmail
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,13 +37,14 @@ constructor(
     private val database: AppDatabase,
     private val remoteRepository: RemoteRepository,
 ) : ViewModel() {
+
+    var loginPageState by mutableStateOf(LoginState())
+        private set
+
     val loginStatus = MutableStateFlow(
-        Results<LoginResponseDTO>(
-            data = null,
-            message = null,
-            status = ResultStatus.INITIAL,
-        ),
+        Results.initial<LoginResponseDTO>(),
     )
+
     val registrationStatus = MutableStateFlow(
         Results<LoginResponseDTO>(
             data = null,
@@ -75,10 +87,191 @@ constructor(
         getCurrentUser()
     }
 
-    fun login(loginRequestDTO: LoginRequestDTO) {
+    fun onAction(action: LoginAction) {
+        when (action) {
+
+
+            is LoginAction.OnEmailChange -> {
+                loginPageState = loginPageState.copy(email = action.email)
+            }
+
+            is LoginAction.OnPasswordChange -> {
+                loginPageState = loginPageState.copy(password = action.password)
+            }
+
+            is LoginAction.OnShowPasswordChange -> {
+                loginPageState = loginPageState.copy(showPassword = action.showPassword)
+            }
+
+            is LoginAction.OnRememberMeChange -> {
+                loginPageState = loginPageState.copy(rememberMe = action.rememberMe)
+            }
+
+            is LoginAction.OnTermsAndConditionsChange -> {
+                loginPageState = loginPageState.copy(termsAndConditions = action.agree)
+            }
+
+            is LoginAction.OnAgeChange -> {
+                loginPageState = loginPageState.copy(age = action.value)
+            }
+
+            is LoginAction.OnConfirmPasswordChange -> {
+                loginPageState = loginPageState.copy(confirmPassword = action.value)
+            }
+
+            is LoginAction.OnEducationLevelChange -> {
+                loginPageState = loginPageState.copy(educationLevel = action.value)
+            }
+
+            is LoginAction.OnFirstNameChange -> {
+                loginPageState = loginPageState.copy(firstName = action.value)
+            }
+
+            is LoginAction.OnGenderChange -> {
+                loginPageState = loginPageState.copy(gender = action.value)
+            }
+
+            is LoginAction.OnHasTestedBeforeChange -> {
+                loginPageState = loginPageState.copy(hasTestedBefore = action.value)
+            }
+
+            is LoginAction.OnLastNameChange -> {
+                loginPageState = loginPageState.copy(lastname = action.value)
+            }
+
+            is LoginAction.OnMaritalStatusChange -> {
+                loginPageState = loginPageState.copy(maritalStatus = action.value)
+            }
+
+            is LoginAction.OnPhoneNumberChange -> {
+                loginPageState = loginPageState.copy(phoneNumber = action.value)
+            }
+
+            LoginAction.OnUpdateDetails -> {
+
+                loginPageState = loginPageState.copy(
+                    ageError = if (loginPageState.age.isBlank()) "Select your date of birth" else null,
+                    educationLevelError = if (loginPageState.educationLevel.isBlank()) "Select your education level" else null,
+                    genderError = if (loginPageState.gender.isBlank()) "Select your gender" else null,
+                )
+
+                if (loginPageState.age.isNotBlank()) {
+                    loginPageState = loginPageState.copy(
+                        ageError = if (!isValidDate(loginPageState.age)) "Invalid date of birth" else null
+                    )
+                }
+
+                if (loginPageState.ageError != null || loginPageState.genderError != null || loginPageState.educationLevelError != null) {
+                    return
+                }
+
+                updateUserDetails(
+                    details = UpdateUserDetailsDTO(
+                        testedBefore = loginPageState.hasTestedBefore,
+                        educationLevel = loginPageState.educationLevel,
+                        gender = loginPageState.gender,
+                        age = loginPageState.age
+                    )
+                )
+
+            }
+
+
+            is LoginAction.OnSignup -> {
+                val firstNameError =
+                    if (loginPageState.firstName.isBlank()) "Name is required" else null
+                val lastNameError =
+                    if (loginPageState.lastname.isBlank()) "Name is required" else null
+                val phoneNumberError =
+                    if (loginPageState.phoneNumber.isBlank()) "Phone number is required" else null
+                var emailError = if (loginPageState.email.isBlank()) "Email is required" else null
+
+                if (loginPageState.email.isNotBlank() && !isValidEmail(loginPageState.email)) emailError =
+                    "Enter a valid email address"
+
+                var passwordError =
+                    if (loginPageState.password.isBlank()) "Password is required" else null
+                var confirmPasswordError =
+                    if (loginPageState.password.isBlank()) "Password is required" else null
+
+
+                if (loginPageState.password != loginPageState.confirmPassword) {
+                    passwordError = "Passwords do not match"
+                    confirmPasswordError = "Passwords do not match"
+                }
+
+                loginPageState = loginPageState.copy(
+                    firstNameError = firstNameError,
+                    lastnameError = lastNameError,
+                    phoneNumberError = phoneNumberError,
+                    emailError = emailError,
+                    passwordError = passwordError,
+                    confirmPasswordError = confirmPasswordError
+                )
+
+                if (firstNameError == null && lastNameError == null && phoneNumberError == null && emailError == null && passwordError == null && confirmPasswordError == null) {
+
+                    register(
+                        registrationRequestDTO = RegistrationRequestDTO(
+                            firstName = loginPageState.firstName,
+                            lastName = loginPageState.lastname,
+                            phone = loginPageState.phoneNumber,
+                            email = loginPageState.email,
+                            password = loginPageState.password
+                        ),
+                    )
+                }
+
+
+            }
+
+            is LoginAction.OnLogin -> {
+
+                var emailError = if (loginPageState.email.isBlank()) "Email is required" else null
+
+                val passwordError =
+                    if (loginPageState.password.isBlank()) "Password is required" else null
+
+                loginPageState = loginPageState.copy(
+                    emailError = emailError,
+                    passwordError = passwordError
+                )
+
+                if (emailError == null && passwordError == null) {
+
+                    login(
+                        loginRequestDTO = LoginRequestDTO(
+                            email = loginPageState.email.lowercase().trim(),
+                            password = loginPageState.password,
+                        )
+                    )
+                }
+            }
+
+        }
+    }
+
+    private suspend fun getFcmToken(): String {
+        val deferred = CompletableDeferred<String>()
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val fcmToken = task.result
+                    Log.d("FCM Token", "FcmToken: $fcmToken")
+                    deferred.complete(fcmToken ?: "")
+                } else {
+                    Log.e("FCM Token", "Failed to get token: ${task.exception}")
+                    deferred.complete("")
+                }
+            }
+        return deferred.await()
+    }
+
+    private fun login(loginRequestDTO: LoginRequestDTO) {
         viewModelScope.launch {
             loginStatus.value = Results.loading()
-            remoteRepository.login(loginRequestDTO).collect { results ->
+            val token = getFcmToken()
+            remoteRepository.login(loginRequestDTO.copy(deviceId = token)).collect { results ->
                 results.data?.let { result ->
                     database.userDao().insertUser(user = result.user.copy(token = result.token))
                 }
@@ -86,7 +279,8 @@ constructor(
             }
         }
     }
-    fun register(registrationRequestDTO: RegistrationRequestDTO) {
+
+    private fun register(registrationRequestDTO: RegistrationRequestDTO) {
         viewModelScope.launch {
             registrationStatus.value = Results.loading()
             remoteRepository.signUp(registrationRequestDTO).collect { results ->
@@ -98,15 +292,18 @@ constructor(
         }
     }
 
-    fun updateUserDetails(details: UpdateUserDetailsDTO){
+    private fun updateUserDetails(details: UpdateUserDetailsDTO) {
         viewModelScope.launch {
             completeRegistrationState.value = Results.loading()
-          remoteRepository.completeRegistration(detailsDTO = details).collect{ results ->
-              results.data?.let {
-                  database.userDao().updateUser(user = it.user)
-              }
-              completeRegistrationState.value = results
-          }
+            remoteRepository.completeRegistration(detailsDTO = details).collect { results ->
+                results.data?.user?.let { user ->
+                    val loggedInUser = database.userDao().getUser().firstOrNull()
+                    loggedInUser?.let {
+                        database.userDao().updateUser(user = user.copy(token = loggedInUser.token))
+                    }
+                }
+                completeRegistrationState.value = results
+            }
         }
     }
 
@@ -121,6 +318,12 @@ constructor(
                 }.collect {
                     profileStatus.value = Results.success(it)
                 }
+        }
+    }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            database.userDao().updateUser(user)
         }
     }
 

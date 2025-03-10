@@ -7,6 +7,7 @@ import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
+import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +38,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiHelper(): ApiHelper = ApiHelper()
+    fun provideSnackBarViewModel(): SnackBarViewModel = SnackBarViewModel()
+
+
+    @Provides
+    @Singleton
+    fun provideApiHelper(appDatabase: AppDatabase): ApiHelper = ApiHelper(appDatabase)
 
     @Provides
     @Singleton
