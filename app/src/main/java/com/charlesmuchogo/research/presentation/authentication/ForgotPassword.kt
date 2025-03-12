@@ -82,7 +82,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
                     onClick = {
                     },
                     content = {
-                        Text(stringResource(R.string.Resetpassword))
+                        Text(stringResource(R.string.ResetPassword))
                     },
                 )
             }

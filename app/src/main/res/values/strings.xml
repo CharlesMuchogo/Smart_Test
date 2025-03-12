@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Smart Test</string>
     <string name="forgot_password">"Forgot Password?"</string>
-    <string name="Resetpassword">Reset password</string>
+    <string name="ResetPassword">Reset password</string>
     <string name="Profile">Profile</string>
     <string name="History">History</string>
     <string name="Clinics">Clinics</string>
