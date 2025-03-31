@@ -28,6 +28,9 @@ object TestPage
 object ProfilePage
 
 @Serializable
+object EditProfilePage
+
+@Serializable
 object HistoryPage
 
 @Serializable

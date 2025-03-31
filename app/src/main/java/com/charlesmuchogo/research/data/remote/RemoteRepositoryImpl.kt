@@ -1,6 +1,7 @@
 package com.charlesmuchogo.research.data.remote
 
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
@@ -36,13 +37,13 @@ import kotlinx.coroutines.flow.flowOn
 
 class RemoteRepositoryImpl(
     private val apiHelper: ApiHelper,
-    private val appDatabase: AppDatabase,
+    private val settingsRepository: MultiplatformSettingsRepository,
 ) : RemoteRepository {
     override suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>> =
         flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/login") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/login") {
                         contentType(ContentType.Application.Json)
                         setBody(loginRequestDTO)
                     }
@@ -68,7 +69,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/register") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/register") {
                         contentType(ContentType.Application.Json)
                         setBody(registrationRequestDTO)
                     }
@@ -97,7 +98,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/mobile/user") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/mobile/user") {
                         contentType(ContentType.Application.Json)
                         setBody(detailsDTO)
                     }
@@ -128,7 +129,7 @@ class RemoteRepositoryImpl(
         flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.get("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.get("/api/mobile/results") {
                         contentType(ContentType.Application.Json)
                     }
 
@@ -159,7 +160,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.get("/api/mobile/clinics") {
+                    Http(settingsRepository = settingsRepository).client.get("/api/mobile/clinics") {
                         contentType(ContentType.Application.Json)
                     }
 
@@ -191,7 +192,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.delete("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.delete("/api/mobile/results") {
                         contentType(ContentType.Application.Json)
                         parameter("uuid", uuid)
                     }
@@ -225,7 +226,7 @@ class RemoteRepositoryImpl(
             try {
                 println("Care option: ${results.careOption}")
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/mobile/results") {
                         setBody(
                             MultiPartFormDataContent(
                                 formData {

@@ -5,8 +5,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -60,10 +62,9 @@ import kotlinx.datetime.Clock
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavController) {
-    val activity = (LocalContext.current as? Activity)
+    val activity =  (LocalContext.current as? Activity)
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val completeRegistrationState =
-        authenticationViewModel.completeRegistrationState.collectAsState().value
+    val completeRegistrationState by authenticationViewModel.completeRegistrationState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
 
 
@@ -112,7 +113,9 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
             modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 12.dp)
+                .consumeWindowInsets(innerPadding)
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
@@ -143,9 +146,9 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
                 AppTextField(
                     label = "Select your date of birth",
                     value = pageState.age,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnAgeChange(it)) },
-                    error = pageState.ageError,
                     placeholder = startDate,
+                    error = pageState.ageError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnAgeChange(it)) },
                     keyboardType = KeyboardType.Number,
                     trailingIcon = {
                         IconButton(

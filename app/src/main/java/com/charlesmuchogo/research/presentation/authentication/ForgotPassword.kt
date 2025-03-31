@@ -72,9 +72,9 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
                 AppTextField(
                     label = "Email",
                     value = email,
-                    onValueChanged = { email = it },
-                    error = null,
                     placeholder = "johndoe@email.com",
+                    error = null,
+                    onValueChanged = { email = it },
                     keyboardType = KeyboardType.Email,
                 )
 

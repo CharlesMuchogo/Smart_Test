@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
@@ -35,6 +36,7 @@ class AuthenticationViewModel
 @Inject
 constructor(
     private val database: AppDatabase,
+    private val settingsRepository: MultiplatformSettingsRepository,
     private val remoteRepository: RemoteRepository,
 ) : ViewModel() {
 
@@ -227,7 +229,7 @@ constructor(
 
             is LoginAction.OnLogin -> {
 
-                var emailError = if (loginPageState.email.isBlank()) "Email is required" else null
+                val emailError = if (loginPageState.email.isBlank()) "Email is required" else null
 
                 val passwordError =
                     if (loginPageState.password.isBlank()) "Password is required" else null
@@ -274,6 +276,7 @@ constructor(
             remoteRepository.login(loginRequestDTO.copy(deviceId = token)).collect { results ->
                 results.data?.let { result ->
                     database.userDao().insertUser(user = result.user.copy(token = result.token))
+                    settingsRepository.saveAccessToken(result.token)
                 }
                 loginStatus.value = results
             }

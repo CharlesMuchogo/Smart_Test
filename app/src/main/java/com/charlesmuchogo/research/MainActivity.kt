@@ -2,6 +2,7 @@ package com.charlesmuchogo.research
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -20,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.navigation.Navigation
 import com.charlesmuchogo.research.presentation.utils.RequestPermissions
+import com.charlesmuchogo.research.presentation.utils.setAppLocale
 import com.charlesmuchogo.research.ui.theme.SmartTestTheme
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -53,17 +55,24 @@ class MainActivity : ComponentActivity() {
             Log.e("PlayServices", "Google Play Services is not available!")
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            setAppLocale(context = this, languageCode = "sw")
+        }
 
         setContent {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                window.isNavigationBarContrastEnforced = false
+            }
             navController = rememberNavController()
 
             val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
             val profileStatus =
                 authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
+
             RequestPermissions()
             SmartTestTheme(
                 dynamicColor = false,
-                darkTheme = profileStatus.data?.darkTheme ?: false
+                darkTheme = profileStatus.data?.darkTheme == true
             ) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val density = LocalDensity.current.density
@@ -75,6 +84,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 }

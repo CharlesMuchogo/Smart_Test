@@ -15,6 +15,7 @@ import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
+import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
@@ -57,6 +58,35 @@ fun Navigation(navController: NavHostController) {
 
         composable<ProfilePage> {
             ProfileScreen(navController = navController)
+        }
+
+        composable<EditProfilePage>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(ANIMATION_DURATION),
+                )
+            },
+        ) {
+            EditProfileScreen()
         }
         composable<ClinicsPage> {
             ClinicsScreen()
@@ -129,4 +159,4 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
-const val ANIMATION_DURATION = 400
+const val ANIMATION_DURATION = 300

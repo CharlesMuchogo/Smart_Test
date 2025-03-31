@@ -124,4 +124,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.slf4j.nop)
+
+    implementation(libs.multiplatformSettings.noArg)
+    implementation(libs.multiplatformSettings.coroutines)
 }

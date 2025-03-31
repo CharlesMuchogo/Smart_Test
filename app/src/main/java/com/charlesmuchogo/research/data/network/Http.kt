@@ -1,6 +1,6 @@
 package com.charlesmuchogo.research.data.network
 
-import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
@@ -16,18 +16,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
 class Http(
-    private val appDatabase: AppDatabase,
+    private val settingsRepository: MultiplatformSettingsRepository
 ) {
     private var token: String? = null
 
     init {
         runBlocking {
-            token =
-                appDatabase
-                    .userDao()
-                    .getUser()
-                    .firstOrNull()
-                    ?.token
+            token = settingsRepository.getAccessToken().firstOrNull()
         }
     }
 
@@ -43,9 +38,7 @@ class Http(
                 level = LogLevel.ALL
             }
 
-            install(HttpTimeout) {
-                requestTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
-            }
+
 
             install(HttpTimeout) {
                 requestTimeoutMillis = 180_000L
@@ -63,9 +56,6 @@ class Http(
                 )
             }
 
-            install(HttpTimeout) {
-                requestTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
-            }
 
             defaultRequest {
                 url(httpUrlBuilder())

@@ -109,9 +109,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 AppTextField(
                     label = "Email or phone number",
                     value = loginPageState.email,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
-                    error = loginPageState.emailError,
                     placeholder = "johndoe@email.com or 0712345678",
+                    error = loginPageState.emailError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
                     keyboardType = KeyboardType.Email,
                 )
             }
@@ -120,6 +120,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 AppTextField(
                     label = "Password",
                     value = loginPageState.password,
+                    placeholder = "*********",
+                    error = loginPageState.passwordError,
                     onValueChanged = {
                         authenticationViewModel.onAction(
                             LoginAction.OnPasswordChange(
@@ -127,8 +129,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             )
                         )
                     },
-                    error = loginPageState.passwordError,
-                    placeholder = "*********",
                     keyboardType = KeyboardType.Password,
                     passwordVisible = loginPageState.showPassword,
                     imeAction = ImeAction.Done,

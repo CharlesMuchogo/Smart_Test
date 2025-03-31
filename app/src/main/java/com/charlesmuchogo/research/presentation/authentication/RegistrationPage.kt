@@ -89,9 +89,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                         modifier = Modifier.weight(1f),
                         label = "First Name",
                         value = registrationPageState.firstName,
-                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnFirstNameChange(it))},
-                        error = registrationPageState.firstNameError,
                         placeholder = "John",
+                        error = registrationPageState.firstNameError,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnFirstNameChange(it))},
                         keyboardType = KeyboardType.Text,
                     )
 
@@ -99,9 +99,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                         modifier = Modifier.weight(1f),
                         label = "Last Name",
                         value = registrationPageState.lastname,
-                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnLastNameChange(it)) },
-                        error = registrationPageState.lastnameError,
                         placeholder = "Doe",
+                        error = registrationPageState.lastnameError,
+                        onValueChanged = { authenticationViewModel.onAction(LoginAction.OnLastNameChange(it)) },
                         keyboardType = KeyboardType.Text,
                     )
                 }
@@ -112,9 +112,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 AppTextField(
                     label = "Phone Number",
                     value = registrationPageState.phoneNumber,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPhoneNumberChange(it))},
-                    error = registrationPageState.phoneNumberError,
                     placeholder = "07123456789",
+                    error = registrationPageState.phoneNumberError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPhoneNumberChange(it))},
                     keyboardType = KeyboardType.Phone,
                 )
             }
@@ -123,9 +123,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 AppTextField(
                     label = "Email",
                     value = registrationPageState.email,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
-                    error = registrationPageState.emailError,
                     placeholder = "johndoe@email.com",
+                    error = registrationPageState.emailError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
                     keyboardType = KeyboardType.Email,
                 )
             }
@@ -134,9 +134,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 AppTextField(
                     label = "Password",
                     value = registrationPageState.password,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPasswordChange(it))},
-                    error = registrationPageState.passwordError,
                     placeholder = "*********",
+                    error = registrationPageState.passwordError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnPasswordChange(it))},
                     keyboardType = KeyboardType.Password,
                     passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Next,
@@ -157,9 +157,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 AppTextField(
                     label = "Confirm Password",
                     value = registrationPageState.confirmPassword,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnConfirmPasswordChange(it)) },
-                    error = registrationPageState.confirmPasswordError,
                     placeholder = "*********",
+                    error = registrationPageState.confirmPasswordError,
+                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnConfirmPasswordChange(it)) },
                     keyboardType = KeyboardType.Password,
                     passwordVisible = registrationPageState.showPassword,
                     imeAction = ImeAction.Done,

@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +32,10 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -58,6 +56,7 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
+import com.charlesmuchogo.research.presentation.navigation.EditProfilePage
 import com.charlesmuchogo.research.presentation.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.navigation.ProfilePage
 import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
@@ -75,7 +74,6 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
         modifier =
             modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.secondaryContainer),
     ) {
         when (profileState.status) {
             ResultStatus.INITIAL, ResultStatus.LOADING -> {
@@ -91,7 +89,12 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
             }
 
             ResultStatus.SUCCESS -> {
-                profileState.data?.let { ProfileListView(profile = it, navController = navController) }
+                profileState.data?.let {
+                    ProfileListView(
+                        profile = it,
+                        navController = navController
+                    )
+                }
             }
         }
     }
@@ -105,7 +108,7 @@ fun ProfileListView(
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val  context = LocalContext.current
+    val context = LocalContext.current
 
     val darkTheme = profile.darkTheme
     val hideResults = profile.hideResults
@@ -116,7 +119,7 @@ fun ProfileListView(
             onConfirmation = {
                 showLogoutDialog = false
                 authenticationViewModel.logout()
-                navController.navigate(LoginPage){
+                navController.navigate(LoginPage) {
                     popUpTo(ProfilePage) {
                         inclusive = true
                     }
@@ -135,11 +138,6 @@ fun ProfileListView(
                         .padding(vertical = 8.dp)
                         .fillMaxWidth()
                         .fillMaxHeight(0.18f)
-                        .shadow(1.dp, shape = RoundedCornerShape(4))
-                        .clip(
-                            RoundedCornerShape(4),
-                        ).background(MaterialTheme.colorScheme.background)
-                        .padding(vertical = 8.dp),
             ) {
                 Row(
                     modifier =
@@ -174,39 +172,32 @@ fun ProfileListView(
                         )
                     }
 
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
+                    TextButton(onClick = {
+                        navController.navigate(EditProfilePage)
+                    }) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(imageVector = Icons.Default.Edit, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp), contentDescription = "Edit")
+                            Text("Edit", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
                 }
             }
         }
 
         item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    "General",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
 
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        modifier = Modifier.size(25.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
+            Text(
+                "General",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                ),
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+
         }
 
         item {
@@ -214,10 +205,6 @@ fun ProfileListView(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .shadow(1.dp, shape = RoundedCornerShape(4))
-                        .clip(
-                            RoundedCornerShape(4),
-                        ).background(MaterialTheme.colorScheme.background)
                         .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
@@ -255,8 +242,11 @@ fun ProfileListView(
         item {
             Text(
                 "Preferences",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                modifier = Modifier.padding(vertical = 8.dp),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                ),
+                modifier = Modifier.padding(vertical = 4.dp),
             )
         }
 
@@ -265,10 +255,6 @@ fun ProfileListView(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .shadow(1.dp, shape = RoundedCornerShape(4))
-                        .clip(
-                            RoundedCornerShape(4),
-                        ).background(MaterialTheme.colorScheme.background)
                         .padding(vertical = 8.dp),
             ) {
                 Column(modifier = Modifier.padding(8.dp)) {
@@ -293,7 +279,7 @@ fun ProfileListView(
                         label = stringResource(R.string.keepHistory),
                         prefixIcon = if (profile.hideResults) Icons.Default.Lock else Icons.Default.LockOpen,
                         onClick = {
-                             authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
+                            authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
                         },
                         trailingIcon = {
                             Switch(checked = !hideResults, onCheckedChange = {
