@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.UpdateProfileAction
+import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
+import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.states.UpdateProfileState
+import com.charlesmuchogo.research.presentation.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -103,6 +106,17 @@ constructor(
 
             UpdateProfileAction.OnSubmit -> {
 
+                pageState.value = pageState.value.copy(
+                    firstNameError =  if(pageState.value.firstName.isBlank()) "First name is required" else null,
+                    lastNameError =  if(pageState.value.lastName.isBlank()) "Last name is required" else null,
+                    phoneNumberError =  if(pageState.value.phoneNumber.isBlank()) "Phone number is required" else null
+                )
+
+                if(pageState.value.firstNameError != null || pageState.value.lastNameError != null || pageState.value.phoneNumberError != null){
+                    return
+                }
+
+                submit()
             }
 
             is UpdateProfileAction.OnShowImagePicker -> {
@@ -110,5 +124,22 @@ constructor(
             }
         }
 
+    }
+
+    private fun submit(){
+        viewModelScope.launch {
+            pageState.value = pageState.value.copy(isSubmitting = true)
+
+            val results = remoteRepository.updateProfile(pageState.value)
+
+            results.data?.let {
+                database.userDao().updateUser(it.user)
+                pageState.value = pageState.value.copy(isSubmitting = false, hasSubmitted = true)
+            }
+
+            results.message?.let {
+                pageState.value = pageState.value.copy(isSubmitting = false, hasSubmitted = false)
+            }
+        }
     }
 }

@@ -12,6 +12,9 @@ data class UpdateProfileState(
     val showImagePicker: Boolean = false,
     val image: ByteArray? = null,
     val imageLink: String? = null,
+    val isSubmitting: Boolean = false,
+    val hasSubmitted: Boolean = false,
+
 
     /** Errors */
     val firstNameError: String? = null,

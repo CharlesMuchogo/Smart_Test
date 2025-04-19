@@ -8,10 +8,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,7 @@ class ImagePicker(private val context: Context) {
     private lateinit var takePicture: ManagedActivityResultLauncher<Uri, Boolean>
     private lateinit var cropImageLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
     private lateinit var permissionLauncher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>
+    private lateinit var getContent: ActivityResultLauncher<Intent>
 
     private lateinit var photoFile: File
     private lateinit var photoUri: Uri
@@ -69,6 +72,17 @@ class ImagePicker(private val context: Context) {
                 }
             }
         )
+
+        getContent =
+            rememberLauncherForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.data?.let { uri ->
+                        startCrop(uri)
+                    }
+                }
+            }
 
         cropImageLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
@@ -138,18 +152,21 @@ class ImagePicker(private val context: Context) {
     private fun startCrop(sourceUri: Uri) {
         val destinationUri = Uri.fromFile(File(context.cacheDir, "croppedImage.png"))
 
-        val options = UCrop.Options()
-        options.setCompressionQuality(100)
-        options.setMaxBitmapSize(10000)
 
+        val options = UCrop.Options().apply {
+            setCompressionQuality(100)
+            setCompressionFormat(Bitmap.CompressFormat.PNG)
+            setFreeStyleCropEnabled(true)
+        }
 
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
 
-        val uCrop = UCrop.of(sourceUri, destinationUri)
-            .withAspectRatio(4f, 3f)
-            .withMaxResultSize(1000, 1000)
-            .withOptions(options)
-            .getIntent(context)
+        val uCrop =
+            UCrop.of(sourceUri, destinationUri)
+                .withAspectRatio(4f, 3f)
+                .withMaxResultSize(1000, 1000)
+                .withOptions(options)
+                .getIntent(context)
 
         cropImageLauncher.launch(uCrop)
     }
@@ -162,5 +179,12 @@ class ImagePicker(private val context: Context) {
             compressedBytes?.let { onImagePicked(it) }
         }
     }
+
+
+     fun pickImage() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        getContent.launch(intent)
+    }
+
 }
 

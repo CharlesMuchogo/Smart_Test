@@ -34,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,7 @@ import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppImagePickerDialog
+import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.levelsOfEducation
@@ -67,6 +69,12 @@ fun EditProfileScreen() {
     val context = LocalContext.current
     val imagePicker = ImagePicker(context)
 
+    LaunchedEffect(pageState.hasSubmitted) {
+        if(pageState.hasSubmitted){
+            navController.popBackStack()
+        }
+    }
+
 
     imagePicker.RegisterPicker(onImagePicked = { image ->
         profileViewModel.onAction(UpdateProfileAction.OnImageChange(image))
@@ -76,7 +84,7 @@ fun EditProfileScreen() {
         AppImagePickerDialog(
             onPickImage = {
                 profileViewModel.onAction(UpdateProfileAction.OnShowImagePicker(false))
-                imagePicker.captureImage()
+                imagePicker.pickImage()
             },
             onDismiss = {
                 profileViewModel.onAction(UpdateProfileAction.OnShowImagePicker(false))
@@ -301,33 +309,19 @@ fun EditProfileScreen() {
                     .align(Alignment.BottomCenter),
                 shape = MaterialTheme.shapes.extraLarge,
                 onClick = {
-                    //authenticationViewModel.onAction(LoginAction.OnUpdateDetails)
-
+                    profileViewModel.onAction(UpdateProfileAction.OnSubmit)
                 },
                 content = {
-                    Text("Save")
-                    /*when (completeRegistrationState.status) {
-                        ResultStatus.INITIAL,
-                        ResultStatus.ERROR -> {
-                            Text("Continue")
+                    when (pageState.isSubmitting) {
+                        false -> {
+                            Text("Save")
                         }
-
-                        ResultStatus.SUCCESS -> {
-                            Text("Continue")
-                            navController.navigate(HomePage) {
-                                popUpTo(MoreDetailsPage) {
-                                    inclusive = true
-                                }
-                            }
+                        true -> {
+                            AppLoginButtonContent(message = "Saving...")
                         }
-
-                        ResultStatus.LOADING -> {
-                            AppLoginButtonContent(message = "Submitting...")
-                        }
-                    } */
+                    }
                 },
             )
-
         }
     }
 }

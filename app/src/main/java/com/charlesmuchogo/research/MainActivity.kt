@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setAppLocale(context = this, languageCode = "sw")
+            setAppLocale(context = this, languageCode = "en")
         }
 
         setContent {
