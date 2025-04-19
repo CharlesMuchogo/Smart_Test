@@ -19,10 +19,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
@@ -83,7 +85,7 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
                 ResultStatus.SUCCESS -> {
                     if (testResultsStatus.data.isNullOrEmpty() || hideResults) {
                         CenteredColumn(modifier = Modifier) {
-                            Text(text = "No results at the moment")
+                            Text(text = stringResource(R.string.noResults))
                         }
                     } else {
                         TestResultsListView(results = testResultsStatus.data)

@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,15 +68,13 @@ fun HomeScreen(navController: NavController) {
                     NavigationBarItem(
                         colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.background),
                         interactionSource = remember { MutableInteractionSource() },
-                        modifier = Modifier
-                            .testTag(item.title),
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index
                         },
                         label = {
                             Text(
-                                text = item.title,
+                                text = stringResource(item.title) ,
                                 color = if (selectedItemIndex == index)
                                     MaterialTheme.colorScheme.primary
                                 else
@@ -89,7 +88,7 @@ fun HomeScreen(navController: NavController) {
                                 imageVector = if (index == selectedItemIndex) {
                                     item.selectedIcon
                                 } else item.unselectedIcon,
-                                contentDescription = item.title,
+                                contentDescription = stringResource(item.title),
                                 tint = if (selectedItemIndex == index) {
                                     MaterialTheme.colorScheme.primary
                                 } else {
@@ -105,7 +104,7 @@ fun HomeScreen(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title,
+                        text = stringResource(BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title) ,
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
                     )
                 },

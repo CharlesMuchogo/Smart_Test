@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Smart Test</string>
+    <string name="forgot_password">"Forgot Password?"</string>
+    <string name="ResetPassword">Reset password</string>
+    <string name="Profile">Profile</string>
+    <string name="History">History</string>
+    <string name="Clinics">Clinics</string>
+    <string name="Instructions">Instructions</string>
+    <string name="logOut">Log out</string>
+    <string name="logOutDescription">You are about to log out</string>
+    <string name="darkTheme">Dark Theme</string>
+    <string name="keepHistory">Keep Results History</string>
+    <string name="privacyPolicy">Privacy policy</string>
+    <string name="termsAndConditions">Terms and conditions</string>
+    <string name="noResults">No results at the moment</string>
+    <string name="deleteTest">Delete Test</string>
+    <string name="cannotBeunDone">This action cannot be undone</string>
+    <string name="confirm">Confirm</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Delete">Delete\n</string>
+    <string name="noClinicsAtTheMoment">No care options available at th moment.</string>
+    <string name="takeTest">Take a test</string>
+    <string name="individualTest">Personal test</string>
+    <string name="couplesTest">Couples test</string>
+    <string name="testUnderReview">Your test is under review</string>
+    <string name="waitForReview">Hang tight! We’re reviewing your results and will get back to you soon.</string>
+    <string name="okay">Okay</string>
+    <string name="weAreReviewingYourTest">We are reviewing your test!</string>
+    <string name="positiveTestResult">\\uD83D\\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.</string>
+    <string name="negativeTestResult">✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.</string>
 </resources>

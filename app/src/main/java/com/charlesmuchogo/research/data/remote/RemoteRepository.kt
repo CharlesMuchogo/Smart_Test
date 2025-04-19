@@ -8,8 +8,10 @@ import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
+import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
+import com.charlesmuchogo.research.domain.states.UpdateProfileState
 import com.charlesmuchogo.research.presentation.utils.Results
 import kotlinx.coroutines.flow.Flow
 
@@ -17,6 +19,7 @@ interface RemoteRepository {
     suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>>
     suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>>
     suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>>
+    suspend fun updateProfile(request: UpdateProfileState): Results<EditProfileDTO>
     suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>>
     suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>>
     suspend fun deleteResult(uuid: String): Flow<Results<DeleteTestResultsDTO>>

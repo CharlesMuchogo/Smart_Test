@@ -2,9 +2,6 @@ package com.charlesmuchogo.research.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-object AuthenticationPages
-
 
 @Serializable
 object AuthController
@@ -31,6 +28,9 @@ object TestPage
 object ProfilePage
 
 @Serializable
+object EditProfilePage
+
+@Serializable
 object HistoryPage
 
 @Serializable
@@ -40,11 +40,13 @@ object ClinicsPage
 object SearchClinicsPage
 
 @Serializable
-object InstructionsPage
-
-@Serializable
 object PendingTestPage
 
 @Serializable
 object TestInfoPage
+
+@Serializable
+data class PhotoPage(val image: String, val title: String = "Image")
+
+
 

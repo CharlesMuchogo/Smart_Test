@@ -10,34 +10,36 @@ import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.charlesmuchogo.research.R
 
 data class BottomNavigationItem(
-    val title: String,
+    val title: Int,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
 ){
     companion object{
         val bottomNavigationItems = listOf(
             BottomNavigationItem(
-                title = "Instructions",
+                title = R.string.Instructions,
                 selectedIcon = Icons.Default.Info,
                 unselectedIcon = Icons.Outlined.Info,
             ),
 
             BottomNavigationItem(
-                title = "Clinics",
+                title = R.string.Clinics,
                 selectedIcon = Icons.Filled.MedicalServices,
                 unselectedIcon = Icons.Outlined.MedicalServices,
             ),
 
             BottomNavigationItem(
-                title = "History",
+                title = R.string.History,
                 selectedIcon = Icons.Filled.Schedule,
                 unselectedIcon = Icons.Outlined.Schedule,
             ),
 
             BottomNavigationItem(
-                title = "Profile",
+                title = R.string.Profile,
                 selectedIcon = Icons.Filled.Person,
                 unselectedIcon = Icons.Outlined.Person,
             ),

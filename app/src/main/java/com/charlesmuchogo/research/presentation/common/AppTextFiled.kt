@@ -1,24 +1,22 @@
 package com.charlesmuchogo.research.presentation.common
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,81 +27,88 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppTextField(
     modifier: Modifier = Modifier,
+    textFieldModifier: Modifier = Modifier,
     label: String = "",
     value: String,
     placeholder: String,
     error: String?,
-    maxCharacters: Int = Int.MAX_VALUE,
+    enabled: Boolean = true,
+    required: Boolean = false,
+    singleLine: Boolean = true,
     onValueChanged: (String) -> Unit,
     keyboardType: KeyboardType,
     passwordVisible: Boolean = true,
     imeAction: ImeAction = ImeAction.Next,
-    focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
-    unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
     trailingIcon: @Composable () -> Unit = {},
+    leadingIcon: @Composable() (() -> Unit)? = null,
 ) {
-    Column(modifier) {
-        var currentError by remember { mutableStateOf(error) }
+
+
+
+    Column(
+        modifier = modifier,
+    ) {
         if (label.isNotBlank()) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                modifier = Modifier.padding(vertical = 5.dp),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                    modifier = Modifier.padding(vertical = 4.dp),
+                )
+
+                if (required) {
+                    Text(
+                        text = " *",
+                        style =
+                            MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.error,
+                            ),
+                        modifier = Modifier.padding(vertical = 4.dp),
+                    )
+                }
+            }
         }
 
-        OutlinedTextField(
+        TextField(
+            enabled = enabled,
             value = value,
-            placeholder = { Text(text = placeholder, color = Color.Gray) },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = imeAction,
-                ),
-            onValueChange = {
-                if (it.length <= maxCharacters) {
-                    onValueChanged(it)
-                    currentError = null
-                } else {
-                    currentError = "$label cannot be more than $maxCharacters characters"
-                }
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    style = MaterialTheme.typography.labelLarge.copy(color = Color.Gray),
+                )
             },
-            shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            trailingIcon = trailingIcon,
+            maxLines = 1,
             colors =
-                OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = focusedBorderColor,
-                    unfocusedBorderColor = unfocusedBorderColor,
+                TextFieldDefaults.colors(
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    disabledTextColor = MaterialTheme.colorScheme.onBackground,
                 ),
+            leadingIcon = leadingIcon,
+            singleLine = singleLine,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
+            onValueChange = onValueChanged,
+            shape = MaterialTheme.shapes.small,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            modifier = textFieldModifier.fillMaxWidth().padding(vertical = 8.dp).testTag(label.lowercase()),
+            trailingIcon = trailingIcon,
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
         )
-
-        if (maxCharacters != Int.MAX_VALUE) {
-            Row(
-                modifier = Modifier.fillMaxWidth().align(Alignment.End),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = currentError ?: " ",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.labelLarge,
-                )
-
-                Text(
-                    "${value.length}/$maxCharacters",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        } else {
-            error?.let {
-                Text(
-                    text = it,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.labelLarge,
-                )
-            }
+        if (error != null) {
+            Text(
+                text = error,
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.error,
+            )
+        }else {
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

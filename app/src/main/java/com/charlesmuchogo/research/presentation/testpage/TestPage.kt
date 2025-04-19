@@ -21,11 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.navigation.PendingTestPage
@@ -70,7 +72,7 @@ fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                 }
             },
-            title = { Text(text = "Take a test") },
+            title = { Text(text = stringResource(R.string.takeTest)) },
         )
     }) { values ->
         Column(modifier = Modifier
@@ -96,12 +98,12 @@ fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
                                     } else {
                                         MaterialTheme.colorScheme.onBackground
                                     },
-                                    contentDescription = item.title,
+                                    contentDescription = stringResource(item.title) ,
                                 )
 
                                 Text(
                                     modifier = Modifier.padding(horizontal = 8.dp),
-                                    text = item.title,
+                                    text = stringResource(item.title),
                                     style =
                                     MaterialTheme.typography.bodyMedium.copy(
                                         fontWeight = FontWeight.SemiBold,

@@ -1,6 +1,7 @@
 package com.charlesmuchogo.research.data.remote
 
-import com.charlesmuchogo.research.data.local.AppDatabase
+import androidx.compose.runtime.key
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
@@ -12,8 +13,10 @@ import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
+import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
+import com.charlesmuchogo.research.domain.states.UpdateProfileState
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
 import io.ktor.client.call.body
@@ -23,6 +26,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
@@ -33,28 +37,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class RemoteRepositoryImpl(
     private val apiHelper: ApiHelper,
-    private val appDatabase: AppDatabase,
+    private val settingsRepository: MultiplatformSettingsRepository,
 ) : RemoteRepository {
     override suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>> =
         flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/login") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/login") {
                         contentType(ContentType.Application.Json)
                         setBody(loginRequestDTO)
                     }
 
                 if (response.status != HttpStatusCode.OK) {
                     val apiResponse = apiHelper.safeApiCall(response.status) {
-                            response.body<ErrorDTO>()
-                        }
+                        response.body<ErrorDTO>()
+                    }
                     emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
                 } else {
                     val apiResponse = apiHelper.safeApiCall(response.status) {
-                            response.body<LoginResponseDTO>()
+                        response.body<LoginResponseDTO>()
                     }
 
                     emit(apiResponse)
@@ -68,7 +74,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/register") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/register") {
                         contentType(ContentType.Application.Json)
                         setBody(registrationRequestDTO)
                     }
@@ -97,7 +103,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/mobile/user") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/mobile/user") {
                         contentType(ContentType.Application.Json)
                         setBody(detailsDTO)
                     }
@@ -124,11 +130,64 @@ class RemoteRepositoryImpl(
         }.flowOn(Dispatchers.Main)
     }
 
+    @OptIn(ExperimentalUuidApi::class)
+    override suspend fun updateProfile(request: UpdateProfileState): Results<EditProfileDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.put("/api/mobile/profile") {
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("first_name", request.firstName)
+                                append("last_name", request.lastName)
+                                append("phone", request.phoneNumber)
+                                append("age", request.dateOfBirth)
+                                append("gender", request.gender)
+                                append("tested_before", request.testedBefore)
+
+                                request.image?.let {
+                                    append(
+                                        key = "image",
+                                        value = it,
+                                        headers = Headers.build {
+                                            append(HttpHeaders.ContentType, "image/png")
+
+                                            append(
+                                                HttpHeaders.ContentDisposition,
+                                                "filename=\"${Uuid.random()}.png\""
+                                            )
+                                        }
+                                    )
+                                }
+
+                            }
+                        )
+                    )
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(statusCode = response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(
+                    msg = apiResponse.data?.message ?: "Error updating profile. Try again"
+                )
+            } else {
+                apiHelper.safeApiCall(statusCode = response.status) {
+                    response.body<EditProfileDTO>()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Results.error(decodeExceptionMessage(e))
+        }
+    }
+
     override suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>> =
         flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.get("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.get("/api/mobile/results") {
                         contentType(ContentType.Application.Json)
                     }
 
@@ -159,7 +218,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.get("/api/mobile/clinics") {
+                    Http(settingsRepository = settingsRepository).client.get("/api/mobile/clinics") {
                         contentType(ContentType.Application.Json)
                     }
 
@@ -191,7 +250,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(appDatabase = appDatabase).client.delete("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.delete("/api/mobile/results") {
                         contentType(ContentType.Application.Json)
                         parameter("uuid", uuid)
                     }
@@ -225,7 +284,7 @@ class RemoteRepositoryImpl(
             try {
                 println("Care option: ${results.careOption}")
                 val response =
-                    Http(appDatabase = appDatabase).client.post("/api/mobile/results") {
+                    Http(settingsRepository = settingsRepository).client.post("/api/mobile/results") {
                         setBody(
                             MultiPartFormDataContent(
                                 formData {

@@ -3,11 +3,16 @@ package com.charlesmuchogo.research.di
 import android.content.Context
 import androidx.room.Room
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepositoryImpl
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.SharedPreferencesSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,12 +38,32 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHttp(appDatabase: AppDatabase): Http = Http(appDatabase)
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context,
+    ): Settings =
+        SharedPreferencesSettings( context.getSharedPreferences(
+            PreferenceManager.DATASTORE_FILE_NAME,
+            Context.MODE_PRIVATE,
+        ))
+
 
 
     @Provides
     @Singleton
-    fun provideSnackBarViewModel(): SnackBarViewModel = SnackBarViewModel()
+    fun providePreferenceManager(settings: Settings): PreferenceManager = PreferenceManager(settings = settings)
+
+    @Provides
+    @Singleton
+    fun provideMultiplatformSettingsRepository(preferenceManager: PreferenceManager): MultiplatformSettingsRepository = MultiplatformSettingsRepositoryImpl(preferenceManager = preferenceManager)
+
+    @Provides
+    @Singleton
+    fun provideHttp(settingsRepository: MultiplatformSettingsRepository): Http = Http(settingsRepository)
+
+
+    @Provides
+    @Singleton
+    fun provideSnackBarViewModel(): SnackBarViewModel = SnackBarViewModel
 
 
     @Provides
@@ -49,6 +74,6 @@ object AppModule {
     @Singleton
     fun provideRemoteRepository(
         apiHelper: ApiHelper,
-        appDatabase: AppDatabase,
-    ): RemoteRepository = RemoteRepositoryImpl(apiHelper, appDatabase)
+        settingsRepository: MultiplatformSettingsRepository
+    ): RemoteRepository = RemoteRepositoryImpl(apiHelper, settingsRepository)
 }

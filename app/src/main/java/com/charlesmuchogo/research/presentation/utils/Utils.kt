@@ -5,8 +5,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
+import android.os.LocaleList
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +20,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
+import java.util.Locale
 
 
 const val PERMISSION_REQUEST_CODE = 123
@@ -122,6 +127,17 @@ val genders = listOf(
     "Non-Binary",
     "Prefer not to say"
 )
+
+@RequiresApi(Build.VERSION_CODES.N)
+fun setAppLocale(context: Context, languageCode: String) {
+    val locale = Locale(languageCode)
+    Locale.setDefault(locale)
+
+    val config = Configuration(context.resources.configuration)
+    config.setLocales(LocaleList(locale))
+
+    context.resources.updateConfiguration(config, context.resources.displayMetrics)
+}
 
 const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"
 const val TERMS_AND_CONDITIONS_URL = "https://smarttest.muchogoc.com/terms_and_conditions"

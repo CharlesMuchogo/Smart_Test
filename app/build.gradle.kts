@@ -18,8 +18,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 23
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.0.4"
+        versionCode = 10
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -124,4 +124,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.slf4j.nop)
+
+    implementation(libs.multiplatformSettings.noArg)
+    implementation(libs.multiplatformSettings.coroutines)
 }

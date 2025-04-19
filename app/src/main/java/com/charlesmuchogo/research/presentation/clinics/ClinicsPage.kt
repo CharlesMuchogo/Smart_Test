@@ -12,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
@@ -38,7 +40,7 @@ fun ClinicsScreen(modifier: Modifier = Modifier) {
             ResultStatus.SUCCESS -> {
                 if(clinicsState.data.isNullOrEmpty()){
                     CenteredColumn {
-                        Text(text = "No care options available at th moment")
+                        Text(text = stringResource(R.string.noClinicsAtTheMoment) )
                     }
                 } else {
                     ClinicsListView(clinics = clinicsState.data!!)

@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
@@ -25,8 +26,12 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,6 +40,7 @@ class AuthenticationViewModel
 @Inject
 constructor(
     private val database: AppDatabase,
+    private val settingsRepository: MultiplatformSettingsRepository,
     private val remoteRepository: RemoteRepository,
 ) : ViewModel() {
 
@@ -227,7 +233,7 @@ constructor(
 
             is LoginAction.OnLogin -> {
 
-                var emailError = if (loginPageState.email.isBlank()) "Email is required" else null
+                val emailError = if (loginPageState.email.isBlank()) "Email is required" else null
 
                 val passwordError =
                     if (loginPageState.password.isBlank()) "Password is required" else null
@@ -274,6 +280,7 @@ constructor(
             remoteRepository.login(loginRequestDTO.copy(deviceId = token)).collect { results ->
                 results.data?.let { result ->
                     database.userDao().insertUser(user = result.user.copy(token = result.token))
+                    settingsRepository.saveAccessToken(result.token)
                 }
                 loginStatus.value = results
             }
@@ -332,5 +339,18 @@ constructor(
             database.userDao().deleteUsers()
             database.testResultsDao().deleteResults()
         }
+    }
+
+
+    val appTheme: StateFlow<Int?> =
+        settingsRepository.getAppTheme().map { it }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 500L),
+            initialValue = null,
+        )
+
+
+    fun updateAppTheme(theme: Boolean){
+        settingsRepository.saveAppTheme(if (theme) 1 else 0)
     }
 }
