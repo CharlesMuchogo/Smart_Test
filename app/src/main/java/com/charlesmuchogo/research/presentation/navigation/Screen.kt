@@ -45,3 +45,8 @@ object PendingTestPage
 @Serializable
 object TestInfoPage
 
+@Serializable
+data class PhotoPage(val image: String, val title: String = "Image")
+
+
+

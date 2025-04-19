@@ -7,6 +7,7 @@ import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.UpdateProfileAction
 import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
+import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.states.UpdateProfileState
 import com.charlesmuchogo.research.presentation.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,6 +46,7 @@ constructor(
                                 lastName = user.lastName,
                                 phoneNumber = user.phone,
                                 gender = user.gender,
+                                imageLink = user.profilePhoto,
                                 educationLevel = user.educationLevel,
                                 testedBefore = user.testedBefore,
                             )
@@ -135,10 +137,12 @@ constructor(
             results.data?.let {
                 database.userDao().updateUser(it.user)
                 pageState.value = pageState.value.copy(isSubmitting = false, hasSubmitted = true)
+                SnackBarViewModel.sendEvent(SnackBarItem(message = it.message))
             }
 
             results.message?.let {
                 pageState.value = pageState.value.copy(isSubmitting = false, hasSubmitted = false)
+                SnackBarViewModel.sendEvent(SnackBarItem(message = it, isError = true))
             }
         }
     }

@@ -110,7 +110,13 @@ fun ProfileListView(
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val context = LocalContext.current
 
-    val darkTheme = profile.darkTheme
+    val darkThemeFlow by authenticationViewModel.appTheme.collectAsStateWithLifecycle()
+
+    val darkTheme = when (darkThemeFlow) {
+        1 -> true
+        else -> false
+    }
+
     val hideResults = profile.hideResults
 
     if (showLogoutDialog) {
@@ -135,7 +141,7 @@ fun ProfileListView(
             Box(
                 modifier =
                     Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(bottom = 8.dp)
                         .fillMaxWidth()
                         .fillMaxHeight(0.18f)
             ) {
@@ -150,8 +156,7 @@ fun ProfileListView(
                     ProfileIcon(
                         image = profile.profilePhoto,
                         modifier = Modifier.clip(RoundedCornerShape(100)),
-                        photoSize = 70.dp,
-                        onclick = {},
+                        photoSize = 56.dp,
                     )
 
                     Column(
@@ -163,7 +168,7 @@ fun ProfileListView(
                     ) {
                         Text(
                             profile.firstName + " " + profile.lastName,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
                         )
                         Text(
                             modifier = Modifier.padding(top = 4.dp),
@@ -191,8 +196,8 @@ fun ProfileListView(
 
             Text(
                 "General",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                 ),
                 modifier = Modifier.padding(bottom = 8.dp),
@@ -242,8 +247,8 @@ fun ProfileListView(
         item {
             Text(
                 "Preferences",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                 ),
                 modifier = Modifier.padding(vertical = 4.dp),
@@ -265,11 +270,11 @@ fun ProfileListView(
                         label = stringResource(R.string.darkTheme),
                         prefixIcon = if (darkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
                         onClick = {
-                            authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
+                            authenticationViewModel.updateAppTheme(theme = !darkTheme)
                         },
                         trailingIcon = {
                             Switch(checked = darkTheme, onCheckedChange = {
-                                authenticationViewModel.updateUser(profile.copy(darkTheme = !darkTheme))
+                                authenticationViewModel.updateAppTheme(theme = !darkTheme)
                             })
                         },
                     )
@@ -368,7 +373,7 @@ fun ProfileCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = prefixIcon, contentDescription = label)
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(text = label)
+                Text(text = label, style = MaterialTheme.typography.bodyMedium)
             }
 
             trailingIcon()

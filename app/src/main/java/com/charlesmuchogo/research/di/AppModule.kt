@@ -63,7 +63,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSnackBarViewModel(): SnackBarViewModel = SnackBarViewModel()
+    fun provideSnackBarViewModel(): SnackBarViewModel = SnackBarViewModel
 
 
     @Provides

@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,13 +67,17 @@ class MainActivity : ComponentActivity() {
             navController = rememberNavController()
 
             val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-            val profileStatus =
-                authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
 
+            val darkThemeFlow by authenticationViewModel.appTheme.collectAsStateWithLifecycle()
+
+            val darkTheme = when (darkThemeFlow) {
+                1 -> true
+                else -> false
+            }
             RequestPermissions()
             SmartTestTheme(
                 dynamicColor = false,
-                darkTheme = profileStatus.data?.darkTheme == true
+                darkTheme = darkTheme
             ) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val density = LocalDensity.current.density

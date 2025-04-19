@@ -26,8 +26,12 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -335,5 +339,18 @@ constructor(
             database.userDao().deleteUsers()
             database.testResultsDao().deleteResults()
         }
+    }
+
+
+    val appTheme: StateFlow<Int?> =
+        settingsRepository.getAppTheme().map { it }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 500L),
+            initialValue = null,
+        )
+
+
+    fun updateAppTheme(theme: Boolean){
+        settingsRepository.saveAppTheme(if (theme) 1 else 0)
     }
 }

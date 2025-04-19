@@ -27,11 +27,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.charlesmuchogo.research.domain.models.SnackBarItem
+import ui.theme.greenLight
 
 @Composable
 fun SnackBarContent(
-    description: String = "",
     modifier: Modifier = Modifier,
+    description: String = "",
     snackBarHostState: SnackbarHostState,
     snackBarItem: SnackBarItem?,
     alignBottom: Boolean = false,
@@ -53,11 +54,11 @@ fun SnackBarContent(
                     border =
                         BorderStroke(
                             1.dp,
-                            if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                            if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else greenLight,
                         ),
                     colors =
                         CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            containerColor = MaterialTheme.colorScheme.background,
                         ),
                 ) {
                     Row(
@@ -68,27 +69,28 @@ fun SnackBarContent(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        Text(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth(.85f),
-                            text = it.visuals.message,
-                            style =
-                                MaterialTheme.typography.labelLarge.copy(
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onTertiary,
-                                ),
-                        )
-
                         IconButton(onClick = {
                             snackBarHostState.currentSnackbarData?.dismiss()
                         }) {
                             Icon(
                                 imageVector = if (snackBarItem?.isError == true) Icons.Default.Error else Icons.Default.CheckCircle,
-                                tint = if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                                tint = if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else greenLight,
                                 contentDescription = null,
                             )
                         }
+                        Text(
+                            modifier =
+                                Modifier
+                                    .weight(1f),
+                            text = it.visuals.message,
+                            style =
+                                MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Normal,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                ),
+                        )
+
+
                     }
                 }
             },

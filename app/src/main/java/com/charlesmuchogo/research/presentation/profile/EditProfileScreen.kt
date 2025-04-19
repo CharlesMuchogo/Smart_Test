@@ -168,7 +168,6 @@ fun EditProfileScreen() {
                                     modifier = Modifier.fillMaxSize(),
                                     iconSize = 45.dp,
                                     icon = Icons.Default.Person,
-                                    onclick = {}
                                 )
                             }
                         }
