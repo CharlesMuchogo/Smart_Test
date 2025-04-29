@@ -26,6 +26,11 @@ import com.charlesmuchogo.research.presentation.utils.setAppLocale
 import com.charlesmuchogo.research.ui.theme.SmartTestTheme
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.options
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +40,9 @@ lateinit var navController: NavHostController
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var appUpdateManager: AppUpdateManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -49,6 +57,9 @@ class MainActivity : ComponentActivity() {
                 Color.TRANSPARENT,
             ),
         )
+
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        checkForUpdate()
 
         val availability = GoogleApiAvailability.getInstance()
         val status = availability.isGooglePlayServicesAvailable(this)
@@ -86,6 +97,36 @@ class MainActivity : ComponentActivity() {
                         Navigation(navController = navController)
                     }
                 }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(
+                    info,
+                    if (info.updatePriority() >= 4 ) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    this,
+                    123,
+                )
+            }
+        }
+    }
+
+    private fun checkForUpdate() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            val isUpdateAllowed = info.isFlexibleUpdateAllowed
+
+            if (isUpdateAllowed && isUpdateAvailable) {
+                appUpdateManager .startUpdateFlowForResult(
+                    info,
+                    if (info.updatePriority() >= 4 ) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    this,
+                    123,
+                )
             }
         }
     }

@@ -1,3 +1,7 @@
+import java.util.Properties
+
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -46,7 +50,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -127,4 +132,7 @@ dependencies {
 
     implementation(libs.multiplatformSettings.noArg)
     implementation(libs.multiplatformSettings.coroutines)
+
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
 }
