@@ -3,7 +3,7 @@ name: 🚀 Build and deploy to playStore
 on:
   push:
     branches:
-      - masters
+      - master
 jobs:
   build:
     name: 🚀 Build and deploy to playStore
