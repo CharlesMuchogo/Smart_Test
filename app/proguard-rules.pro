@@ -21,3 +21,16 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.charlesmuchogo.research.domain.** { *; }
+-keep @kotlinx.serialization.Serializable class * {*;}
+# Keep all built-in serializers and related top-level functions in the kotlinx.serialization.builtins package
+-keep class kotlinx.serialization.builtins.** { *; }
+
+# Keep Kotlinx Serialization metadata
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+
+# Keep all classes in the kotlinx.serialization package
+-keep class kotlinx.serialization.** { *; }
+
+# Keep generated serializer classes (they usually have a $$serializer suffix)
+-keepclassmembers class **$$serializer { *; }

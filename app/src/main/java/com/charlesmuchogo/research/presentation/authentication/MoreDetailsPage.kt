@@ -25,6 +25,7 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +56,7 @@ import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.calculateDifferenceBetweenDates
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToDate
 import com.charlesmuchogo.research.presentation.utils.genders
+import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
 import com.charlesmuchogo.research.presentation.utils.levelsOfEducation
 import kotlinx.datetime.Clock
 
@@ -66,7 +68,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val completeRegistrationState by authenticationViewModel.completeRegistrationState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
 
     val timestamp18YearsAgo = Clock.System.now().toEpochMilliseconds() - 568_036_800_000L
     val startDate = convertTimestampToDate(timestamp18YearsAgo)
@@ -96,6 +98,11 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
                 authenticationViewModel.onAction(LoginAction.OnAgeChange(date))
             }
         )
+    }
+
+    LaunchedEffect(Unit) {
+        val country = getDeviceCountry(context)
+        authenticationViewModel.onAction(LoginAction.OnCountryChange(country))
     }
 
     Scaffold(

@@ -49,7 +49,7 @@ fun HomeScreen(navController: NavController) {
         mutableIntStateOf(0)
     }
 
-    var kiswahiliLanguage by remember { mutableStateOf(true) }
+    var kiswahiliLanguage by remember { mutableStateOf(false) }
 
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
 

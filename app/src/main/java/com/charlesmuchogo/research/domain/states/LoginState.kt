@@ -16,6 +16,7 @@ data class LoginState(
     val educationLevel: String = "",
     val hasTestedBefore: Boolean = false,
     val maritalStatus: String = "",
+    val country: String = "",
 
     //Errors
     val domainError: String? = null,

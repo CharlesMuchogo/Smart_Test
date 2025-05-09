@@ -5,11 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.UpdateProfileAction
-import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
-import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.states.UpdateProfileState
-import com.charlesmuchogo.research.presentation.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -123,6 +120,11 @@ constructor(
 
             is UpdateProfileAction.OnShowImagePicker -> {
                 pageState.value = pageState.value.copy(showImagePicker = action.value)
+            }
+
+            is UpdateProfileAction.OnCountryChange -> {
+
+                pageState.value = pageState.value.copy(country = action.country)
             }
         }
 

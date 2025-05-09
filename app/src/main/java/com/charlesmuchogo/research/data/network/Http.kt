@@ -35,10 +35,8 @@ class Http(
                             println(message)
                         }
                     }
-                level = LogLevel.ALL
+                level = LogLevel.NONE
             }
-
-
 
             install(HttpTimeout) {
                 requestTimeoutMillis = 30_000L
@@ -65,6 +63,7 @@ class Http(
     }
 
     companion object {
-        fun httpUrlBuilder(): String = "https://smarttest.muchogoc.com"
+
+        fun httpUrlBuilder(): String =  "https://smarttest.muchogoc.com"
     }
 }

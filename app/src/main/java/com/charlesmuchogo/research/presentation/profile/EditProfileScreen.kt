@@ -47,6 +47,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.actions.UpdateProfileAction
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.EditProfileViewModel
@@ -57,6 +58,7 @@ import com.charlesmuchogo.research.presentation.common.AppImagePickerDialog
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
+import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
 import com.charlesmuchogo.research.presentation.utils.levelsOfEducation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +75,11 @@ fun EditProfileScreen() {
         if(pageState.hasSubmitted){
             navController.popBackStack()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        val country = getDeviceCountry(context)
+        profileViewModel.onAction(UpdateProfileAction.OnCountryChange(country))
     }
 
 

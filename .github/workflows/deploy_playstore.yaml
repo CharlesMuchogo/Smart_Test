@@ -65,8 +65,8 @@ jobs:
           status: completed
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           whatsNewDirectory: release-notes
-          track: internal #production
-          inAppUpdatePriority: 2
+          track:  production #internal
+          inAppUpdatePriority: 3
           mappingFile: app/build/outputs/mapping/release/mapping.txt
 
       # Slack Notification

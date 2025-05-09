@@ -21,6 +21,8 @@ interface MultiplatformSettingsRepository {
 
     fun saveUserName(username: String)
 
+    fun saveFirstTimeUse(firstTime: Boolean)
+
     fun saveUserEmail(email: String)
 
     fun saveUserPhoneNumber(phone: String)
@@ -34,6 +36,8 @@ interface MultiplatformSettingsRepository {
     fun getUsername(): Flow<String?>
 
     fun getUserEmail(): Flow<String?>
+
+    fun getFirstTime(): Flow<Boolean?>
 
     fun getAppTheme(): Flow<Int?>
 

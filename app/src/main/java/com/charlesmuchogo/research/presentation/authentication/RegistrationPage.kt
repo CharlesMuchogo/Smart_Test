@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
+import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
 import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
 @Composable
@@ -56,6 +58,11 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     val registrationStatus by authenticationViewModel.registrationStatus.collectAsState()
     val registrationPageState = authenticationViewModel.loginPageState
     val  context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val country = getDeviceCountry(context)
+        authenticationViewModel.onAction(LoginAction.OnCountryChange(country))
+    }
 
     Scaffold { padding ->
         LazyColumn(

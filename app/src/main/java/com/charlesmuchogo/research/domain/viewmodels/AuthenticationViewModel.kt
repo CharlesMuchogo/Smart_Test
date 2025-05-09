@@ -51,6 +51,7 @@ constructor(
         Results.initial<LoginResponseDTO>(),
     )
 
+
     val registrationStatus = MutableStateFlow(
         Results<LoginResponseDTO>(
             data = null,
@@ -176,7 +177,8 @@ constructor(
                         testedBefore = loginPageState.hasTestedBefore,
                         educationLevel = loginPageState.educationLevel,
                         gender = loginPageState.gender,
-                        age = loginPageState.age
+                        age = loginPageState.age,
+                        country = loginPageState.country
                     )
                 )
 
@@ -223,7 +225,8 @@ constructor(
                             lastName = loginPageState.lastname,
                             phone = loginPageState.phoneNumber,
                             email = loginPageState.email,
-                            password = loginPageState.password
+                            password = loginPageState.password,
+                            country = loginPageState.country
                         ),
                     )
                 }
@@ -254,6 +257,9 @@ constructor(
                 }
             }
 
+            is LoginAction.OnCountryChange -> {
+                loginPageState = loginPageState.copy(country = action.country)
+            }
         }
     }
 
@@ -349,6 +355,12 @@ constructor(
             initialValue = null,
         )
 
+    val isFirstTime: StateFlow<Boolean?> =
+        settingsRepository.getFirstTime().map { it }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 500L),
+            initialValue = null,
+        )
 
     fun updateAppTheme(theme: Boolean){
         settingsRepository.saveAppTheme(if (theme) 1 else 0)
