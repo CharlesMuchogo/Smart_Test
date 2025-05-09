@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.LocaleList
+import android.telephony.TelephonyManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
@@ -137,6 +138,21 @@ fun setAppLocale(context: Context, languageCode: String) {
     config.setLocales(LocaleList(locale))
 
     context.resources.updateConfiguration(config, context.resources.displayMetrics)
+}
+
+fun getDeviceCountry(context: Context): String {
+    val telephonyManager =
+        context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    val simCountry = telephonyManager.simCountryIso
+    val networkCountry = telephonyManager.networkCountryIso
+
+    return if (simCountry.isNotEmpty()) {
+        simCountry.uppercase(Locale.US)
+    } else if (networkCountry.isNotEmpty()) {
+        networkCountry.uppercase(Locale.US)
+    } else {
+        Locale.getDefault().country
+    }
 }
 
 const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"

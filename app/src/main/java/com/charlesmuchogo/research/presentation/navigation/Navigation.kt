@@ -29,6 +29,7 @@ import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
+import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
@@ -69,6 +70,9 @@ fun Navigation(navController: NavHostController) {
 
             composable<AuthController> {
                 AuthControllerScreen(navController = navController)
+            }
+            composable<OnBoardingScreen> {
+                OnboardingRoot()
             }
             composable<LoginPage> {
                 LoginScreen(navController = navController)

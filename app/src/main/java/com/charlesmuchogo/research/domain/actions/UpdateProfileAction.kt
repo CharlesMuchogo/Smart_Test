@@ -26,4 +26,6 @@ sealed interface UpdateProfileAction {
 
     data class OnShowImagePicker(val value: Boolean) : UpdateProfileAction
 
+    data class OnCountryChange(val country: String) : UpdateProfileAction
+
 }

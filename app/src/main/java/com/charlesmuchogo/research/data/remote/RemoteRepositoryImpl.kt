@@ -144,6 +144,7 @@ class RemoteRepositoryImpl(
                                 append("age", request.dateOfBirth)
                                 append("gender", request.gender)
                                 append("tested_before", request.testedBefore)
+                                append("country", request.country)
 
                                 request.image?.let {
                                     append(

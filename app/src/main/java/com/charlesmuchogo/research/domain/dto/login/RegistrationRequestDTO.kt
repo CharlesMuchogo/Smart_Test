@@ -9,4 +9,5 @@ data class RegistrationRequestDTO(
     val phone: String,
     val email: String,
     val password: String,
+    val country: String
 )

@@ -8,6 +8,7 @@ data class UpdateProfileState(
     val gender: String = "",
     val educationLevel: String = "",
     val maritalStatus: String = "",
+    val country: String = "",
     val testedBefore: Boolean = false,
     val showImagePicker: Boolean = false,
     val image: ByteArray? = null,

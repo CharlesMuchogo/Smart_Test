@@ -19,6 +19,7 @@ class PreferenceManager(private val settings: Settings) {
         const val AUTHENTICATION_TOKEN = "auth_token_key"
         const val APP_THEME = "app_theme_key"
         const val LOGIN_TYPE = "login_type_key"
+        const val FIRST_TIME = "first_time_key"
 
         const val APP_VERSION = "app_version"
         const val CURRENT_LATITUDE = "current_latitude_key"

@@ -18,6 +18,7 @@ data class User(
     val lastName: String,
     val phone: String,
     val profilePhoto: String,
+    val country: String = "",
     val token: String? = null,
     val testedBefore: Boolean,
     @SerialName("SaveResults")

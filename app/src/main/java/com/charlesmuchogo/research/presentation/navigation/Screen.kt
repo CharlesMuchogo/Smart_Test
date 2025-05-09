@@ -7,6 +7,9 @@ import kotlinx.serialization.Serializable
 object AuthController
 
 @Serializable
+object OnBoardingScreen
+
+@Serializable
 object LoginPage
 
 @Serializable

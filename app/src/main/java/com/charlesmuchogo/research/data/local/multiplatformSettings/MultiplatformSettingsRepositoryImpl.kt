@@ -41,6 +41,10 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
         preferenceManager.setString(key = PreferenceManager.USER_NAME, value = username)
     }
 
+    override fun saveFirstTimeUse(firstTime: Boolean) {
+        preferenceManager.setBoolean(key = PreferenceManager.FIRST_TIME, value = firstTime)
+    }
+
     override fun saveUserEmail(email: String) {
         preferenceManager.setString(key = PreferenceManager.USER_EMAIL, value = email)
     }
@@ -67,6 +71,11 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
 
     override fun getUserEmail(): Flow<String?> {
         return preferenceManager.getString(PreferenceManager.USER_EMAIL)
+    }
+
+    override fun getFirstTime(): Flow<Boolean?> {
+        return preferenceManager.getBoolean(key = PreferenceManager.FIRST_TIME)
+
     }
 
     override fun getAppTheme(): Flow<Int?> {

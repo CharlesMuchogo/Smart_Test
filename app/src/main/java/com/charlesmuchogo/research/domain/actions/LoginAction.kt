@@ -8,6 +8,7 @@ sealed interface LoginAction {
     data class OnRememberMeChange(val rememberMe: Boolean) : LoginAction
     data class OnTermsAndConditionsChange(val agree: Boolean) : LoginAction
     data class OnEmailChange(val email: String) : LoginAction
+    data class OnCountryChange(val country: String) : LoginAction
     data class OnPasswordChange(val password: String) : LoginAction
 
     data class OnFirstNameChange(val value: String) : LoginAction
