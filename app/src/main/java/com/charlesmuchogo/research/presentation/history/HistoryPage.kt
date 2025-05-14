@@ -64,7 +64,6 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
         snackbarHost = {
             SnackBarContent(
                 snackBarHostState = snackBarHostState,
-                snackBarItem = snackBarNotification.data,
                 alignBottom = true
             )
         }

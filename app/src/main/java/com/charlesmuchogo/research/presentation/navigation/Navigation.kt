@@ -42,14 +42,13 @@ import com.charlesmuchogo.research.presentation.testpage.TestScreen
 @Composable
 fun Navigation(navController: NavHostController) {
 
-    val snackBarNotification by SnackBarViewModel.events.collectAsState(initial = null)
     val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(snackBarNotification) {
-        if(snackBarNotification != null){
+    LaunchedEffect(Unit) {
+        SnackBarViewModel.events.collect { snackBarItem ->
             snackBarHostState.showSnackbar(
-                duration = SnackbarDuration.Short,
-                message = snackBarNotification?.message ?: "",
+                message = snackBarItem.message,
+                duration = SnackbarDuration.Short
             )
         }
     }
@@ -59,7 +58,6 @@ fun Navigation(navController: NavHostController) {
             SnackBarContent(
                 modifier = Modifier.statusBarsPadding(),
                 snackBarHostState = snackBarHostState,
-                snackBarItem = snackBarNotification,
             )
         }
     ) {

@@ -125,7 +125,7 @@ dependencies {
     //lottie
     implementation(libs.lottie)
 
-    //workmanager
+    //work manager
     implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.slf4j.nop)

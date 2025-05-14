@@ -2,6 +2,7 @@ package com.charlesmuchogo.research.presentation.profile
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -113,8 +114,9 @@ fun ProfileListView(
     val darkThemeFlow by authenticationViewModel.appTheme.collectAsStateWithLifecycle()
 
     val darkTheme = when (darkThemeFlow) {
+        0 -> false
         1 -> true
-        else -> false
+        else -> isSystemInDarkTheme()
     }
 
     val hideResults = profile.hideResults

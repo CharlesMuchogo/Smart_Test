@@ -16,6 +16,7 @@ import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
 import com.charlesmuchogo.research.domain.events.AuthenticationEvent
+import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -41,6 +42,7 @@ class AuthenticationViewModel
 constructor(
     private val database: AppDatabase,
     private val settingsRepository: MultiplatformSettingsRepository,
+    private val snackBarViewModel: SnackBarViewModel,
     private val remoteRepository: RemoteRepository,
 ) : ViewModel() {
 
@@ -85,10 +87,6 @@ constructor(
         )
     )
 
-    fun updateAuthenticationEvent(authenticationEvent: AuthenticationEvent) {
-        authenticationEventState.value = Results.initial()
-        authenticationEventState.value = Results.success(authenticationEvent)
-    }
 
     init {
         getCurrentUser()
@@ -315,6 +313,12 @@ constructor(
                         database.userDao().updateUser(user = user.copy(token = loggedInUser.token))
                     }
                 }
+
+                results.message?.let {
+                    snackBarViewModel.sendEvent(SnackBarItem(message = it, isError = true))
+                }
+
+
                 completeRegistrationState.value = results
             }
         }
