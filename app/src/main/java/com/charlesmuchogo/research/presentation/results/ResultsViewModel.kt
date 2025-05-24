@@ -37,6 +37,14 @@ class ResultsViewModel @Inject constructor(
                         _state.update { it.copy(result = result) }
                     }
                 }
+
+                is ResultsAction.OnShowDeleteDialog -> {
+                    _state.update { it.copy(showDeleteDialog = action.show) }
+                }
+
+                is ResultsAction.OnShowMoreChange -> {
+                    _state.update { it.copy(showMore = action.show) }
+                }
             }
         }
     }

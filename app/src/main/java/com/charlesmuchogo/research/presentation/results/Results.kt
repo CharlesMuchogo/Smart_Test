@@ -5,15 +5,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocalHospital
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +41,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
+import ui.theme.lightGreen
+import ui.theme.lightYellow
 
 @Composable
 fun ResultsRoot(id: Long) {
@@ -59,6 +68,32 @@ fun ResultsScreen(
     state: ResultsState,
     onAction: (ResultsAction) -> Unit,
 ) {
+
+    if (state.showDeleteDialog) {
+        AppAlertDialog(
+            onDismissRequest = { onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog)) },
+            onConfirmation = {
+                onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
+            },
+            dialogTitle = stringResource(R.string.deleteTest),
+            dialogText = stringResource(R.string.cannotBeunDone),
+            confirmContent = {
+                when (state.isDeleting) {
+                    true -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(26.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    false -> {
+                        Text(stringResource(R.string.confirm))
+                    }
+                }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -77,23 +112,60 @@ fun ResultsScreen(
                     )
                 },
                 actions = {
-                    IconButton(
-                        onClick = {}
+                    Box(
+                        modifier = Modifier
+                            .padding(4.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "More"
-                        )
 
+                        IconButton(
+                            onClick = {
+                                onAction(ResultsAction.OnShowMoreChange(!state.showMore))
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "More"
+                            )
+
+                        }
+
+                        DropdownMenu(
+                            containerColor = MaterialTheme.colorScheme.background,
+                            expanded = state.showMore,
+                            onDismissRequest = { onAction(ResultsAction.OnShowMoreChange(!state.showMore)) }
+                        ) {
+                            DropdownMenuItem(
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Delete, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.error, contentDescription = "Delete")
+                                },
+                                text = { Text("Delete", style = MaterialTheme.typography.labelMedium) },
+                                onClick = {
+                                    onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
+                                    onAction(ResultsAction.OnShowMoreChange(!state.showMore))
+                                }
+                            )
+                            DropdownMenuItem(
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Share, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Share")
+                                },
+                                text = { Text("Share", style = MaterialTheme.typography.labelMedium) },
+                                onClick = {
+                                    onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
+                                    onAction(ResultsAction.OnShowMoreChange(!state.showMore))
+                                }
+                            )
+                        }
                     }
                 }
             )
         }) { values ->
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(values)
-            .padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(values)
+                .padding(horizontal = 16.dp)
+        ) {
 
             when (state.result == null) {
                 true -> {
@@ -103,6 +175,14 @@ fun ResultsScreen(
                 }
 
                 false -> {
+
+                    val color = when (state.result.results.uppercase()) {
+                        "NEGATIVE" -> lightGreen
+                        "POSITIVE" -> MaterialTheme.colorScheme.error
+                        "INVALID" -> lightYellow
+                        else -> MaterialTheme.colorScheme.tertiary
+                    }
+
                     LazyColumn {
                         item {
                             ResultDetailCard(
@@ -129,7 +209,8 @@ fun ResultsScreen(
                             ResultDetailCard(
                                 title = "Result",
                                 icon = Icons.Default.Person,
-                                description = state.result.results
+                                description = state.result.results,
+                                color = color
                             )
                         }
 
@@ -147,15 +228,21 @@ fun ResultsScreen(
                             Spacer(Modifier.height(24.dp))
                         }
 
-                        if(state.result.reason.isNotBlank()){
-                            item{
+                        if (state.result.reason.isNotBlank()) {
+                            item {
 
-                                Text("Reason", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold))
+                                Text(
+                                    "Reason",
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                                )
 
                             }
 
-                            item{
-                                Text(text = state.result.reason, style = MaterialTheme.typography.bodyMedium)
+                            item {
+                                Text(
+                                    text = state.result.reason,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
                         }
                     }
@@ -178,7 +265,7 @@ fun ResultsScreenPreview() {
         status = "Pending",
         partnerImage = "",
         partnerResults = "",
-        results = "N/A",
+        results = "Invalid",
         reason = "Results are invalid. Read the instructions, use a test equipment to take a test and upload the results to get your correct results",
         userId = 1
     )

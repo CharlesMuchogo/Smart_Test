@@ -21,12 +21,19 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ResultDetailCard(modifier: Modifier = Modifier, icon: ImageVector, title: String, description: String) {
+fun ResultDetailCard(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    title: String,
+    description: String,
+    color: Color = MaterialTheme.colorScheme.onBackground
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -35,14 +42,20 @@ fun ResultDetailCard(modifier: Modifier = Modifier, icon: ImageVector, title: St
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth(0.4f)
-            .fillMaxHeight()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.4f)
+                .fillMaxHeight()
+        ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f))
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     title,
@@ -58,6 +71,7 @@ fun ResultDetailCard(modifier: Modifier = Modifier, icon: ImageVector, title: St
         Text(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
+            color = color,
             modifier = Modifier.weight(1f),
         )
     }
@@ -70,7 +84,7 @@ fun ResultDetailCard(modifier: Modifier = Modifier, icon: ImageVector, title: St
 @Preview
 @Composable
 private fun ResultDetailCardPreview() {
-    Surface(color = MaterialTheme.colorScheme.background){
+    Surface(color = MaterialTheme.colorScheme.background) {
         ResultDetailCard(
             title = "Date",
             icon = Icons.Default.CalendarMonth,

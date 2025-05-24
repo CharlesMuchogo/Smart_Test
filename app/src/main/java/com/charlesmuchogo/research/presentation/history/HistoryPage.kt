@@ -69,7 +69,7 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
                 alignBottom = true
             )
         }
-    )  {
+    ) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -110,9 +110,12 @@ fun TestResultsListView(
 ) {
     LazyColumn(modifier = modifier.padding(horizontal = 8.dp)) {
         items(results) { result ->
-            HistoryCard(result = result, onClick = {
-                navController.navigate(TestResultsPage(result.id))
-            })
+            HistoryCard(
+                result = result,
+                onClick = {
+                    navController.navigate(TestResultsPage(result.id))
+                },
+            )
         }
     }
 }
