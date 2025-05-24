@@ -33,6 +33,7 @@ import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
+import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
 import com.charlesmuchogo.research.presentation.testpage.TestScreen
@@ -226,6 +227,36 @@ fun Navigation(navController: NavHostController) {
                 TestInfoScreen(navController = navController)
             }
 
+
+            composable<TestResultsPage>(
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+            ) { backStackEntry ->
+                val args = backStackEntry.toRoute<TestResultsPage>()
+                ResultsRoot(id = args.id )
+            }
         }
     }
 

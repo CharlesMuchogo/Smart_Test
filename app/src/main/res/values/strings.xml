@@ -20,6 +20,7 @@
     <string name="Delete">Delete\n</string>
     <string name="noClinicsAtTheMoment">No care options available at th moment.</string>
     <string name="takeTest">Take a test</string>
+    <string name="testResults">Test Results</string>
     <string name="individualTest">Personal test</string>
     <string name="couplesTest">Couples test</string>
     <string name="testUnderReview">Your test is under review</string>

@@ -28,6 +28,11 @@ object HomePage
 object TestPage
 
 @Serializable
+data class TestResultsPage(
+    val id: Long
+)
+
+@Serializable
 object ProfilePage
 
 @Serializable

@@ -17,6 +17,9 @@ interface TestResultsDao {
     @Query("SELECT * FROM TESTRESULTS ORDER BY id DESC")
     fun getTestResults(): Flow<List<TestResult>>
 
+    @Query("SELECT * FROM TESTRESULTS WHERE id =:id ORDER BY id DESC LIMIT 1")
+    fun getTestResult(id: Long): Flow<TestResult?>
+
     @Update
     suspend fun updateResult(result: TestResult)
 

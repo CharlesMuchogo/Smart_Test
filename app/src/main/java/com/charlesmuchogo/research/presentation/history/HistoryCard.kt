@@ -53,6 +53,7 @@ import ui.theme.lightYellow
 fun HistoryCard(
     modifier: Modifier = Modifier,
     result: TestResult,
+    onClick: (TestResult) -> Unit,
     historyViewModel: TestResultsViewModel = hiltViewModel()
 ) {
     var showMoreActions by remember { mutableStateOf(false) }
@@ -103,7 +104,7 @@ fun HistoryCard(
             )
             .background(MaterialTheme.colorScheme.background)
             .clickable {
-
+                onClick(result)
             }
             .testTag(result.id.toString())
     ) {
