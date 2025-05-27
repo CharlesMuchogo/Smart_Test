@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.data.remote
 
-import androidx.compose.runtime.key
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
@@ -68,7 +67,7 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        }
 
     override suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>> {
         return flow {
@@ -96,7 +95,7 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        }
     }
 
     override suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>> {
@@ -127,7 +126,7 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        }
     }
 
     @OptIn(ExperimentalUuidApi::class)
@@ -213,7 +212,7 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        }
 
     override suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>> {
         return flow {
@@ -244,40 +243,38 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        }
     }
 
-    override suspend fun deleteResult(uuid: String): Flow<Results<DeleteTestResultsDTO>> {
-        return flow {
-            try {
-                val response =
-                    Http(settingsRepository = settingsRepository).client.delete("/api/mobile/results") {
-                        contentType(ContentType.Application.Json)
-                        parameter("uuid", uuid)
+    override suspend fun deleteResult(uuid: String): Results<DeleteTestResultsDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.delete("/api/mobile/results") {
+                    contentType(ContentType.Application.Json)
+                    parameter("uuid", uuid)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse =
+                    apiHelper.safeApiCall(response.status) {
+                        response.body<ErrorDTO>()
                     }
 
-                if (response.status != HttpStatusCode.OK) {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
-                            response.body<ErrorDTO>()
-                        }
 
-                    emit(
-                        Results.error(
-                            apiResponse.data?.message ?: "Error deleting test. Try again"
-                        )
-                    )
-                } else {
-                    val apiResponse =
-                        apiHelper.safeApiCall(response.status) {
-                            response.body<DeleteTestResultsDTO>()
-                        }
-                    emit(apiResponse)
+                Results.error(
+                    apiResponse.data?.message ?: "Error deleting test. Try again"
+
+                )
+            } else {
+
+                apiHelper.safeApiCall(response.status) {
+                    response.body<DeleteTestResultsDTO>()
                 }
-            } catch (e: Exception) {
-                emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Main)
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
+        }
+
     }
 
     override suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>> {
@@ -342,6 +339,6 @@ class RemoteRepositoryImpl(
                 e.printStackTrace()
                 emit(Results.error(decodeExceptionMessage(e)))
             }
-        }.flowOn(Dispatchers.Default)
+        }
     }
 }

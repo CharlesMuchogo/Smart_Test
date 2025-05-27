@@ -14,6 +14,7 @@
     <string name="termsAndConditions">Terms and conditions</string>
     <string name="noResults">No results at the moment</string>
     <string name="deleteTest">Delete Test</string>
+    <string name="shareTest">Share Test</string>
     <string name="cannotBeunDone">This action cannot be undone</string>
     <string name="confirm">Confirm</string>
     <string name="Cancel">Cancel</string>

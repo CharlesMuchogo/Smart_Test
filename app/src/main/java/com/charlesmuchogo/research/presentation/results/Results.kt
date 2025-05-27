@@ -1,5 +1,10 @@
 package com.charlesmuchogo.research.presentation.results
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +47,7 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
+import com.charlesmuchogo.research.presentation.common.AppLoadingDialog
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import ui.theme.lightGreen
 import ui.theme.lightYellow
@@ -69,29 +75,32 @@ fun ResultsScreen(
     onAction: (ResultsAction) -> Unit,
 ) {
 
+    LaunchedEffect(state.hasDeleted) {
+        if(state.hasDeleted){
+            navController.popBackStack()
+        }
+    }
+
     if (state.showDeleteDialog) {
         AppAlertDialog(
             onDismissRequest = { onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog)) },
             onConfirmation = {
-                onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
+                onAction(ResultsAction.OnDeleteResults)
             },
             dialogTitle = stringResource(R.string.deleteTest),
             dialogText = stringResource(R.string.cannotBeunDone),
             confirmContent = {
-                when (state.isDeleting) {
-                    true -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(26.dp),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    false -> {
-                        Text(stringResource(R.string.confirm))
-                    }
-                }
+                Text(stringResource(R.string.confirm))
             }
         )
+    }
+
+    AnimatedVisibility(
+        visible = state.isDeleting,
+        enter = fadeIn() + scaleIn(initialScale = 0.4f),
+        exit = fadeOut() + scaleOut(targetScale = 0.4f),
+    ) {
+        AppLoadingDialog(label = "Deleting...")
     }
 
     Scaffold(
@@ -138,7 +147,7 @@ fun ResultsScreen(
                                 leadingIcon = {
                                     Icon(imageVector = Icons.Default.Delete, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.error, contentDescription = "Delete")
                                 },
-                                text = { Text("Delete", style = MaterialTheme.typography.labelMedium) },
+                                text = { Text(stringResource(R.string.deleteTest), style = MaterialTheme.typography.labelMedium) },
                                 onClick = {
                                     onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
                                     onAction(ResultsAction.OnShowMoreChange(!state.showMore))
@@ -148,9 +157,8 @@ fun ResultsScreen(
                                 leadingIcon = {
                                     Icon(imageVector = Icons.Default.Share, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Share")
                                 },
-                                text = { Text("Share", style = MaterialTheme.typography.labelMedium) },
+                                text = { Text(stringResource(R.string.shareTest), style = MaterialTheme.typography.labelMedium) },
                                 onClick = {
-                                    onAction(ResultsAction.OnShowDeleteDialog(!state.showDeleteDialog))
                                     onAction(ResultsAction.OnShowMoreChange(!state.showMore))
                                 }
                             )

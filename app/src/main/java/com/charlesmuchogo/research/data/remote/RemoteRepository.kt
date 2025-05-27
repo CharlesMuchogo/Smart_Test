@@ -22,6 +22,6 @@ interface RemoteRepository {
     suspend fun updateProfile(request: UpdateProfileState): Results<EditProfileDTO>
     suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>>
     suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>>
-    suspend fun deleteResult(uuid: String): Flow<Results<DeleteTestResultsDTO>>
+    suspend fun deleteResult(uuid: String): Results<DeleteTestResultsDTO>
     suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>>
 }
