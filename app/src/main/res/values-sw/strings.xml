@@ -14,12 +14,14 @@
     <string name="termsAndConditions">Sheria na Masharti</string>
     <string name="noResults">Hakuna matokeo kwa sasa</string>
     <string name="deleteTest">Futa Jaribio</string>
+    <string name="shareTest">Sambaza Jaribio</string>
     <string name="cannotBeunDone">Hatua hii haiwezi kubatilishwa</string>
     <string name="confirm">Thibitisha</string>
     <string name="Cancel">Ghairi</string>
     <string name="Delete">Futa\n</string>
     <string name="noClinicsAtTheMoment">Hakuna chaguo la huduma kwa sasa.</string>
     <string name="takeTest">Fanya jaribio</string>
+    <string name="testResults">Matokeo</string>
     <string name="individualTest">Jaribio la binafsi</string>
     <string name="couplesTest">Jaribio la wanandoa</string>
     <string name="testUnderReview">Jaribio lako linakaguliwa</string>

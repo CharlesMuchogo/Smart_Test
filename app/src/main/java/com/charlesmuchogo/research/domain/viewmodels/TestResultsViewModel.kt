@@ -299,24 +299,24 @@ constructor(
     fun deleteTest(testResult: TestResult) {
       viewModelScope.launch {
           deleteTestResultsStatus.value = Results.loading()
-          remoteRepository.deleteResult(testResult.uuid).collect{ results ->
-
-              results.data?.let {
-                  database.testResultsDao().deleteResult(testResult)
-                  showSnackBarNotification(
-                      SnackBarItem(message = it.message)
-                  )
-              }
-
-              results.message?.let { msg ->
-                  showSnackBarNotification(
-                      SnackBarItem(message = msg, isError = true)
-                  )
-              }
-
-              updateShowDeleteTestDialog(false)
-              deleteTestResultsStatus.value = results
-          }
+//          remoteRepository.deleteResult(testResult.uuid).collect{ results ->
+//
+//              results.data?.let {
+//                  database.testResultsDao().deleteResult(testResult)
+//                  showSnackBarNotification(
+//                      SnackBarItem(message = it.message)
+//                  )
+//              }
+//
+//              results.message?.let { msg ->
+//                  showSnackBarNotification(
+//                      SnackBarItem(message = msg, isError = true)
+//                  )
+//              }
+//
+//              updateShowDeleteTestDialog(false)
+//              deleteTestResultsStatus.value = results
+//          }
       }
     }
 

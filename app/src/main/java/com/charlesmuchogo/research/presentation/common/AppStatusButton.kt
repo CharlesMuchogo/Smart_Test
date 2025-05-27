@@ -26,7 +26,7 @@ fun AppStatusButton(
     width: Dp = 80.dp,
 ) {
     TextButton(
-        shape = RoundedCornerShape(12),
+        shape = MaterialTheme.shapes.extraLarge,
         modifier = modifier.height(height).width(width),
         colors =
             ButtonColors(

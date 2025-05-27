@@ -33,6 +33,7 @@ import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
+import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
 import com.charlesmuchogo.research.presentation.testpage.TestScreen
@@ -42,14 +43,13 @@ import com.charlesmuchogo.research.presentation.testpage.TestScreen
 @Composable
 fun Navigation(navController: NavHostController) {
 
-    val snackBarNotification by SnackBarViewModel.events.collectAsState(initial = null)
     val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(snackBarNotification) {
-        if(snackBarNotification != null){
+    LaunchedEffect(Unit) {
+        SnackBarViewModel.events.collect { snackBarItem ->
             snackBarHostState.showSnackbar(
-                duration = SnackbarDuration.Short,
-                message = snackBarNotification?.message ?: "",
+                message = snackBarItem.message,
+                duration = SnackbarDuration.Short
             )
         }
     }
@@ -59,7 +59,6 @@ fun Navigation(navController: NavHostController) {
             SnackBarContent(
                 modifier = Modifier.statusBarsPadding(),
                 snackBarHostState = snackBarHostState,
-                snackBarItem = snackBarNotification,
             )
         }
     ) {
@@ -228,6 +227,36 @@ fun Navigation(navController: NavHostController) {
                 TestInfoScreen(navController = navController)
             }
 
+
+            composable<TestResultsPage>(
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+            ) { backStackEntry ->
+                val args = backStackEntry.toRoute<TestResultsPage>()
+                ResultsRoot(id = args.id )
+            }
         }
     }
 

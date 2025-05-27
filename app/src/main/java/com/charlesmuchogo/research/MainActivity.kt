@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
@@ -82,8 +83,9 @@ class MainActivity : ComponentActivity() {
             val darkThemeFlow by authenticationViewModel.appTheme.collectAsStateWithLifecycle()
 
             val darkTheme = when (darkThemeFlow) {
+                0 -> false
                 1 -> true
-                else -> false
+                else -> isSystemInDarkTheme()
             }
             RequestPermissions()
             SmartTestTheme(

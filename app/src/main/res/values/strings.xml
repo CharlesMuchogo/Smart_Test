@@ -14,12 +14,14 @@
     <string name="termsAndConditions">Terms and conditions</string>
     <string name="noResults">No results at the moment</string>
     <string name="deleteTest">Delete Test</string>
+    <string name="shareTest">Share Test</string>
     <string name="cannotBeunDone">This action cannot be undone</string>
     <string name="confirm">Confirm</string>
     <string name="Cancel">Cancel</string>
     <string name="Delete">Delete\n</string>
     <string name="noClinicsAtTheMoment">No care options available at th moment.</string>
     <string name="takeTest">Take a test</string>
+    <string name="testResults">Test Results</string>
     <string name="individualTest">Personal test</string>
     <string name="couplesTest">Couples test</string>
     <string name="testUnderReview">Your test is under review</string>

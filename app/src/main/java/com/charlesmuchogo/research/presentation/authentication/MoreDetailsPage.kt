@@ -79,7 +79,6 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
             selectableDates =
             object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                    val startDate = convertTimestampToDate(timestamp18YearsAgo )
                     val endDate = convertTimestampToDate(utcTimeMillis)
                     val dateDifference = calculateDifferenceBetweenDates(startDate = startDate, endDate = endDate)
                     return dateDifference <= 0
@@ -105,6 +104,16 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
         authenticationViewModel.onAction(LoginAction.OnCountryChange(country))
     }
 
+    LaunchedEffect(completeRegistrationState.status) {
+        if(completeRegistrationState.status == ResultStatus.SUCCESS){
+            navController.navigate(HomePage) {
+                popUpTo(MoreDetailsPage) {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -113,7 +122,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
                         Icon(imageVector = Icons.Default.Close, contentDescription = "Exit")
                     }
                 },
-                title = { Text(text = "Complete Registration") })
+                title = {  })
         }
     ) { innerPadding ->
         LazyColumn(
@@ -142,8 +151,8 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
 
             item {
                 Text(
-                    text = "You are one step away from completing your registration. Tell us more about yourself",
-                    textAlign = TextAlign.Justify,
+                    text = "Let’s complete your setup – we’d love to know a bit more about you.",
+                    textAlign = TextAlign.Left,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
@@ -228,23 +237,12 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
 
                     },
                     content = {
-                        when (completeRegistrationState.status) {
-                            ResultStatus.INITIAL,
-                            ResultStatus.ERROR -> {
-                                Text("Continue")
-                            }
-
-                            ResultStatus.SUCCESS -> {
-                                Text("Continue")
-                                navController.navigate(HomePage) {
-                                    popUpTo(MoreDetailsPage) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            ResultStatus.LOADING -> {
+                        when (completeRegistrationState.status == ResultStatus.LOADING) {
+                            true -> {
                                 AppLoginButtonContent(message = "Submitting...")
+                            }
+                            false -> {
+                                Text("Continue")
                             }
                         }
                     },

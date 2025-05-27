@@ -34,7 +34,6 @@ fun SnackBarContent(
     modifier: Modifier = Modifier,
     description: String = "",
     snackBarHostState: SnackbarHostState,
-    snackBarItem: SnackBarItem?,
     alignBottom: Boolean = false,
 ) {
     Box(
@@ -44,6 +43,8 @@ fun SnackBarContent(
         SnackbarHost(
             hostState = snackBarHostState,
             snackbar = {
+                val message = it.visuals.message
+                val isError = message.lowercase().contains("error") || message.lowercase().contains("something")
                 Card(
                     modifier =
                         Modifier
@@ -54,7 +55,7 @@ fun SnackBarContent(
                     border =
                         BorderStroke(
                             1.dp,
-                            if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else greenLight,
+                            if (isError) MaterialTheme.colorScheme.error else greenLight,
                         ),
                     colors =
                         CardDefaults.cardColors(
@@ -73,8 +74,8 @@ fun SnackBarContent(
                             snackBarHostState.currentSnackbarData?.dismiss()
                         }) {
                             Icon(
-                                imageVector = if (snackBarItem?.isError == true) Icons.Default.Error else Icons.Default.CheckCircle,
-                                tint = if (snackBarItem?.isError == true) MaterialTheme.colorScheme.error else greenLight,
+                                imageVector = if (isError) Icons.Default.Error else Icons.Default.CheckCircle,
+                                tint = if (isError) MaterialTheme.colorScheme.error else greenLight,
                                 contentDescription = null,
                             )
                         }

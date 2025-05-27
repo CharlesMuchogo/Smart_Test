@@ -17,5 +17,6 @@ data class TestResult(
     val partnerImage: String,
     val partnerResults: String,
     val results: String,
+    val reason: String,
     val userId: Long,
 )

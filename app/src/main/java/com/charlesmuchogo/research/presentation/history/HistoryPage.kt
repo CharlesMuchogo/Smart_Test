@@ -28,8 +28,10 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
+import com.charlesmuchogo.research.presentation.navigation.TestResultsPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
@@ -64,11 +66,10 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
         snackbarHost = {
             SnackBarContent(
                 snackBarHostState = snackBarHostState,
-                snackBarItem = snackBarNotification.data,
                 alignBottom = true
             )
         }
-    )  {
+    ) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -109,7 +110,12 @@ fun TestResultsListView(
 ) {
     LazyColumn(modifier = modifier.padding(horizontal = 8.dp)) {
         items(results) { result ->
-            HistoryCard(result = result)
+            HistoryCard(
+                result = result,
+                onClick = {
+                    navController.navigate(TestResultsPage(result.id))
+                },
+            )
         }
     }
 }

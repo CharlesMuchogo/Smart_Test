@@ -22,8 +22,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 23
         targetSdk = 35
-        versionCode = 13
-        versionName = "1.2.1"
+        versionCode = 14
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -125,7 +125,7 @@ dependencies {
     //lottie
     implementation(libs.lottie)
 
-    //workmanager
+    //work manager
     implementation(libs.androidx.work.runtime.ktx)
 
     implementation(libs.slf4j.nop)

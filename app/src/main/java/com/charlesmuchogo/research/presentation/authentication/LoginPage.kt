@@ -68,7 +68,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 .consumeWindowInsets(padding)
                 .imePadding()
                 .padding(padding)
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
