@@ -181,6 +181,22 @@ fun formatChatDate(date: LocalDate): String {
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} ${date.year}"
 }
 
+fun convertTimestampToTime(timeStamp: Long): String {
+    val isMilliseconds = timeStamp > 15_000_000_000L
+    val instant =
+        if (isMilliseconds) {
+            Instant.fromEpochMilliseconds(timeStamp)
+        } else {
+            Instant.fromEpochSeconds(timeStamp)
+        }
+    val timeZone = TimeZone.currentSystemDefault()
+    val localDateTime = instant.toLocalDateTime(timeZone)
+
+    val formattedHour = localDateTime.hour.toString().padStart(2, '0')
+    val formattedMinute = localDateTime.minute.toString().padStart(2, '0')
+    return "$formattedHour:$formattedMinute"
+}
+
 
 const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"
 const val TERMS_AND_CONDITIONS_URL = "https://smarttest.muchogoc.com/terms_and_conditions"

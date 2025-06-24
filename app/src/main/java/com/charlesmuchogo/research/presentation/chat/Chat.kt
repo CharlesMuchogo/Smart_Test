@@ -1,6 +1,8 @@
 package com.charlesmuchogo.research.presentation.chat
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -22,6 +24,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
+import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 
 @Composable
 fun ChatRoot() {
@@ -84,7 +88,11 @@ fun ChatScreen(
                 state.messages.forEach { group ->
 
                     items(group.value) {
-                        Text(it.message, style = MaterialTheme.typography.titleMedium)
+
+                        ChatItem(
+                            message = it,
+                            onClick = {}
+                        )
                     }
 
                     item {
@@ -92,7 +100,20 @@ fun ChatScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(group.key, style = MaterialTheme.typography.titleMedium)
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .clip(
+                                            MaterialTheme.shapes.extraLarge,
+                                        )
+                                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                    text = group.key,
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            }
                         }
                     }
                 }
