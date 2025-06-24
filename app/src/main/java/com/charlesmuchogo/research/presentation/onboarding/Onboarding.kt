@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.navController
-import com.charlesmuchogo.research.presentation.navigation.LoginPage
+import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.onboarding.components.OnboardingContent
 import kotlinx.coroutines.delay
 

@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.authentication
 
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -8,8 +7,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
+import com.charlesmuchogo.research.presentation.authentication.login.LoginScreen
 import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
-import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
@@ -29,7 +29,7 @@ fun AuthControllerScreen(modifier: Modifier = Modifier, navController: NavContro
                 ResultStatus.INITIAL,
                 ResultStatus.LOADING -> { }
                 ResultStatus.ERROR -> {
-                    LoginScreen(navController = navController)
+                    LoginRoot()
                 }
 
                 ResultStatus.SUCCESS -> {
@@ -40,7 +40,7 @@ fun AuthControllerScreen(modifier: Modifier = Modifier, navController: NavContro
                             HomeScreen(navController = navController)
                         }
                     } else {
-                        LoginScreen(navController = navController)
+                        LoginRoot()
                     }
                 }
             }

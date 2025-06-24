@@ -9,15 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,9 +22,8 @@ import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.TestResultsPage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
-import com.charlesmuchogo.research.presentation.common.SnackBarContent
-import com.charlesmuchogo.research.presentation.navigation.TestResultsPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
@@ -44,63 +36,39 @@ fun HistoryScreen(modifier: Modifier = Modifier, navController: NavController) {
         testResultsViewModel.testResultsStatus.collectAsStateWithLifecycle().value
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val user = authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
-    val hideResults = user.data?.hideResults ?: true
+    val hideResults = user.data?.hideResults != false
 
-    val snackBarNotification by testResultsViewModel.snackBarNotification.collectAsState()
-    val snackBarHostState = remember { SnackbarHostState() }
-
-
-
-
-    LaunchedEffect(snackBarNotification.status) {
-        if (snackBarNotification.status == ResultStatus.SUCCESS) {
-            snackBarHostState.showSnackbar(
-                duration = SnackbarDuration.Short,
-                message = snackBarNotification.data?.message ?: "",
-            )
-        }
-    }
-
-
-    Scaffold(
-        snackbarHost = {
-            SnackBarContent(
-                snackBarHostState = snackBarHostState,
-                alignBottom = true
-            )
-        }
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondaryContainer)
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-        ) {
-            when (testResultsStatus.status) {
-                ResultStatus.INITIAL,
-                ResultStatus.LOADING -> {
-                    CenteredColumn(modifier = Modifier) {
-                        CircularProgressIndicator()
-                    }
+        when (testResultsStatus.status) {
+            ResultStatus.INITIAL,
+            ResultStatus.LOADING -> {
+                CenteredColumn(modifier = Modifier) {
+                    CircularProgressIndicator()
                 }
+            }
 
-                ResultStatus.SUCCESS -> {
-                    if (testResultsStatus.data.isNullOrEmpty() || hideResults) {
-                        CenteredColumn(modifier = Modifier) {
-                            Text(text = stringResource(R.string.noResults))
-                        }
-                    } else {
-                        TestResultsListView(results = testResultsStatus.data)
-                    }
-                }
-
-                ResultStatus.ERROR -> {
+            ResultStatus.SUCCESS -> {
+                if (testResultsStatus.data.isNullOrEmpty() || hideResults) {
                     CenteredColumn(modifier = Modifier) {
-                        Text(text = testResultsStatus.message.toString())
+                        Text(text = stringResource(R.string.noResults))
                     }
+                } else {
+                    TestResultsListView(results = testResultsStatus.data)
+                }
+            }
+
+            ResultStatus.ERROR -> {
+                CenteredColumn(modifier = Modifier) {
+                    Text(text = testResultsStatus.message.toString())
                 }
             }
         }
     }
+
 }
 
 @Composable

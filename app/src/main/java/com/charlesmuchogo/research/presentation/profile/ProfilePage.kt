@@ -57,9 +57,9 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
-import com.charlesmuchogo.research.presentation.navigation.EditProfilePage
-import com.charlesmuchogo.research.presentation.navigation.LoginPage
-import com.charlesmuchogo.research.presentation.navigation.ProfilePage
+import com.charlesmuchogo.research.navigation.EditProfilePage
+import com.charlesmuchogo.research.navigation.LoginPage
+import com.charlesmuchogo.research.navigation.ProfilePage
 import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL

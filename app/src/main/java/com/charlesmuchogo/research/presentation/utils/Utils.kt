@@ -10,12 +10,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.LocaleList
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -154,6 +157,30 @@ fun getDeviceCountry(context: Context): String {
         Locale.getDefault().country
     }
 }
+
+suspend fun getFcmToken(): String {
+    val deferred = CompletableDeferred<String>()
+    FirebaseMessaging.getInstance().token
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val fcmToken = task.result
+                Log.d("FCM Token", "FcmToken: $fcmToken")
+                deferred.complete(fcmToken ?: "")
+            } else {
+                Log.e("FCM Token", "Failed to get token: ${task.exception}")
+                deferred.complete("")
+            }
+        }
+    return deferred.await()
+}
+
+fun formatChatDate(date: LocalDate): String {
+    return "${
+        date.dayOfMonth.toString().padStart(2, '0')
+    } ${date.month.name.lowercase()
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }} ${date.year}"
+}
+
 
 const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"
 const val TERMS_AND_CONDITIONS_URL = "https://smarttest.muchogoc.com/terms_and_conditions"

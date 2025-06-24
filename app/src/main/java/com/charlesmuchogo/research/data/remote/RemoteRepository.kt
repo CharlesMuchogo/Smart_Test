@@ -16,7 +16,7 @@ import com.charlesmuchogo.research.presentation.utils.Results
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
-    suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>>
+    suspend fun login(loginRequestDTO: LoginRequestDTO): Results<LoginResponseDTO>
     suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>>
     suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>>
     suspend fun updateProfile(request: UpdateProfileState): Results<EditProfileDTO>

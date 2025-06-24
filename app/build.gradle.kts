@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 35
         versionCode = 14
         versionName = "1.2.2"
@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.ai)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

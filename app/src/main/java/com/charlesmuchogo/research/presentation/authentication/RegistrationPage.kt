@@ -44,8 +44,8 @@ import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
-import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
+import com.charlesmuchogo.research.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
 import com.charlesmuchogo.research.presentation.utils.getDeviceCountry

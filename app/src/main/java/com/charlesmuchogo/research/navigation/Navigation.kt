@@ -1,4 +1,4 @@
-package com.charlesmuchogo.research.presentation.navigation
+package com.charlesmuchogo.research.navigation
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -9,11 +9,8 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,10 +18,11 @@ import androidx.navigation.toRoute
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.authentication.ForgotPasswordScreen
-import com.charlesmuchogo.research.presentation.authentication.LoginScreen
+import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
 import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
+import com.charlesmuchogo.research.presentation.chat.ChatRoot
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
@@ -74,8 +72,13 @@ fun Navigation(navController: NavHostController) {
                 OnboardingRoot()
             }
             composable<LoginPage> {
-                LoginScreen(navController = navController)
+                LoginRoot()
             }
+
+            composable<ChatPage> {
+                ChatRoot()
+            }
+
             composable<ForgotPasswordPage> {
                 ForgotPasswordScreen(navController = navController)
             }

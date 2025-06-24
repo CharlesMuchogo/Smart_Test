@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "841400667450",
-    "project_id": "smarttest-db7bd",
-    "storage_bucket": "smarttest-db7bd.firebasestorage.app"
+    "project_number": "956251606257",
+    "project_id": "smart-test-d6f13",
+    "storage_bucket": "smart-test-d6f13.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:841400667450:android:0ee45682d84d08db555403",
+        "mobilesdk_app_id": "1:956251606257:android:90bc5d40bc517936326d50",
         "android_client_info": {
           "package_name": "com.charlesmuchogo.research"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCh2HWod-opjQ_7KXTN1ayHDmKl25kVmww"
+          "current_key": "AIzaSyAFldqrdh78xbld-XRMgqowFjH_OXFvros"
         }
       ],
       "services": {

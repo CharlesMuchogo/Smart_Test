@@ -1,5 +1,7 @@
 package com.charlesmuchogo.research.domain.states
 
+import com.charlesmuchogo.research.domain.models.User
+
 data class LoginState(
     val firstName: String = "",
     val lastname: String = "",
@@ -10,6 +12,10 @@ data class LoginState(
     val showPassword: Boolean = false,
     val rememberMe: Boolean = true,
     val termsAndConditions: Boolean = false,
+    val isLoggingIn: Boolean = false,
+    val hasLoggedIn: Boolean = false,
+    val loggedInUser: User? = null,
+    val message: String? = "",
 
     val age: String = "",
     val gender: String = "",
