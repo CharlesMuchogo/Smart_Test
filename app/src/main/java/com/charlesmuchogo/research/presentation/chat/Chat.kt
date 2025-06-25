@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.chat
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
 import com.charlesmuchogo.research.presentation.chat.components.ChatItem
+import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 
 @Composable
 fun ChatRoot() {
@@ -75,7 +77,7 @@ fun ChatScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 12.dp)
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
                 .imePadding()
@@ -86,6 +88,12 @@ fun ChatScreen(
                 reverseLayout = true
             ) {
                 state.messages.forEach { group ->
+
+                    item {
+                        AnimatedVisibility(visible = state.isGeneratingContent) {
+                            TypingBubble()
+                        }
+                    }
 
                     items(group.value) {
 
@@ -109,7 +117,10 @@ fun ChatScreen(
                                         .background(MaterialTheme.colorScheme.secondaryContainer),
                             ) {
                                 Text(
-                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                    modifier = Modifier.padding(
+                                        vertical = 8.dp,
+                                        horizontal = 16.dp
+                                    ),
                                     text = group.key,
                                     style = MaterialTheme.typography.titleSmall
                                 )

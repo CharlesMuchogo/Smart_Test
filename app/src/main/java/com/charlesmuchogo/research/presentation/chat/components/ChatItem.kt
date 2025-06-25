@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -31,15 +32,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.charlesmuchogo.research.domain.models.Message
 import com.charlesmuchogo.research.presentation.chat.MessageSender
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToTime
+import kotlinx.datetime.Clock
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -128,8 +132,6 @@ fun ChatItem(
         }
     }
 }
-
-
 fun buildAnnotatedStringWithLinks(
     text: String,
     onClickLinkTag: String = "LINK",
@@ -137,40 +139,123 @@ fun buildAnnotatedStringWithLinks(
 ): AnnotatedString {
     val urlRegex = Regex("""(https?://\S+)""")
     val emailRegex = Regex("""[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+""")
+    val doubleBoldRegex = Regex("""\*\*(.+?)\*\*""")
+    val singleBoldRegex = Regex("""(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)""")
+    val codeRegex = Regex("""```(.*?)```""")
 
     val builder = AnnotatedString.Builder()
-    var lastIndex = 0
+    var currentIndex = 0
 
-    val matches = (urlRegex.findAll(text) + emailRegex.findAll(text))
-        .sortedBy { it.range.first }
+    val matches = (
+            urlRegex.findAll(text) +
+                    emailRegex.findAll(text) +
+                    codeRegex.findAll(text) +
+                    doubleBoldRegex.findAll(text) +
+                    singleBoldRegex.findAll(text)
+            ).sortedBy { it.range.first }
 
     for (match in matches) {
-        val range = match.range
-        if (range.first > lastIndex) {
-            builder.append(text.substring(lastIndex, range.first))
+        val start = match.range.first
+        val end = match.range.last + 1
+
+        // Append normal text before match
+        if (currentIndex < start) {
+            builder.append(text.substring(currentIndex, start))
         }
 
         val matchText = match.value
-        val tag = if (urlRegex.matches(matchText)) onClickLinkTag else onClickEmailTag
 
-        builder.pushStringAnnotation(tag = tag, annotation = matchText)
-        builder.withStyle(
-            style = SpanStyle(
-                color = Color.Blue,
-                textDecoration = TextDecoration.combine(
-                    listOf(TextDecoration.Underline)
-                )
-            )
-        ) {
-            builder.append(matchText)
+        when {
+            codeRegex.matches(matchText) -> {
+                val code = codeRegex.find(matchText)?.groups?.get(1)?.value ?: matchText
+                builder.withStyle(
+                    SpanStyle(
+                        fontFamily = FontFamily.Monospace,
+                        background = Color(0xFFE0E0E0),
+                        fontSize = 14.sp,
+                        color = Color.DarkGray
+                    )
+                ) {
+                    builder.append(code)
+                }
+            }
+
+            doubleBoldRegex.matches(matchText) -> {
+                val bold = doubleBoldRegex.find(matchText)?.groups?.get(1)?.value ?: matchText
+                builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    builder.append(bold)
+                }
+            }
+
+            singleBoldRegex.matches(matchText) -> {
+                val bold = singleBoldRegex.find(matchText)?.groups?.get(1)?.value ?: matchText
+                builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    builder.append(bold)
+                }
+            }
+
+            urlRegex.matches(matchText) -> {
+                builder.pushStringAnnotation(tag = onClickLinkTag, annotation = matchText)
+                builder.withStyle(
+                    SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ) {
+                    builder.append(matchText)
+                }
+                builder.pop()
+            }
+
+            emailRegex.matches(matchText) -> {
+                builder.pushStringAnnotation(tag = onClickEmailTag, annotation = matchText)
+                builder.withStyle(
+                    SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ) {
+                    builder.append(matchText)
+                }
+                builder.pop()
+            }
         }
-        builder.pop()
-        lastIndex = range.last + 1
+
+        currentIndex = end
     }
 
-    if (lastIndex < text.length) {
-        builder.append(text.substring(lastIndex))
+    // Append remaining text
+    if (currentIndex < text.length) {
+        builder.append(text.substring(currentIndex))
     }
 
     return builder.toAnnotatedString()
 }
+
+@Composable
+@Preview()
+fun ChatItemPreview() {
+    val testText = """
+Visit **Main points** or *just bold*. 
+See https://example.com or email test@example.com. 
+Here's code: ```println("Hello")```
+""".trimIndent()
+    val message = Message(
+        id = 1,
+        message = testText,
+        sender = MessageSender.AI.name,
+        timestamp = Clock.System.now().toEpochMilliseconds()
+    )
+
+
+    Surface(
+        color = MaterialTheme.colorScheme.background
+    ){
+        ChatItem(
+            onClick = {},
+            message = message,
+
+        )
+    }
+}
+

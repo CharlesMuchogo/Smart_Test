@@ -70,7 +70,7 @@ class ChatViewModel @Inject constructor(
                 }
 
                 ChatAction.OnSubmitMessage -> {
-                    _state.update { it.copy(message = "") }
+                    _state.update { it.copy(message = "", isGeneratingContent = true) }
 
                     try {
                         if (state.value.message.isNotBlank()) {
@@ -99,6 +99,8 @@ class ChatViewModel @Inject constructor(
                     } catch (e: Exception) {
                         println("Error generating content: ${e.message}")
                         e.printStackTrace()
+                    } finally {
+                        _state.update { it.copy(isGeneratingContent = false) }
                     }
                 }
             }
