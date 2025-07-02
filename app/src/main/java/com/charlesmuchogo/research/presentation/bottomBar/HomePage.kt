@@ -4,12 +4,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,17 +33,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
+import com.charlesmuchogo.research.navigation.ChatPage
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
-import com.charlesmuchogo.research.presentation.navigation.SearchClinicsPage
+import com.charlesmuchogo.research.navigation.SearchClinicsPage
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
 
@@ -59,6 +64,17 @@ fun HomeScreen(navController: NavController) {
 
 
     Scaffold(
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                navController.navigate(ChatPage)
+            },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.offset(y = 72.dp), shape = CircleShape) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.Message, contentDescription = "Chat")
+            }
+        },
         bottomBar = {
             BottomAppBar(
                 contentColor = MaterialTheme.colorScheme.onBackground,
@@ -66,6 +82,7 @@ fun HomeScreen(navController: NavController) {
             ) {
                 BottomNavigationItem.bottomNavigationItems.forEachIndexed { index, item ->
                     NavigationBarItem(
+                        modifier = Modifier.offset(x= if(index == 1) -(18).dp else if(index == 2) 18.dp else 0.dp),
                         colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.background),
                         interactionSource = remember { MutableInteractionSource() },
                         selected = selectedItemIndex == index,
@@ -74,7 +91,7 @@ fun HomeScreen(navController: NavController) {
                         },
                         label = {
                             Text(
-                                text = stringResource(item.title) ,
+                                text = stringResource(item.title),
                                 color = if (selectedItemIndex == index)
                                     MaterialTheme.colorScheme.primary
                                 else
@@ -104,7 +121,7 @@ fun HomeScreen(navController: NavController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title) ,
+                        text = stringResource(BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
                     )
                 },

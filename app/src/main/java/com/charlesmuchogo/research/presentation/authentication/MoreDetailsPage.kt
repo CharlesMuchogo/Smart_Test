@@ -50,8 +50,8 @@ import com.charlesmuchogo.research.presentation.common.AppDatePickerDialog
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.navigation.HomePage
-import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.navigation.HomePage
+import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.calculateDifferenceBetweenDates
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToDate

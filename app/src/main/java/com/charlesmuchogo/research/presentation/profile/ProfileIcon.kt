@@ -45,7 +45,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.charlesmuchogo.research.data.network.Http.Companion.httpUrlBuilder
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
-import com.charlesmuchogo.research.presentation.navigation.PhotoPage
+import com.charlesmuchogo.research.navigation.PhotoPage
 
 @Composable
 fun ProfileIcon(

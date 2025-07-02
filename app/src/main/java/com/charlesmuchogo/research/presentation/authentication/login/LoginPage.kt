@@ -1,4 +1,4 @@
-package com.charlesmuchogo.research.presentation.authentication
+package com.charlesmuchogo.research.presentation.authentication.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -24,10 +23,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
@@ -37,26 +35,43 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.domain.actions.LoginAction
-import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.domain.states.LoginState
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.presentation.navigation.ForgotPasswordPage
-import com.charlesmuchogo.research.presentation.navigation.HomePage
-import com.charlesmuchogo.research.presentation.navigation.LoginPage
-import com.charlesmuchogo.research.presentation.navigation.MoreDetailsPage
-import com.charlesmuchogo.research.presentation.navigation.RegistrationPage
-import com.charlesmuchogo.research.presentation.utils.ResultStatus
-
+import com.charlesmuchogo.research.navigation.ForgotPasswordPage
+import com.charlesmuchogo.research.navigation.HomePage
+import com.charlesmuchogo.research.navigation.LoginPage
+import com.charlesmuchogo.research.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.navigation.RegistrationPage
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
-    val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
-    val loginStatus = authenticationViewModel.loginStatus.collectAsState().value
-    val loginPageState = authenticationViewModel.loginPageState
+fun LoginRoot() {
+    val loginViewModel = hiltViewModel<LoginViewModel>()
+    val loginPageState = loginViewModel.state.collectAsStateWithLifecycle()
+    LoginScreen(
+        state = loginPageState.value,
+        onAction = loginViewModel::onAction
+    )
+}
+
+@Composable
+fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (LoginAction) -> Unit) {
+
+    LaunchedEffect(state.hasLoggedIn) {
+        if(state.hasLoggedIn){
+            navController.navigate(
+                route = if (state.loggedInUser?.educationLevel.isNullOrBlank()) MoreDetailsPage else HomePage
+            ) {
+                popUpTo(LoginPage) {
+                    inclusive = true
+                }
+            }
+        }
+    }
 
 
 
@@ -79,18 +94,17 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.login),
+                        painter = painterResource(R.drawable.password),
                         contentDescription = null,
                         contentScale = ContentScale.Fit,
                         modifier =
                         Modifier
-                            .fillParentMaxHeight(0.3f)
-                            .clip(RoundedCornerShape(8.dp))
+                            .fillParentMaxHeight(0.23f)
                             .padding(vertical = 24.dp),
                     )
                 }
                 Text(
-                    text = "Log in to your account",
+                    text = "Log in",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold),
@@ -107,11 +121,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
             item {
                 AppTextField(
-                    label = "Email or phone number",
-                    value = loginPageState.email,
-                    placeholder = "johndoe@email.com or 0712345678",
-                    error = loginPageState.emailError,
-                    onValueChanged = { authenticationViewModel.onAction(LoginAction.OnEmailChange(it)) },
+                    label = "Email",
+                    value = state.email,
+                    placeholder = "johndoe@email.com",
+                    error = state.emailError,
+                    onValueChanged = { onAction(LoginAction.OnEmailChange(it)) },
                     keyboardType = KeyboardType.Email,
                 )
             }
@@ -119,25 +133,25 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             item {
                 AppTextField(
                     label = "Password",
-                    value = loginPageState.password,
+                    value = state.password,
                     placeholder = "*********",
-                    error = loginPageState.passwordError,
+                    error = state.passwordError,
                     onValueChanged = {
-                        authenticationViewModel.onAction(
+                        onAction(
                             LoginAction.OnPasswordChange(
                                 it
                             )
                         )
                     },
                     keyboardType = KeyboardType.Password,
-                    passwordVisible = loginPageState.showPassword,
+                    passwordVisible = state.showPassword,
                     imeAction = ImeAction.Done,
                     trailingIcon = {
                         IconButton(onClick = {
-                            authenticationViewModel.onAction(LoginAction.OnShowPasswordChange(!loginPageState.showPassword))
+                            onAction(LoginAction.OnShowPasswordChange(!state.showPassword))
                         }) {
                             Icon(
-                                imageVector = if (loginPageState.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                imageVector = if (state.showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "show password",
                             )
                         }
@@ -153,9 +167,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
-                            checked = loginPageState.rememberMe,
+                            checked = state.rememberMe,
                             onCheckedChange = { isChecked ->
-                                authenticationViewModel.onAction(
+                                onAction(
                                     LoginAction.OnRememberMeChange(isChecked)
                                 )
                             },
@@ -183,7 +197,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             }
 
             item {
-                loginStatus.message?.let {
+                state.message?.let {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
@@ -193,31 +207,18 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 }
 
                 AppButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.extraLarge,
                     onClick = {
-                        authenticationViewModel.onAction(LoginAction.OnLogin)
+                        onAction(LoginAction.OnLogin)
                     },
                     content = {
-                        when (loginStatus.status) {
-                            ResultStatus.INITIAL, ResultStatus.ERROR -> {
-                                Text("Log in")
-                            }
-
-                            ResultStatus.SUCCESS -> {
-                                Text("Log in")
-                                loginStatus.data?.let { response ->
-                                    navController.navigate(
-                                        route = if (response.user.educationLevel.isBlank() || response.user.age.isBlank()) MoreDetailsPage else HomePage
-                                    ) {
-                                        popUpTo(LoginPage) {
-                                            inclusive = true
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            ResultStatus.LOADING -> {
+                        when (state.isLoggingIn) {
+                            true -> {
                                 AppLoginButtonContent(message = "Authenticating...")
+                            }
+                            false -> {
+                                Text("Log in")
                             }
                         }
                     },

@@ -21,6 +21,7 @@ import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
+import com.charlesmuchogo.research.presentation.utils.getFcmToken
 import com.charlesmuchogo.research.presentation.utils.isValidDate
 import com.charlesmuchogo.research.presentation.utils.isValidEmail
 import com.google.firebase.messaging.FirebaseMessaging
@@ -261,34 +262,10 @@ constructor(
         }
     }
 
-    private suspend fun getFcmToken(): String {
-        val deferred = CompletableDeferred<String>()
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val fcmToken = task.result
-                    Log.d("FCM Token", "FcmToken: $fcmToken")
-                    deferred.complete(fcmToken ?: "")
-                } else {
-                    Log.e("FCM Token", "Failed to get token: ${task.exception}")
-                    deferred.complete("")
-                }
-            }
-        return deferred.await()
-    }
+
 
     private fun login(loginRequestDTO: LoginRequestDTO) {
-        viewModelScope.launch {
-            loginStatus.value = Results.loading()
-            val token = getFcmToken()
-            remoteRepository.login(loginRequestDTO.copy(deviceId = token)).collect { results ->
-                results.data?.let { result ->
-                    database.userDao().insertUser(user = result.user.copy(token = result.token))
-                    settingsRepository.saveAccessToken(result.token)
-                }
-                loginStatus.value = results
-            }
-        }
+
     }
 
     private fun register(registrationRequestDTO: RegistrationRequestDTO) {

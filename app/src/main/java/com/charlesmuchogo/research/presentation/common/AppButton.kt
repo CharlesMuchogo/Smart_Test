@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppButton(
     enabled: Boolean = true,
-    modifier: Modifier = Modifier.padding(vertical = 10.dp).fillMaxWidth(),
+    modifier: Modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
     onClick: () -> Unit,
     shape: Shape? = MaterialTheme.shapes.medium,
     height: Dp = 54.dp,

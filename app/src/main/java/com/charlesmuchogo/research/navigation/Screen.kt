@@ -1,4 +1,4 @@
-package com.charlesmuchogo.research.presentation.navigation
+package com.charlesmuchogo.research.navigation
 
 import kotlinx.serialization.Serializable
 
@@ -52,6 +52,9 @@ object PendingTestPage
 
 @Serializable
 object TestInfoPage
+
+@Serializable
+object ChatPage
 
 @Serializable
 data class PhotoPage(val image: String, val title: String = "Image")

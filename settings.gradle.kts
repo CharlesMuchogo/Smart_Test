@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Smart Test"
 include(":app")
+include(":shared")

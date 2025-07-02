@@ -21,7 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
-import com.charlesmuchogo.research.presentation.navigation.Navigation
+import com.charlesmuchogo.research.navigation.Navigation
 import com.charlesmuchogo.research.presentation.utils.RequestPermissions
 import com.charlesmuchogo.research.presentation.utils.setAppLocale
 import com.charlesmuchogo.research.ui.theme.SmartTestTheme
@@ -32,8 +32,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.options
 import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("StaticFieldLeak")
@@ -94,7 +92,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val density = LocalDensity.current.density
-
                     CompositionLocalProvider(LocalDensity provides Density(density = density * 0.93f)) {
                         Navigation(navController = navController)
                     }

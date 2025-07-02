@@ -1,9 +1,8 @@
 package com.charlesmuchogo.research.data.network
 
 import com.charlesmuchogo.research.data.local.AppDatabase
-import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.navController
-import com.charlesmuchogo.research.presentation.navigation.LoginPage
+import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.utils.Results
 import io.ktor.http.HttpStatusCode
 

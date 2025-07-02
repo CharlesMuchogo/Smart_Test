@@ -10,11 +10,14 @@ import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.message.GetMessagesDTO
+import com.charlesmuchogo.research.domain.dto.message.SendMessageResponse
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
 import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
+import com.charlesmuchogo.research.domain.models.Message
 import com.charlesmuchogo.research.domain.states.UpdateProfileState
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.decodeExceptionMessage
@@ -43,31 +46,28 @@ class RemoteRepositoryImpl(
     private val apiHelper: ApiHelper,
     private val settingsRepository: MultiplatformSettingsRepository,
 ) : RemoteRepository {
-    override suspend fun login(loginRequestDTO: LoginRequestDTO): Flow<Results<LoginResponseDTO>> =
-        flow {
-            try {
-                val response =
-                    Http(settingsRepository = settingsRepository).client.post("/api/login") {
-                        contentType(ContentType.Application.Json)
-                        setBody(loginRequestDTO)
-                    }
-
-                if (response.status != HttpStatusCode.OK) {
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<ErrorDTO>()
-                    }
-                    emit(Results.error(apiResponse.data?.message ?: "Error logging in"))
-                } else {
-                    val apiResponse = apiHelper.safeApiCall(response.status) {
-                        response.body<LoginResponseDTO>()
-                    }
-
-                    emit(apiResponse)
+    override suspend fun login(loginRequestDTO: LoginRequestDTO): Results<LoginResponseDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.post("/api/login") {
+                    contentType(ContentType.Application.Json)
+                    setBody(loginRequestDTO)
                 }
-            } catch (e: Exception) {
-                emit(Results.error(decodeExceptionMessage(e)))
+
+            if (response.status != HttpStatusCode.OK) {
+               val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Error logging in")
+            } else {
+                 apiHelper.safeApiCall(response.status) {
+                    response.body<LoginResponseDTO>()
+                }
             }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
         }
+    }
 
     override suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>> {
         return flow {
@@ -339,6 +339,51 @@ class RemoteRepositoryImpl(
                 e.printStackTrace()
                 emit(Results.error(decodeExceptionMessage(e)))
             }
+        }
+    }
+
+    override suspend fun sendMessage(message: Message): Results<SendMessageResponse> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.post("/api/mobile/messages") {
+                    contentType(ContentType.Application.Json)
+                    setBody(message)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Something went wrong. Try again")
+            } else {
+                apiHelper.safeApiCall(response.status) {
+                    response.body<SendMessageResponse>()
+                }
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
+        }
+    }
+
+    override suspend fun getMessages(): Results<GetMessagesDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.get("/api/mobile/messages") {
+                    contentType(ContentType.Application.Json)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Something went wrong. Try again")
+            } else {
+                apiHelper.safeApiCall(response.status) {
+                    response.body<GetMessagesDTO>()
+                }
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
         }
     }
 }

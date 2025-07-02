@@ -13,8 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
-import com.charlesmuchogo.research.presentation.navigation.PendingTestPage
-import com.charlesmuchogo.research.presentation.navigation.TestPage
+import com.charlesmuchogo.research.navigation.PendingTestPage
+import com.charlesmuchogo.research.navigation.TestPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 

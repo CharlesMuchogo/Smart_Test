@@ -30,4 +30,5 @@
     <string name="weAreReviewingYourTest">We are reviewing your test!</string>
     <string name="positiveTestResult">\\uD83D\\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.</string>
     <string name="negativeTestResult">✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.</string>
+    <string name="chat">Chat (beta)</string>
 </resources>
