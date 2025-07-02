@@ -49,6 +49,7 @@ fun ChatRoot() {
     val viewModel = hiltViewModel<ChatViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+
     ChatScreen(
         state = state,
         onAction = viewModel::onAction
@@ -119,14 +120,13 @@ fun ChatScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 reverseLayout = true
                             ) {
-                                state.messages.forEach { group ->
-
-                                    item {
-                                        AnimatedVisibility(visible = state.isGeneratingContent) {
-                                            TypingBubble()
-                                        }
+                                item {
+                                    AnimatedVisibility(visible = state.isGeneratingContent) {
+                                        TypingBubble()
                                     }
+                                }
 
+                                state.messages.forEach { group ->
                                     items(group.value) {
                                         ChatItem(
                                             message = it,

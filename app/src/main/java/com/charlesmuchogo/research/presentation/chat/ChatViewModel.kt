@@ -1,7 +1,9 @@
 package com.charlesmuchogo.research.presentation.chat
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.charlesmuchogo.research.analytics
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.models.Message
@@ -9,6 +11,7 @@ import com.charlesmuchogo.research.presentation.utils.formatChatDate
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +37,12 @@ class ChatViewModel @Inject constructor(
 
     init {
         FirebaseAuth.getInstance().signInAnonymously()
+
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.ITEM_NAME, "Chat page visit")
+        }
+
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
     }
 
     private val model = Firebase.ai(backend = GenerativeBackend.googleAI())

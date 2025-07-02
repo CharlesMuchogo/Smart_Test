@@ -32,10 +32,15 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("StaticFieldLeak")
 lateinit var navController: NavHostController
+
+ lateinit var analytics: FirebaseAnalytics
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,6 +49,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analytics = Firebase.analytics
         enableEdgeToEdge(
             statusBarStyle =
             SystemBarStyle.light(

@@ -37,6 +37,7 @@ ksp = "2.1.20-1.0.32"
 appUpdate = "2.1.0"
 firebaseAi = "16.1.0"
 kotlinxSerialization = "1.6.0"
+firebaseAnalytics = "22.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -88,6 +89,7 @@ firebase-inappmessaging-display = { group = "com.google.firebase", name = "fireb
 
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNop" }
 ucrop-compose = {module = "com.github.yalantis:ucrop", version.ref = "ucrop"}
 inappbrowser = {module = "androidx.browser:browser", version.ref = "browser"}
@@ -104,6 +106,7 @@ shimmer-compose = { module = "com.valentinilk.shimmer:compose-shimmer", version.
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
 firebase-ai = { group = "com.google.firebase", name = "firebase-ai", version.ref = "firebaseAi" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
