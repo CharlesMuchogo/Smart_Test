@@ -7,6 +7,8 @@ import com.charlesmuchogo.research.analytics
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.models.Message
+import com.charlesmuchogo.research.domain.models.SnackBarItem
+import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.utils.formatChatDate
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
@@ -32,6 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val database: AppDatabase,
+
     private val remoteRepository: RemoteRepository
 ) : ViewModel() {
 
@@ -121,6 +124,23 @@ class ChatViewModel @Inject constructor(
                     } finally {
                         _state.update { it.copy(isGeneratingContent = false) }
                     }
+                }
+
+                is ChatAction.OnSelectMessage -> {
+                    val messages = _state.value.selectedMessages.toMutableList()
+
+                    if (messages.contains(action.message)){
+                        messages.remove(action.message)
+                    }else{
+                        messages.add(action.message)
+                    }
+
+                    _state.update { it.copy(selectedMessages = messages) }
+                }
+
+                ChatAction.OnReportMessages -> {
+                    _state.update { it.copy(selectedMessages = emptyList()) }
+                    SnackBarViewModel.sendEvent(SnackBarItem(message = "We'll look into these messages"))
                 }
             }
         }
