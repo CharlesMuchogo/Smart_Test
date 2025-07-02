@@ -1,8 +1,11 @@
 package com.charlesmuchogo.research.presentation.chat
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -49,13 +54,14 @@ fun ChatRoot() {
     val viewModel = hiltViewModel<ChatViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+
     ChatScreen(
         state = state,
         onAction = viewModel::onAction
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ChatScreen(
     state: ChatState,
@@ -70,6 +76,15 @@ fun ChatScreen(
                             imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = "Exit"
                         )
+                    }
+                },
+                actions = {
+                    AnimatedVisibility(state.selectedMessages.isNotEmpty()) {
+                        IconButton(onClick = {
+                          onAction(ChatAction.OnReportMessages)
+                        }) {
+                            Icon(imageVector = Icons.Default.Report, contentDescription = "Report")
+                        }
                     }
                 },
                 title = {
@@ -119,18 +134,29 @@ fun ChatScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 reverseLayout = true
                             ) {
-                                state.messages.forEach { group ->
-
-                                    item {
-                                        AnimatedVisibility(visible = state.isGeneratingContent) {
-                                            TypingBubble()
-                                        }
+                                item {
+                                    AnimatedVisibility(visible = state.isGeneratingContent) {
+                                        TypingBubble()
                                     }
+                                }
 
+                                state.messages.forEach { group ->
                                     items(group.value) {
                                         ChatItem(
+                                            modifier = Modifier.combinedClickable(
+                                                indication = null,
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                onLongClick = {
+                                                    onAction(ChatAction.OnSelectMessage(it))
+                                                },
+                                                onClick = {
+                                                    if (state.selectedMessages.isNotEmpty()) {
+                                                        onAction(ChatAction.OnSelectMessage(it))
+                                                    }
+                                                }
+                                            ),
+                                            selected = state.selectedMessages.contains(it),
                                             message = it,
-                                            onClick = {}
                                         )
                                     }
 

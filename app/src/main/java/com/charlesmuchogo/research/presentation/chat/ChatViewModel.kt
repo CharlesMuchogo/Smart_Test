@@ -1,14 +1,19 @@
 package com.charlesmuchogo.research.presentation.chat
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.charlesmuchogo.research.analytics
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.models.Message
+import com.charlesmuchogo.research.domain.models.SnackBarItem
+import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.utils.formatChatDate
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,11 +34,18 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val database: AppDatabase,
+
     private val remoteRepository: RemoteRepository
 ) : ViewModel() {
 
     init {
         FirebaseAuth.getInstance().signInAnonymously()
+
+        val bundle = Bundle().apply {
+            putString(FirebaseAnalytics.Param.ITEM_NAME, "Chat page visit")
+        }
+
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
     }
 
     private val model = Firebase.ai(backend = GenerativeBackend.googleAI())
@@ -112,6 +124,23 @@ class ChatViewModel @Inject constructor(
                     } finally {
                         _state.update { it.copy(isGeneratingContent = false) }
                     }
+                }
+
+                is ChatAction.OnSelectMessage -> {
+                    val messages = _state.value.selectedMessages.toMutableList()
+
+                    if (messages.contains(action.message)){
+                        messages.remove(action.message)
+                    }else{
+                        messages.add(action.message)
+                    }
+
+                    _state.update { it.copy(selectedMessages = messages) }
+                }
+
+                ChatAction.OnReportMessages -> {
+                    _state.update { it.copy(selectedMessages = emptyList()) }
+                    SnackBarViewModel.sendEvent(SnackBarItem(message = "We'll look into these messages"))
                 }
             }
         }

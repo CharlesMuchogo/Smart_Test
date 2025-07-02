@@ -49,8 +49,9 @@ import kotlinx.datetime.Clock
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatItem(
+    modifier: Modifier = Modifier,
     message: Message,
-    onClick: (Message) -> Unit,
+    selected: Boolean = false,
 ) {
 
 
@@ -62,13 +63,13 @@ fun ChatItem(
 
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth().background(if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else Color.Transparent)
             .padding(vertical = 1.dp)
     ) {
         Box(
             modifier =
-                Modifier
+                modifier
                     .align(if (isUserMessage) Alignment.End else Alignment.Start)
                     .padding(
                         start = if (isUserMessage) 40.dp else 0.dp,
@@ -88,19 +89,14 @@ fun ChatItem(
                         ) else MaterialTheme.colorScheme.surfaceVariant,
                     )
                     .padding(8.dp)
-                    .combinedClickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { },
-                        onLongClick = { onClick.invoke(message) },
-                    ),
         ) {
             Column(
+                modifier = modifier,
                 horizontalAlignment = Alignment.End,
             ) {
 
                 ClickableText(
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(
                             bottom = 4.dp,
                             end = if (isUserMessage) 28.dp else 20.dp,
@@ -117,6 +113,7 @@ fun ChatItem(
                 )
 
                 Row(
+                    modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
                 ) {
@@ -252,7 +249,7 @@ Here's code: ```println("Hello")```
         color = MaterialTheme.colorScheme.background
     ){
         ChatItem(
-            onClick = {},
+            selected = true,
             message = message,
 
         )
