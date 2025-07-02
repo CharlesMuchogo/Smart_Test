@@ -1,6 +1,7 @@
 package com.charlesmuchogo.research.presentation.chat
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,8 @@ import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
 import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
+import com.charlesmuchogo.research.presentation.common.AppListLoading
+import com.charlesmuchogo.research.presentation.common.CenteredColumn
 
 @Composable
 fun ChatRoot() {
@@ -82,54 +88,83 @@ fun ChatScreen(
                 .consumeWindowInsets(innerPadding)
                 .imePadding()
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                reverseLayout = true
-            ) {
-                state.messages.forEach { group ->
 
-                    item {
-                        AnimatedVisibility(visible = state.isGeneratingContent) {
-                            TypingBubble()
-                        }
-                    }
+            when (state.isLoading) {
+                true -> {
+                    AppListLoading(modifier = Modifier.weight(1f))
+                }
 
-                    items(group.value) {
-
-                        ChatItem(
-                            message = it,
-                            onClick = {}
-                        )
-                    }
-
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .clip(
-                                            MaterialTheme.shapes.extraLarge,
-                                        )
-                                        .background(MaterialTheme.colorScheme.secondaryContainer),
-                            ) {
+                false -> {
+                    when (state.messages.isEmpty()) {
+                        true -> {
+                            CenteredColumn(modifier = Modifier.weight(1f)) {
+                                Image(
+                                    painter = painterResource(R.drawable.empty),
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .height(150.dp)
+                                        .padding(vertical = 16.dp),
+                                    contentDescription = "Empty"
+                                )
                                 Text(
-                                    modifier = Modifier.padding(
-                                        vertical = 8.dp,
-                                        horizontal = 16.dp
-                                    ),
-                                    text = group.key,
-                                    style = MaterialTheme.typography.titleSmall
+                                    "No messages yet. How are you doing?",
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal)
                                 )
                             }
                         }
+
+                        false -> {
+                            LazyColumn(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                reverseLayout = true
+                            ) {
+                                state.messages.forEach { group ->
+
+                                    item {
+                                        AnimatedVisibility(visible = state.isGeneratingContent) {
+                                            TypingBubble()
+                                        }
+                                    }
+
+                                    items(group.value) {
+                                        ChatItem(
+                                            message = it,
+                                            onClick = {}
+                                        )
+                                    }
+
+                                    item {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
+                                            Box(
+                                                modifier =
+                                                    Modifier
+                                                        .clip(
+                                                            MaterialTheme.shapes.extraLarge,
+                                                        )
+                                                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                                            ) {
+                                                Text(
+                                                    modifier = Modifier.padding(
+                                                        vertical = 8.dp,
+                                                        horizontal = 16.dp
+                                                    ),
+                                                    text = group.key,
+                                                    style = MaterialTheme.typography.titleSmall
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+                    ChatBox(state = state, onAction = onAction)
                 }
             }
-            ChatBox(state = state, onAction = onAction)
         }
     }
 }

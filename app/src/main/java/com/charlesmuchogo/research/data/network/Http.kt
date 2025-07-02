@@ -35,7 +35,7 @@ class Http(
                             println(message)
                         }
                     }
-                level = LogLevel.NONE
+                level = LogLevel.ALL
             }
 
             install(HttpTimeout) {

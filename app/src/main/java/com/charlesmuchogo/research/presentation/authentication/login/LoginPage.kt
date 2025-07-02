@@ -64,7 +64,7 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
     LaunchedEffect(state.hasLoggedIn) {
         if(state.hasLoggedIn){
             navController.navigate(
-                route = if (state.loggedInUser?.educationLevel.isNullOrBlank() || state.loggedInUser.age.isBlank()) MoreDetailsPage else HomePage
+                route = if (state.loggedInUser?.educationLevel.isNullOrBlank()) MoreDetailsPage else HomePage
             ) {
                 popUpTo(LoginPage) {
                     inclusive = true

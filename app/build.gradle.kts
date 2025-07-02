@@ -22,8 +22,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 35
-        versionCode = 14
-        versionName = "1.2.2"
+        versionCode = 16
+        versionName = "1.4.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -136,4 +136,7 @@ dependencies {
 
     implementation(libs.app.update)
     implementation(libs.app.update.ktx)
+
+    // shimmer
+    implementation(libs.shimmer.compose)
 }

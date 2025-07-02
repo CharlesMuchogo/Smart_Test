@@ -1,4 +1,3 @@
-
 package com.charlesmuchogo.research.presentation.common
 
 import androidx.compose.foundation.BorderStroke
@@ -26,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.charlesmuchogo.research.domain.models.SnackBarItem
 import ui.theme.greenLight
 
 @Composable
@@ -37,14 +35,17 @@ fun SnackBarContent(
     alignBottom: Boolean = false,
 ) {
     Box(
-        modifier = modifier.fillMaxSize().testTag(description),
+        modifier = modifier
+            .fillMaxSize()
+            .testTag(description),
         contentAlignment = if (alignBottom) Alignment.BottomCenter else Alignment.TopCenter,
     ) {
         SnackbarHost(
             hostState = snackBarHostState,
             snackbar = {
                 val message = it.visuals.message
-                val isError = message.lowercase().contains("error") || message.lowercase().contains("something")
+                val isError = message.lowercase().contains("error") || message.lowercase()
+                    .contains("something") || message.lowercase().contains("invalid")
                 Card(
                     modifier =
                         Modifier

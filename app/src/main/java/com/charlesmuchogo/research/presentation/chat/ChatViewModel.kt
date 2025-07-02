@@ -3,6 +3,7 @@ package com.charlesmuchogo.research.presentation.chat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.models.Message
 import com.charlesmuchogo.research.presentation.utils.formatChatDate
 import com.google.firebase.Firebase
@@ -27,9 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val remoteRepository: RemoteRepository
 ) : ViewModel() {
-
 
     init {
         FirebaseAuth.getInstance().signInAnonymously()
@@ -54,8 +55,14 @@ class ChatViewModel @Inject constructor(
                 }
             }
         currentState.copy(
-            messages = dateMessages
+            messages = dateMessages,
+            isLoading = false
         )
+    }.onStart {
+        val response = remoteRepository.getMessages()
+        response.data?.let {
+            database.messagesDao().insertMessages(it.data)
+        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
@@ -76,34 +83,46 @@ class ChatViewModel @Inject constructor(
                         if (state.value.message.isNotBlank()) {
 
                             val prompt = state.value.message
-                            database.messagesDao().insertMessage(
-                                message = Message(
-                                    message = prompt,
-                                    sender = MessageSender.ME.name,
-                                    timestamp = Clock.System.now().toEpochMilliseconds()
-                                )
+
+                            val message = Message(
+                                message = prompt,
+                                sender = MessageSender.ME.name,
+                                timestamp = Clock.System.now().toEpochMilliseconds()
                             )
+
+                            database.messagesDao().insertMessage(message = message)
+
+                            sendMessage(message)
 
                             val response = model.generateContent(prompt)
 
-                            response.text?.let { message ->
-                                database.messagesDao().insertMessage(
-                                    message = Message(
-                                        message = message,
-                                        sender = MessageSender.AI.name,
-                                        timestamp = Clock.System.now().toEpochMilliseconds()
-                                    )
+                            response.text?.let { text ->
+                                _state.update { it.copy(isGeneratingContent = false) }
+                                val message = Message(
+                                    message = text,
+                                    sender = MessageSender.AI.name,
+                                    timestamp = Clock.System.now().toEpochMilliseconds()
                                 )
+                                database.messagesDao().insertMessage(message = message)
+                                sendMessage(message)
                             }
                         }
                     } catch (e: Exception) {
-                        println("Error generating content: ${e.message}")
                         e.printStackTrace()
                     } finally {
                         _state.update { it.copy(isGeneratingContent = false) }
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun sendMessage(
+        message: Message
+    ) {
+        val response = remoteRepository.sendMessage(message)
+        response.data?.let {
+            database.messagesDao().insertMessage(message)
         }
     }
 }

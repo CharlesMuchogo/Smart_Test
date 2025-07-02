@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val density = LocalDensity.current.density
-
                     CompositionLocalProvider(LocalDensity provides Density(density = density * 0.93f)) {
                         Navigation(navController = navController)
                     }

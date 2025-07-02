@@ -84,7 +84,7 @@ constructor(
                             database.userDao()
                                 .insertUser(user = result.user.copy(token = result.token))
                             settingsRepository.saveAccessToken(result.token)
-                            _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true) }
+                            _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true, loggedInUser = result.user) }
                         }
 
 
