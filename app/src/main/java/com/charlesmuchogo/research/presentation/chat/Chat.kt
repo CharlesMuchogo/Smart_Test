@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -45,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.ads.showInterstitialAd
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
 import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
@@ -58,13 +61,15 @@ fun ChatRoot() {
     val viewModel = hiltViewModel<ChatViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
-
-
-
-    ChatScreen(
-        state = state,
-        onAction = viewModel::onAction
+    AuthControllerScreen(
+        modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
+        screen = {
+            ChatScreen(
+                state = state,
+                onAction = viewModel::onAction
+            )
+        },
+        authRequired = true,
     )
 }
 
@@ -84,6 +89,7 @@ fun ChatScreen(
                 onAction(ChatAction.OnUpdateShowAd(false))
             })
         }
+        onAction(ChatAction.FetchMessages)
     }
 
     Scaffold(

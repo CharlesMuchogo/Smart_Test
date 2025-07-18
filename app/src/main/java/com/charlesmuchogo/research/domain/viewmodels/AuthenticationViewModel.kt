@@ -50,9 +50,6 @@ constructor(
     var loginPageState by mutableStateOf(LoginState())
         private set
 
-    val loginStatus = MutableStateFlow(
-        Results.initial<LoginResponseDTO>(),
-    )
 
 
     val registrationStatus = MutableStateFlow(
@@ -72,14 +69,6 @@ constructor(
             ),
         )
 
-
-    val authenticationEventState = MutableStateFlow(
-        Results(
-            status = ResultStatus.INITIAL,
-            data = AuthenticationEvent(),
-            message = null
-        )
-    )
     val completeRegistrationState = MutableStateFlow(
         Results<UpdateUserDetailsResponseDTO>(
             status = ResultStatus.INITIAL,

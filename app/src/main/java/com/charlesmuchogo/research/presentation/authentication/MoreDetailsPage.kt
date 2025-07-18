@@ -45,6 +45,7 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDatePickerDialog
 import com.charlesmuchogo.research.presentation.common.AppDropDown
@@ -63,7 +64,7 @@ import kotlinx.datetime.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun MoreDetailsScreen(modifier: Modifier = Modifier) {
     val activity =  (LocalContext.current as? Activity)
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val completeRegistrationState by authenticationViewModel.completeRegistrationState.collectAsState()

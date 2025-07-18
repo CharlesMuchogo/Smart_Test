@@ -10,6 +10,8 @@ sealed interface ChatAction {
 
     data class OnUpdateShowAd(val show: Boolean): ChatAction
 
+    data object FetchMessages : ChatAction
+
     data object OnSubmitMessage: ChatAction
 
     data object OnReportMessages: ChatAction

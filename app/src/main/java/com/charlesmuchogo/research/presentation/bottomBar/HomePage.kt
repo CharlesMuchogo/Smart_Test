@@ -24,116 +24,54 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.ChatPage
-import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
-import com.charlesmuchogo.research.presentation.history.HistoryScreen
-import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
 import com.charlesmuchogo.research.navigation.SearchClinicsPage
-import com.charlesmuchogo.research.presentation.profile.ProfileScreen
+import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
+import com.charlesmuchogo.research.presentation.utils.ALMOST_BLUR_ALPHA
 
+
+@Composable
+fun BottomBarRoot() {
+    val viewModel = hiltViewModel<BottomBarViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    HomeScreen(
+        state = state,
+        onAction = viewModel::onAction
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
-    var selectedItemIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-
-    var kiswahiliLanguage by remember { mutableStateOf(false) }
-
-    val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
-
-    LaunchedEffect(key1 = true) {
-        testResultsViewModel.fetchTestResults()
-    }
-
-
+fun HomeScreen(state: BottomBarState, onAction: (BottomBarAction) -> Unit) {
     Scaffold(
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(ChatPage)
-            },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.offset(y = 72.dp), shape = CircleShape) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.Message, contentDescription = "Chat")
-            }
-        },
-        bottomBar = {
-            BottomAppBar(
-                contentColor = MaterialTheme.colorScheme.onBackground,
-                containerColor = MaterialTheme.colorScheme.background
-            ) {
-                BottomNavigationItem.bottomNavigationItems.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        modifier = Modifier.offset(x= if(index == 1) -(18).dp else if(index == 2) 18.dp else 0.dp),
-                        colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.background),
-                        interactionSource = remember { MutableInteractionSource() },
-                        selected = selectedItemIndex == index,
-                        onClick = {
-                            selectedItemIndex = index
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(item.title),
-                                color = if (selectedItemIndex == index)
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    MaterialTheme.colorScheme.onBackground
-
-                            )
-                        },
-                        alwaysShowLabel = true,
-                        icon = {
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else item.unselectedIcon,
-                                contentDescription = stringResource(item.title),
-                                tint = if (selectedItemIndex == index) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onBackground
-                                }
-                            )
-                        }
-                    )
-                }
-            }
-        },
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(BottomNavigationItem.bottomNavigationItems[selectedItemIndex].title),
+                        text = stringResource(state.selectedBottomBarItem.title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
                     )
                 },
                 actions = {
-                    if (selectedItemIndex == 0) {
+                    if (state.selectedBottomBarItem == BottomNavigationItem.bottomNavigationItems.first()) {
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp)
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null,
-                                    onClick = { kiswahiliLanguage = !kiswahiliLanguage }),
+                                    onClick = { onAction(BottomBarAction.OnUpdateSelectedLanguage(!state.selectedKiswahiliLanguage)) }),
 
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -145,14 +83,15 @@ fun HomeScreen(navController: NavController) {
                             )
 
 
-                            when (kiswahiliLanguage) {
+                            when (state.selectedKiswahiliLanguage) {
                                 true -> Text("KISW")
                                 else -> Text("ENG")
                             }
 
                         }
                     }
-                    if (selectedItemIndex == 1) {
+
+                    if (state.selectedBottomBarItem == BottomNavigationItem.bottomNavigationItems.first()) {
                         IconButton(onClick = {
                             navController.navigate(SearchClinicsPage)
                         }) {
@@ -160,38 +99,78 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
                 }
-
-
             )
-        }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(ChatPage)
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.offset(y = 72.dp), shape = CircleShape
+            ) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.Message, contentDescription = "Chat")
+            }
+        },
+        bottomBar = {
+            BottomAppBar(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                containerColor = MaterialTheme.colorScheme.background.copy(alpha = ALMOST_BLUR_ALPHA),
+            ) {
+                BottomNavigationItem.bottomNavigationItems.forEach { item ->
+                    NavigationBarItem(
+                        modifier =
+                            Modifier
+                                .offset(x = if (item == BottomNavigationItem.bottomNavigationItems[1]) -(20).dp else if (item == BottomNavigationItem.bottomNavigationItems[2]) 20.dp else 0.dp)
+                                .testTag(stringResource(item.title)),
+                        colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.background),
+                        interactionSource = remember { MutableInteractionSource() },
+                        selected = state.selectedBottomBarItem == item,
+                        onClick = {
+                            onAction(BottomBarAction.OnUpdateSelectedItem(item))
+                        },
+                        label = {
+                            Text(
+                                text = stringResource(item.title),
+                                color =
+                                    if (item == state.selectedBottomBarItem) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                    },
+                            )
+                        },
+                        alwaysShowLabel = true,
+                        icon = {
+                            Icon(
+                                imageVector = if (item == state.selectedBottomBarItem) {
+                                    item.selectedIcon
+                                } else item.unselectedIcon,
+                                contentDescription = stringResource(item.title),
+                                tint =
+                                    if (item == state.selectedBottomBarItem) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                    },
+                            )
+                        },
+                    )
+                }
+            }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier.padding(paddingValues)
         ) {
-
-            when (selectedItemIndex) {
-                0 -> {
-                    InstructionsScreen(
-                        navController = navController,
-                        isKiswahiliLanguage = kiswahiliLanguage
-                    )
-                }
-
-                1 -> {
-                    ClinicsScreen()
-                }
-
-                2 -> {
-                    HistoryScreen()
-                }
-
-                3 -> {
-                    ProfileScreen(navController = navController)
-                }
-
-            }
+            AuthControllerScreen(
+                modifier = Modifier,
+                screen = state.selectedBottomBarItem.screen,
+                authRequired = state.selectedBottomBarItem.authRequired,
+            )
         }
-
     }
 }
 

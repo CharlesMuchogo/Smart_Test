@@ -58,7 +58,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.icon),
+                        painter = painterResource(R.drawable.password),
                         contentDescription = null,
                         modifier =
                             Modifier
