@@ -95,7 +95,7 @@ fun Navigation(navController: NavHostController) {
             }
 
             composable<HistoryPage> {
-                HistoryScreen(navController = navController)
+                HistoryScreen()
             }
 
             composable<ProfilePage> {

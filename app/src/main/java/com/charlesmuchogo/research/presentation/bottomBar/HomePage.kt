@@ -182,7 +182,7 @@ fun HomeScreen(navController: NavController) {
                 }
 
                 2 -> {
-                    HistoryScreen(navController = navController)
+                    HistoryScreen()
                 }
 
                 3 -> {

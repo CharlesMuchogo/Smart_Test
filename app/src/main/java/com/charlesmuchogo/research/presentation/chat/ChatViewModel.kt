@@ -142,6 +142,10 @@ class ChatViewModel @Inject constructor(
                     _state.update { it.copy(selectedMessages = emptyList()) }
                     SnackBarViewModel.sendEvent(SnackBarItem(message = "We'll look into these messages"))
                 }
+
+                is ChatAction.OnUpdateShowAd -> {
+                    _state.update { it.copy(showAd = action.show) }
+                }
             }
         }
     }

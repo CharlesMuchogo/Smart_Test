@@ -38,13 +38,8 @@ fun EnglishInstructions(modifier: Modifier = Modifier, onClick: () -> Unit) {
         ) {
 
             item {
-                Box(modifier = modifier.fillMaxWidth()) { BannerAd(modifier = Modifier, adUnitId = BANNER_AD_UNIT_ID ) }
-            }
-            item {
                 ExoPlayerView()
             }
-
-
 
             item {
                 Text(

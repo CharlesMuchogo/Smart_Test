@@ -50,6 +50,7 @@ import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
+import kotlinx.coroutines.delay
 
 @Composable
 fun ChatRoot() {
@@ -57,9 +58,9 @@ fun ChatRoot() {
     val viewModel = hiltViewModel<ChatViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
 
-    showInterstitialAd(context)
+
+
 
     ChatScreen(
         state = state,
@@ -74,6 +75,16 @@ fun ChatScreen(
     onAction: (ChatAction) -> Unit,
 ) {
 
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (state.showAd) {
+            delay(3_000L)
+            showInterstitialAd(context, onShowAd = {
+                onAction(ChatAction.OnUpdateShowAd(false))
+            })
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -89,7 +100,7 @@ fun ChatScreen(
                 actions = {
                     AnimatedVisibility(state.selectedMessages.isNotEmpty()) {
                         IconButton(onClick = {
-                          onAction(ChatAction.OnReportMessages)
+                            onAction(ChatAction.OnReportMessages)
                         }) {
                             Icon(imageVector = Icons.Default.Report, contentDescription = "Report")
                         }

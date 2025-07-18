@@ -7,5 +7,6 @@ data class ChatState(
     val messages: Map<String, List<Message>> = mapOf(),
     val selectedMessages: List<Message> = listOf(),
     val isGeneratingContent: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val showAd: Boolean = true
 )

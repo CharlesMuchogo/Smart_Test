@@ -26,20 +26,18 @@ fun loadInterstitialAd(context: Context) {
     })
 }
 
-fun showInterstitialAd(context: Context) {
+fun showInterstitialAd(context: Context, onShowAd: () -> Unit = {}) {
     if (mInterstitialAd != null) {
         mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                Log.d("Ad displayed", "Ad was dismissed correctly")
                 mInterstitialAd = null
                 loadInterstitialAd(context)
             }
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                Log.d("Ad displayed", "Ad was displayed with error ${p0.message}")
                 mInterstitialAd = null
             }
             override fun onAdShowedFullScreenContent() {
-                Log.d("Ad displayed", "Ad was displayed correctly")
+                onShowAd()
             }
         }
         mInterstitialAd?.show(context as Activity)

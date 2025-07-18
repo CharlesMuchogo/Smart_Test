@@ -325,6 +325,7 @@ constructor(
         viewModelScope.launch {
             database.userDao().deleteUsers()
             database.testResultsDao().deleteResults()
+            settingsRepository.clearSettings()
         }
     }
 
