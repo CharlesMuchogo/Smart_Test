@@ -16,11 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.charlesmuchogo.research.R
+import com.charlesmuchogo.research.ads.BannerAd
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.BANNER_AD_UNIT_ID
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
 
 @Composable
 fun EnglishInstructions(modifier: Modifier = Modifier, onClick: () -> Unit) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,6 +36,10 @@ fun EnglishInstructions(modifier: Modifier = Modifier, onClick: () -> Unit) {
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+
+            item {
+                Box(modifier = modifier.fillMaxWidth()) { BannerAd(modifier = Modifier, adUnitId = BANNER_AD_UNIT_ID ) }
+            }
             item {
                 ExoPlayerView()
             }

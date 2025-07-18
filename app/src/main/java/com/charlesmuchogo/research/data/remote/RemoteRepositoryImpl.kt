@@ -260,7 +260,6 @@ class RemoteRepositoryImpl(
                         response.body<ErrorDTO>()
                     }
 
-
                 Results.error(
                     apiResponse.data?.message ?: "Error deleting test. Try again"
 

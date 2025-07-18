@@ -16,6 +16,7 @@ hiltAndroid = "2.52"
 hiltAndroidCompiler = "2.51.1"
 hiltCompiler = "1.2.0"
 coil = "2.7.0"
+playServicesAds = "24.4.0"
 playServicesAuth = "21.3.0"
 playServicesLocation = "21.3.0"
 slf4jNop = "2.0.9"
@@ -37,6 +38,7 @@ ksp = "2.1.20-1.0.32"
 appUpdate = "2.1.0"
 firebaseAi = "16.1.0"
 firebaseAnalytics = "22.5.0"
+adsMobileSdk = "0.17.0-alpha02"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -86,6 +88,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" }
 
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
@@ -106,6 +109,7 @@ app-update = { module = "com.google.android.play:app-update", version.ref = "app
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
 firebase-ai = { group = "com.google.firebase", name = "firebase-ai", version.ref = "firebaseAi" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+ads-mobile-sdk = { group = "com.google.android.libraries.ads.mobile.sdk", name = "ads-mobile-sdk", version.ref = "adsMobileSdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

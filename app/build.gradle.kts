@@ -140,4 +140,6 @@ dependencies {
 
     // shimmer
     implementation(libs.shimmer.compose)
+
+    implementation(libs.play.services.ads)
 }
