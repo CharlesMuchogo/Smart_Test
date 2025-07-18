@@ -71,7 +71,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material.icons.extended)
     implementation(libs.firebase.messaging)
-    implementation(libs.firebase.inappmessaging.display)
     implementation(libs.navigation.compose)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.crashlytics)
