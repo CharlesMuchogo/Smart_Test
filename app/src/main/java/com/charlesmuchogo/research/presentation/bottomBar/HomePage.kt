@@ -24,21 +24,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.charlesmuchogo.research.ads.showInterstitialAd
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.ChatPage
 import com.charlesmuchogo.research.navigation.SearchClinicsPage
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.utils.ALMOST_BLUR_ALPHA
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -54,6 +58,18 @@ fun BottomBarRoot() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(state: BottomBarState, onAction: (BottomBarAction) -> Unit) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (state.showAd) {
+            delay(3_000L)
+            showInterstitialAd(context, onShowAd = {
+                onAction(BottomBarAction.OnHasShownAd)
+            })
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(

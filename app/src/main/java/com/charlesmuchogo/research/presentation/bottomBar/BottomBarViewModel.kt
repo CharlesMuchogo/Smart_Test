@@ -30,6 +30,10 @@ class BottomBarViewModel @Inject constructor(): ViewModel() {
             is BottomBarAction.OnUpdateSelectedLanguage -> {
                 _state.update { it.copy(selectedKiswahiliLanguage = action.isKiswahili) }
             }
+
+            is BottomBarAction.OnHasShownAd -> {
+                _state.update { it.copy(showAd = !it.showAd) }
+            }
         }
 
     }

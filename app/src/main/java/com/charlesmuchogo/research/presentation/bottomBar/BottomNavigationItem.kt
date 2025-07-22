@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
+import com.charlesmuchogo.research.presentation.instructions.InstructionsRoot
 import com.charlesmuchogo.research.presentation.instructions.InstructionsScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 
@@ -31,7 +32,7 @@ data class BottomNavigationItem(
                 title = R.string.Instructions,
                 selectedIcon = Icons.Default.Info,
                 unselectedIcon = Icons.Outlined.Info,
-                screen = { InstructionsScreen() }
+                screen = { InstructionsRoot() }
             ),
 
             BottomNavigationItem(

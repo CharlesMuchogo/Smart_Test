@@ -31,4 +31,40 @@
     <string name="positiveTestResult">📅 Ikiwa matokeo yako ni chanya, uchunguzi wa kliniki utakusaidia kupata mwongozo na msaada unaohitaji.</string>
     <string name="negativeTestResult">✅ Matokeo hasi ni habari njema! Ikiwa umekuwa na hatari za hivi karibuni, fikiria kufanya jaribio lingine baada ya miezi 3 ili kuwa na uhakika.</string>
     <string name="chat">Gumzo (beta)</string>
+
+    <!-- Maelekezo -->
+    <string name="first_heading">JINSI YA KUTUMIA ORAQUICK®, KIPIMO CHA VVU, MATUMIZI BINAFSI</string>
+    <string name="sentence_1">UTAHITAJI KUKADIRIA MUDA WA KIPIMO</string>
+    <string name="sentence_2">Mfuko una: vifaa vya kupima, kifaa cha kusaidia kipimo, na maagizo ya matumizi</string>
+    <string name="sentence_3">ACHE KIFAA KWENYE TUBU kwa DAKIKA 20 kabla ya kusoma matokeo. USISOME matokeo baada ya dakika 40.</string>
+
+    <string name="sentence_6">Toa kifaa kutoka kwenye tubu, funika tubu, kisha tupa kila kitu kwenye pipa la takataka.</string>
+    <string name="sentence_7">MATOKEO CHANYA</string>
+    <string name="sentence_8">Mstari miwili kamili, hata kama mmoja ni hafifu, inamaanisha unaweza kuwa na VVU na unahitaji kupimwa tena.</string>
+    <string name="sentence_9">Tembelea kituo cha VCT au Kituo cha Afya kilicho karibu nawe haraka iwezekanavyo.</string>
+
+    <string name="sentence_12">MATOKEO HASI</string>
+    <string name="sentence_13">MSTARI MMOJA katika eneo la “C” na HAKUNA mstari katika eneo la “T”, matokeo yako ni HasI, Huna VVU.&#10;Fikiria kupima mara kwa mara. Ikiwa unahisi ulipatwa na VVU hivi karibuni, pima tena baada ya miezi mitatu.</string>
+
+    <string name="sentence_15">MATOKEO BATILI</string>
+    <string name="sentence_16">Hakuna mstari katika eneo la “C” (hata kama kuna mstari katika eneo la “T”), au kama kuna rangi nyekundu inayozuia kusoma matokeo, kipimo si sahihi na kinapaswa kurudiwa. Utahitaji kifaa kipya cha kupima.&#10;Kipimo hakikufanya kazi ipasavyo. Tembelea kituo cha VCT au Kituo cha Afya kilicho karibu kwa kipimo cha ziada.</string>
+
+    <string name="sentence_18">Kama hujui au hauna uhakika na matokeo yako, tembelea kituo cha VCT au Kituo cha Afya kilicho karibu kwa kipimo cha ziada.</string>
+    <string name="sentence_19">MATOKEO HAYAELEWEKI</string>
+    <string name="sentence_20">UTUPAJI</string>
+
+    <string name="sentence_21">Kipimo chako cha VVU kina vifurushi viwili vilivyounganishwa.</string>
+    <string name="sentence_22">Pasua kifurushi upande ulio na mchoro wa Tubu, kisha toa tubu.</string>
+    <string name="sentence_23">Toa kofia/funiko la tubu. USIMWAGE kioevu. USIKUNYWE.</string>
+    <string name="sentence_24">Sugua kifutio juu ya fizi ya juu mara moja, ukifunisha fizi yote ya juu, kisha sugua fisi yote ya chini mara moja pia.</string>
+    <string name="sentence_25">Weka kifaa ndani ya tubu mpaka kifutio kizame kwenye kioevu.</string>
+    <string name="sentence_26">Pasua mfuko unaobeba kifaa cha kupima na ukitoe. USIGUSE pedi tambarare kwa vidole vyako. USILE wala kumeza kihifadhi.</string>
+    <string name="sentence_27">Usimwage kioevu. Usikunywe.</string>
+    <string name="sentence_28">Weka tubu kwenye kishikiliaji.</string>
+
+    <string name="sign_up_button_text">Jisajili</string>
+    <string name="or">Au</string>
+    <string name="login">Ingia</string>
+    <string name="already_have_an_account">Tayari una akaunti?</string>
+    <string name="welcome_to_smarttest">Karibu Smarttest, tunafurahi kukuona hapa! Ingia ili kuendelea</string>
 </resources>

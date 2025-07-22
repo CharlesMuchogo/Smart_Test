@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,7 @@ fun AuthenticationBlockerScreen(modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = "Welcome to Smarttest, we are glad to have you here! Login to proceed",
+            text = stringResource(R.string.welcome_to_smarttest)  ,
             style =
                 MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Normal,
@@ -58,7 +59,7 @@ fun AuthenticationBlockerScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
         ) {
             Text(
-                text = "Already have an account? ",
+                text = stringResource(R.string.already_have_an_account) ,
                 style =
                     MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.Medium,
@@ -68,7 +69,7 @@ fun AuthenticationBlockerScreen(modifier: Modifier = Modifier) {
 
             Text(
                 modifier = Modifier.removeRipple { navController.navigate(LoginPage) },
-                text = "Login",
+                text =  stringResource(R.string.login) ,
                 style =
                     MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,
@@ -78,7 +79,7 @@ fun AuthenticationBlockerScreen(modifier: Modifier = Modifier) {
             )
 
             Text(
-                text = "Or",
+                text = stringResource(R.string.or),
                 style =
                     MaterialTheme.typography.labelLarge.copy(
                         fontWeight = FontWeight.Medium,
@@ -88,7 +89,7 @@ fun AuthenticationBlockerScreen(modifier: Modifier = Modifier) {
 
             Text(
                 modifier = Modifier.removeRipple { navController.navigate(RegistrationPage) },
-                text = "Sign Up",
+                text = stringResource(R.string.sign_up_button_text) ,
                 style =
                     MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,
