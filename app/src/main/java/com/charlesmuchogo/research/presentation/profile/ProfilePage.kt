@@ -56,6 +56,7 @@ import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.navigation.EditProfilePage
 import com.charlesmuchogo.research.navigation.LoginPage
@@ -67,7 +68,7 @@ import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun ProfileScreen(modifier: Modifier = Modifier) {
     val profileViewModel = hiltViewModel<AuthenticationViewModel>()
     val profileState = profileViewModel.profileStatus.collectAsStateWithLifecycle().value
 

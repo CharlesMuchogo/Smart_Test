@@ -9,6 +9,8 @@ import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
+import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.utils.getFcmToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,6 +87,7 @@ constructor(
                                 .insertUser(user = result.user.copy(token = result.token))
                             settingsRepository.saveAccessToken(result.token)
                             _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true, loggedInUser = result.user) }
+                            navController.popBackStack(LoginPage, inclusive = true)
                         }
 
 

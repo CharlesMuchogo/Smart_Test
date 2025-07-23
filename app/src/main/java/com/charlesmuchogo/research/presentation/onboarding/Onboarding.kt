@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.HomePage
 import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.presentation.onboarding.components.OnboardingContent
 import kotlinx.coroutines.delay
@@ -141,7 +142,7 @@ fun OnboardingScreen(
                 TextButton(
                     onClick = {
                         onAction(OnboardingAction.SaveFirstTime(true))
-                        navController.navigate(LoginPage) },
+                        navController.navigate(HomePage) },
                     shape = RoundedCornerShape(4.dp),
                     colors = ButtonDefaults.textButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,

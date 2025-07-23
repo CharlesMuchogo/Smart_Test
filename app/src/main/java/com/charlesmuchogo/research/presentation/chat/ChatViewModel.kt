@@ -66,15 +66,11 @@ class ChatViewModel @Inject constructor(
                     else -> formatChatDate(date.date)
                 }
             }
+
         currentState.copy(
             messages = dateMessages,
             isLoading = false
         )
-    }.onStart {
-        val response = remoteRepository.getMessages()
-        response.data?.let {
-            database.messagesDao().insertMessages(it.data)
-        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
@@ -141,6 +137,17 @@ class ChatViewModel @Inject constructor(
                 ChatAction.OnReportMessages -> {
                     _state.update { it.copy(selectedMessages = emptyList()) }
                     SnackBarViewModel.sendEvent(SnackBarItem(message = "We'll look into these messages"))
+                }
+
+                is ChatAction.OnUpdateShowAd -> {
+                    _state.update { it.copy(showAd = action.show) }
+                }
+
+                is ChatAction.FetchMessages -> {
+                    val response = remoteRepository.getMessages()
+                    response.data?.let {
+                        database.messagesDao().insertMessages(it.data)
+                    }
                 }
             }
         }

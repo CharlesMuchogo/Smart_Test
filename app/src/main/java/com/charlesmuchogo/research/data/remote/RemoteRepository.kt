@@ -20,13 +20,22 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
     suspend fun login(loginRequestDTO: LoginRequestDTO): Results<LoginResponseDTO>
+
     suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>>
+
     suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>>
+
     suspend fun updateProfile(request: UpdateProfileState): Results<EditProfileDTO>
+
     suspend fun fetchTestResults(): Flow<Results<GetTestResultsDTO>>
+
     suspend fun fetchClinics(): Flow<Results<GetClinicsDTO>>
+
     suspend fun deleteResult(uuid: String): Results<DeleteTestResultsDTO>
+
     suspend fun uploadResults(results: UploadTestResultsDTO): Flow<Results<UploadTestResultsResponse>>
+
     suspend fun sendMessage(message: Message): Results<SendMessageResponse>
+
     suspend fun getMessages(): Results<GetMessagesDTO>
 }

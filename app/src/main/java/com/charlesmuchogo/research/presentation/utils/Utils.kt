@@ -14,7 +14,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import com.google.firebase.messaging.FirebaseMessaging
@@ -197,6 +201,16 @@ fun convertTimestampToTime(timeStamp: Long): String {
     return "$formattedHour:$formattedMinute"
 }
 
+@Composable
+fun Modifier.removeRipple(onClick: () -> Unit): Modifier {
+    return this.clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null,
+        onClick = onClick,
+    )
+}
+
+const val ALMOST_BLUR_ALPHA = 0.95f
 
 const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"
 const val TERMS_AND_CONDITIONS_URL = "https://smarttest.muchogoc.com/terms_and_conditions"

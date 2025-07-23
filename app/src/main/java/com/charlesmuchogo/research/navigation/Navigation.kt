@@ -16,11 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
-import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
+import com.charlesmuchogo.research.presentation.authentication.OnBoardingControllerScreen
 import com.charlesmuchogo.research.presentation.authentication.ForgotPasswordScreen
-import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
+import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
+import com.charlesmuchogo.research.presentation.bottomBar.BottomBarRoot
 import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
 import com.charlesmuchogo.research.presentation.chat.ChatRoot
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
@@ -33,6 +34,7 @@ import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
+import com.charlesmuchogo.research.presentation.testpage.TestAuthBlocker
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
 import com.charlesmuchogo.research.presentation.testpage.TestScreen
 
@@ -66,7 +68,7 @@ fun Navigation(navController: NavHostController) {
         ) {
 
             composable<AuthController> {
-                AuthControllerScreen(navController = navController)
+                OnBoardingControllerScreen(navController = navController)
             }
             composable<OnBoardingScreen> {
                 OnboardingRoot()
@@ -79,29 +81,7 @@ fun Navigation(navController: NavHostController) {
                 ChatRoot()
             }
 
-            composable<ForgotPasswordPage> {
-                ForgotPasswordScreen(navController = navController)
-            }
-
-            composable<RegistrationPage> {
-                RegistrationScreen(navController = navController)
-            }
-            composable<MoreDetailsPage> {
-                MoreDetailsScreen(navController = navController)
-            }
-
-            composable<HomePage> {
-                HomeScreen(navController = navController)
-            }
-
-            composable<HistoryPage> {
-                HistoryScreen(navController = navController)
-            }
-
-            composable<ProfilePage> {
-                ProfileScreen(navController = navController)
-            }
-            composable<PhotoPage> (
+            composable<ForgotPasswordPage>(
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Up,
@@ -126,7 +106,54 @@ fun Navigation(navController: NavHostController) {
                         animationSpec = tween(ANIMATION_DURATION),
                     )
                 },
-            ){  backStackEntry ->
+            ) {
+                ForgotPasswordScreen()
+            }
+
+            composable<RegistrationPage> {
+                RegistrationScreen(navController = navController)
+            }
+            composable<MoreDetailsPage> {
+                MoreDetailsScreen()
+            }
+
+            composable<HomePage> {
+                BottomBarRoot()
+            }
+
+            composable<HistoryPage> {
+                HistoryScreen()
+            }
+
+            composable<ProfilePage> {
+                ProfileScreen()
+            }
+            composable<PhotoPage>(
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(ANIMATION_DURATION),
+                    )
+                },
+            ) { backStackEntry ->
                 val args = backStackEntry.toRoute<PhotoPage>()
                 PictureScreen(
                     url = args.image,
@@ -170,7 +197,7 @@ fun Navigation(navController: NavHostController) {
             }
 
             composable<TestPage> {
-                TestScreen(navController = navController)
+                TestAuthBlocker()
             }
 
             composable<PendingTestPage>(
@@ -258,7 +285,7 @@ fun Navigation(navController: NavHostController) {
                 },
             ) { backStackEntry ->
                 val args = backStackEntry.toRoute<TestResultsPage>()
-                ResultsRoot(id = args.id )
+                ResultsRoot(id = args.id)
             }
         }
     }

@@ -15,13 +15,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,7 +33,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
@@ -39,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
@@ -46,11 +55,14 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.navigation.RegistrationPage
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
+import com.charlesmuchogo.research.presentation.common.TopBarTitle
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
 import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
 import com.charlesmuchogo.research.presentation.utils.openInAppBrowser
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
 
@@ -59,12 +71,37 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     val registrationPageState = authenticationViewModel.loginPageState
     val  context = LocalContext.current
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     LaunchedEffect(Unit) {
         val country = getDeviceCountry(context)
         authenticationViewModel.onAction(LoginAction.OnCountryChange(country))
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            MediumTopAppBar(
+                scrollBehavior = scrollBehavior,
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        scrolledContainerColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                navigationIcon = {
+                    NavigationIcon()
+                },
+                title = {
+                    TopBarTitle(
+                        style = if (scrollBehavior.state.collapsedFraction > 0) MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Medium
+                        ) else MaterialTheme.typography.titleLarge.copy(fontWeight = SemiBold),
+                        title = "Create an account"
+                    )
+                },
+            )
+        },
+    ) { padding ->
         LazyColumn(
             verticalArrangement = Arrangement.Center,
             modifier =
@@ -77,11 +114,6 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
             horizontalAlignment = Alignment.Start,
         ) {
             item {
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    "Create an account",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = SemiBold, letterSpacing = 1.5.sp),
-                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     "Please enter your details to continue.",
@@ -216,23 +248,12 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                         authenticationViewModel.onAction(LoginAction.OnSignup)
                     },
                     content = {
-                        when (registrationStatus.status) {
-                            ResultStatus.INITIAL,
-                            ResultStatus.ERROR -> {
-                                Text("Sign up")
-                            }
-
-                            ResultStatus.SUCCESS -> {
-                                Text("Sign up")
-                                navController.navigate(MoreDetailsPage){
-                                    popUpTo(RegistrationPage) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-
-                            ResultStatus.LOADING -> {
+                        when (registrationStatus.status == ResultStatus.LOADING) {
+                            true -> {
                                 AppLoginButtonContent(message = "Signing up ...")
+                            }
+                            false -> {
+                                Text("Sign up")
                             }
                         }
                     },

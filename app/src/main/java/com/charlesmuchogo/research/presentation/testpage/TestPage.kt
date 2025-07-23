@@ -30,13 +30,14 @@ import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.TestInfoPage
 import com.charlesmuchogo.research.navigation.TestPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TestScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun TestScreen(modifier: Modifier = Modifier) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
     val uploadTestState = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value

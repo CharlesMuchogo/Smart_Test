@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -29,11 +31,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,12 +45,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
+import com.charlesmuchogo.research.ads.showInterstitialAd
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
 import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
+import kotlinx.coroutines.delay
 
 @Composable
 fun ChatRoot() {
@@ -54,10 +61,16 @@ fun ChatRoot() {
     val viewModel = hiltViewModel<ChatViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
-    ChatScreen(
-        state = state,
-        onAction = viewModel::onAction
+    AuthControllerScreen(
+        modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
+        showTopBar = true,
+        screen = {
+            ChatScreen(
+                state = state,
+                onAction = viewModel::onAction
+            )
+        },
+        authRequired = true,
     )
 }
 
@@ -67,6 +80,19 @@ fun ChatScreen(
     state: ChatState,
     onAction: (ChatAction) -> Unit,
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (state.showAd) {
+            delay(3_000L)
+            showInterstitialAd(context, onShowAd = {
+                onAction(ChatAction.OnUpdateShowAd(false))
+            })
+        }
+        onAction(ChatAction.FetchMessages)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -81,7 +107,7 @@ fun ChatScreen(
                 actions = {
                     AnimatedVisibility(state.selectedMessages.isNotEmpty()) {
                         IconButton(onClick = {
-                          onAction(ChatAction.OnReportMessages)
+                            onAction(ChatAction.OnReportMessages)
                         }) {
                             Icon(imageVector = Icons.Default.Report, contentDescription = "Report")
                         }

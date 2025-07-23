@@ -31,6 +31,8 @@ class PreferenceManager(private val settings: Settings) {
         const val USER_EMAIL = "user_email_key"
         const val USER_ID = "user_id_key"
         const val USER_PHONE_NUMBER = "user_phone_number_key"
+        const val BANNER_AD_UNIT_ID = "ca-app-pub-6323830758154106/9756149016"
+        const val INTERESTIAL_AD_UNIT_ID = "ca-app-pub-6323830758154106/6808883055"
     }
 
     private val observableSettings: ObservableSettings by lazy { settings as ObservableSettings }

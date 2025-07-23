@@ -31,4 +31,44 @@
     <string name="positiveTestResult">\\uD83D\\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.</string>
     <string name="negativeTestResult">✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.</string>
     <string name="chat">Chat (beta)</string>
+    <string name="almost_there">We’re Almost There!</string>
+    <string name="we_need_more_information">To complete your registration and unlock all features, we just need a few more details from you. It only takes a minute!</string>
+
+    <!-- Instructions -->
+
+    <string name="first_heading">HOW TO USE ORAQUICK®, HIV TEST, PERSONAL USE</string>
+    <string name="sentence_1">YOU WILL NEED TO ESTIMATE THE TEST DURATION</string>
+    <string name="sentence_2">The pouch contains: test devices, a test support device, and usage instructions</string>
+    <string name="sentence_3">LEAVE THE DEVICE IN THE TUBE for 20 MINUTES before reading the result. DO NOT READ the result after 40 minutes.</string>
+
+    <string name="sentence_6">Remove the device from the tube, cover the tube, and then dispose of everything in the trash bin.</string>
+    <string name="sentence_7">POSITIVE RESULT</string>
+    <string name="sentence_8">Two complete lines, even if the line is faint, means you may have HIV and need further testing.</string>
+    <string name="sentence_9">Visit a nearby VCT or Health Center. As soon as possible</string>
+
+    <string name="sentence_12">NEGATIVE RESULT</string>
+    <string name="sentence_13">ONE LINE in the “C” area and NO line in the “T” area, your result is Negative, You Do Not Have HIV.&#10;Consider regular testing. If you think you were recently exposed to HIV, retest after three months.</string>
+
+    <string name="sentence_15">INVALID RESULT</string>
+    <string name="sentence_16">No line in the “C” area (even if there is a line in the “T” area), or if there’s a red color preventing result reading, the test is invalid and should be repeated. You’ll need a new test kit.&#10;The test did not work correctly. Visit a nearby VCT or Health Center for additional testing.</string>
+
+    <string name="sentence_18">If you do not know your result or are unsure of your result, visit a nearby VCT or Health Center for additional testing.</string>
+    <string name="sentence_19">RESULT UNCERTAIN</string>
+    <string name="sentence_20">DISPOSAL</string>
+
+    <string name="sentence_21">Your HIV test has two connected packs.</string>
+    <string name="sentence_22">Tear the pack on the side with the Tube illustration, then remove the tube.</string>
+    <string name="sentence_23">Remove the cap/lid of the tube. DO NOT SPILL the liquid. DO NOT DRINK it.</string>
+    <string name="sentence_24">Rub the swab on your upper gum once, covering the entire upper gum, then rub it on the entire lower gum once.</string>
+    <string name="sentence_25">Insert the device into the tube until the swab is submerged in the liquid.</string>
+    <string name="sentence_26">Pierce the pouch containing the test device and remove it. DO NOT TOUCH the flat pad with your fingers. DO NOT EAT or ingest the preservative.</string>
+    <string name="sentence_27">Do not spill the liquid. Do not drink it.</string>
+    <string name="sentence_28">Place the tube in the holder.</string>
+    <string name="sign_up_button_text">Sign Up</string>
+    <string name="or">Or</string>
+    <string name="login">Login</string>
+    <string name="already_have_an_account">"Already have an account? "</string>
+    <string name="welcome_to_smarttest">Welcome to Smarttest, we are glad to have you here! Login to proceed</string>
+    <string name="appId" translatable="false">ca-app-pub-6323830758154106~7836828619</string>
+    <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
 </resources>

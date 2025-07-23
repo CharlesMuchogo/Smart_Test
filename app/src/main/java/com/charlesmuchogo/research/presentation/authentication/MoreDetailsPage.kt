@@ -45,6 +45,7 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDatePickerDialog
 import com.charlesmuchogo.research.presentation.common.AppDropDown
@@ -52,6 +53,7 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.navigation.HomePage
 import com.charlesmuchogo.research.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.calculateDifferenceBetweenDates
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToDate
@@ -63,8 +65,7 @@ import kotlinx.datetime.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavController) {
-    val activity =  (LocalContext.current as? Activity)
+fun MoreDetailsScreen(modifier: Modifier = Modifier) {
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val completeRegistrationState by authenticationViewModel.completeRegistrationState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
@@ -106,11 +107,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
 
     LaunchedEffect(completeRegistrationState.status) {
         if(completeRegistrationState.status == ResultStatus.SUCCESS){
-            navController.navigate(HomePage) {
-                popUpTo(MoreDetailsPage) {
-                    inclusive = true
-                }
-            }
+            navController.popBackStack(MoreDetailsPage, true)
         }
     }
 
@@ -118,9 +115,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finishAndRemoveTask() }) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Exit")
-                    }
+                    NavigationIcon()
                 },
                 title = {  })
         }
@@ -141,10 +136,10 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier, navController: NavControlle
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.completeregistration),
+                        painter = painterResource(R.drawable.registration),
                         contentScale = ContentScale.Fit,
                         contentDescription = null,
-                        modifier = Modifier.fillParentMaxHeight(0.2f)
+                        modifier = Modifier.fillParentMaxHeight(0.15f).padding(vertical = 8.dp)
                     )
                 }
             }
