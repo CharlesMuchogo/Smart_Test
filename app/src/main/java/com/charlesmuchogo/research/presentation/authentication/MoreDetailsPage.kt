@@ -53,6 +53,7 @@ import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.navigation.HomePage
 import com.charlesmuchogo.research.navigation.MoreDetailsPage
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.calculateDifferenceBetweenDates
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToDate
@@ -65,7 +66,6 @@ import kotlinx.datetime.Clock
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreDetailsScreen(modifier: Modifier = Modifier) {
-    val activity =  (LocalContext.current as? Activity)
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
     val completeRegistrationState by authenticationViewModel.completeRegistrationState.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
@@ -107,11 +107,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier) {
 
     LaunchedEffect(completeRegistrationState.status) {
         if(completeRegistrationState.status == ResultStatus.SUCCESS){
-            navController.navigate(HomePage) {
-                popUpTo(MoreDetailsPage) {
-                    inclusive = true
-                }
-            }
+            navController.popBackStack(MoreDetailsPage, true)
         }
     }
 
@@ -119,9 +115,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier) {
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finishAndRemoveTask() }) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Exit")
-                    }
+                    NavigationIcon()
                 },
                 title = {  })
         }
@@ -142,10 +136,10 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.completeregistration),
+                        painter = painterResource(R.drawable.registration),
                         contentScale = ContentScale.Fit,
                         contentDescription = null,
-                        modifier = Modifier.fillParentMaxHeight(0.2f)
+                        modifier = Modifier.fillParentMaxHeight(0.15f).padding(vertical = 8.dp)
                     )
                 }
             }

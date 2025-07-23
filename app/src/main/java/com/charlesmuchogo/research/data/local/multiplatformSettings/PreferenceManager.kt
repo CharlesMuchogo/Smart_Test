@@ -31,7 +31,7 @@ class PreferenceManager(private val settings: Settings) {
         const val USER_EMAIL = "user_email_key"
         const val USER_ID = "user_id_key"
         const val USER_PHONE_NUMBER = "user_phone_number_key"
-        const val BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"
+        const val BANNER_AD_UNIT_ID = "ca-app-pub-6323830758154106/9756149016"
         const val INTERESTIAL_AD_UNIT_ID = "ca-app-pub-6323830758154106/6808883055"
     }
 

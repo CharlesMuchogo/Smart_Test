@@ -24,6 +24,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.ads.showInterstitialAd
+import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.PendingTestPage
+import com.charlesmuchogo.research.navigation.TestPage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
 import kotlinx.coroutines.delay
@@ -308,7 +311,16 @@ fun InstructionsScreen(
             }
 
             item {
-                AppButton(onClick = {}) {
+                AppButton(onClick = {
+                    when(state.hasPendingResults){
+                        true -> {
+                            navController.navigate(PendingTestPage)
+                        }
+                        false -> {
+                            navController.navigate(TestPage)
+                        }
+                    }
+                }) {
                     Text(text = stringResource(R.string.takeTest))
                 }
             }

@@ -19,6 +19,9 @@ import com.charlesmuchogo.research.domain.events.AuthenticationEvent
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.states.LoginState
+import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.LoginPage
+import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
 import com.charlesmuchogo.research.presentation.utils.getFcmToken
@@ -263,6 +266,7 @@ constructor(
             remoteRepository.signUp(registrationRequestDTO).collect { results ->
                 results.data?.let { result ->
                     database.userDao().insertUser(user = result.user.copy(token = result.token))
+                    navController.popBackStack(RegistrationPage, inclusive = true)
                 }
                 registrationStatus.value = results
             }

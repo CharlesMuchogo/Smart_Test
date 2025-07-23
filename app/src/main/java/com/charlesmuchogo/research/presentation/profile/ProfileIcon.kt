@@ -65,7 +65,7 @@ fun ProfileIcon(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { onclick.invoke() },
+                    onClick = { if(hasImage) onclick.invoke() },
                 ),
         contentAlignment = Alignment.Center,
     ) {

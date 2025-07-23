@@ -6,14 +6,17 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
 @Composable
 fun AuthControllerScreen(
     modifier: Modifier = Modifier,
-    screen: @Composable() () -> Unit,
     authRequired: Boolean = true,
+    showTopBar: Boolean = false,
+    screen: @Composable() () -> Unit,
 ) {
 
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
@@ -32,12 +35,12 @@ fun AuthControllerScreen(
             ResultStatus.SUCCESS -> {
                 if (profileStatus.data != null) {
                     if (profileStatus.data!!.age.isBlank() || profileStatus.data!!.educationLevel.isBlank()) {
-                        MoreDetailsScreen()
+                        MoreDetailsRequiredScreen(showTopBar = showTopBar)
                     } else {
                         screen.invoke()
                     }
                 } else {
-                    AuthenticationBlockerScreen(modifier = modifier)
+                    AuthenticationBlockerScreen(modifier = modifier, showTopBar = showTopBar)
                 }
             }
         }

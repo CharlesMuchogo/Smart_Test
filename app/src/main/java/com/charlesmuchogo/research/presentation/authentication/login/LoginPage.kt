@@ -16,12 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -47,6 +49,7 @@ import com.charlesmuchogo.research.navigation.HomePage
 import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.navigation.RegistrationPage
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
 
 @Composable
 fun LoginRoot() {
@@ -58,24 +61,32 @@ fun LoginRoot() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (LoginAction) -> Unit) {
 
-    LaunchedEffect(state.hasLoggedIn) {
-        if(state.hasLoggedIn){
-            navController.navigate(
-                route = if (state.loggedInUser?.educationLevel.isNullOrBlank()) MoreDetailsPage else HomePage
-            ) {
-                popUpTo(LoginPage) {
-                    inclusive = true
-                }
-            }
+//    LaunchedEffect(state.hasLoggedIn) {
+//        if(state.hasLoggedIn){
+//            navController.navigate(
+//                route = if (state.loggedInUser?.educationLevel.isNullOrBlank()) MoreDetailsPage else HomePage
+//            ) {
+//                popUpTo(LoginPage) {
+//                    inclusive = true
+//                }
+//            }
+//        }
+//    }
+
+
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = { NavigationIcon() },
+                title = {}
+            )
         }
-    }
-
-
-
-    Scaffold { padding ->
+    ) { padding ->
         LazyColumn(
             verticalArrangement = Arrangement.Center,
             modifier = modifier

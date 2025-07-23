@@ -31,6 +31,9 @@
     <string name="positiveTestResult">📅 Ikiwa matokeo yako ni chanya, uchunguzi wa kliniki utakusaidia kupata mwongozo na msaada unaohitaji.</string>
     <string name="negativeTestResult">✅ Matokeo hasi ni habari njema! Ikiwa umekuwa na hatari za hivi karibuni, fikiria kufanya jaribio lingine baada ya miezi 3 ili kuwa na uhakika.</string>
     <string name="chat">Gumzo (beta)</string>
+    <string name="almost_there">Tuko Karibu Kumaliza!</string>
+    <string name="we_need_more_information">Ili kukamilisha usajili wako na kufungua vipengele vyote, tunahitaji maelezo machache zaidi kutoka kwako. Haitachukua muda mrefu!</string>
+
 
     <!-- Maelekezo -->
     <string name="first_heading">JINSI YA KUTUMIA ORAQUICK®, KIPIMO CHA VVU, MATUMIZI BINAFSI</string>

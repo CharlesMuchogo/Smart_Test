@@ -63,6 +63,7 @@ fun ChatRoot() {
 
     AuthControllerScreen(
         modifier = Modifier.statusBarsPadding().navigationBarsPadding(),
+        showTopBar = true,
         screen = {
             ChatScreen(
                 state = state,

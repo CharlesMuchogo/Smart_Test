@@ -63,7 +63,8 @@ fun HomeScreen(state: BottomBarState, onAction: (BottomBarAction) -> Unit) {
 
     LaunchedEffect(Unit) {
         if (state.showAd) {
-            delay(3_000L)
+
+//            delay(3_000L)
             showInterstitialAd(context, onShowAd = {
                 onAction(BottomBarAction.OnHasShownAd)
             })

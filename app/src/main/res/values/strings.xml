@@ -31,6 +31,8 @@
     <string name="positiveTestResult">\\uD83D\\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.</string>
     <string name="negativeTestResult">✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.</string>
     <string name="chat">Chat (beta)</string>
+    <string name="almost_there">We’re Almost There!</string>
+    <string name="we_need_more_information">To complete your registration and unlock all features, we just need a few more details from you. It only takes a minute!</string>
 
     <!-- Instructions -->
 
@@ -67,4 +69,6 @@
     <string name="login">Login</string>
     <string name="already_have_an_account">"Already have an account? "</string>
     <string name="welcome_to_smarttest">Welcome to Smarttest, we are glad to have you here! Login to proceed</string>
+    <string name="appId" translatable="false">ca-app-pub-6323830758154106~7836828619</string>
+    <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
 </resources>

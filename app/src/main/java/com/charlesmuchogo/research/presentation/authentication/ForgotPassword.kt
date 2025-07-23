@@ -31,20 +31,18 @@ import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppTextField
-
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun ForgotPasswordScreen(modifier: Modifier = Modifier) {
     var email by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
-                    }
+                    NavigationIcon()
                 },
                 title = { Text(text = stringResource(R.string.forgot_password)) },
             )

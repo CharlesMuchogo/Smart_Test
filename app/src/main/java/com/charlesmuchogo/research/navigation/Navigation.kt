@@ -34,6 +34,7 @@ import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
+import com.charlesmuchogo.research.presentation.testpage.TestAuthBlocker
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
 import com.charlesmuchogo.research.presentation.testpage.TestScreen
 
@@ -106,7 +107,7 @@ fun Navigation(navController: NavHostController) {
                     )
                 },
             ) {
-                ForgotPasswordScreen(navController = navController)
+                ForgotPasswordScreen()
             }
 
             composable<RegistrationPage> {
@@ -196,7 +197,7 @@ fun Navigation(navController: NavHostController) {
             }
 
             composable<TestPage> {
-                TestScreen(navController = navController)
+                TestAuthBlocker()
             }
 
             composable<PendingTestPage>(

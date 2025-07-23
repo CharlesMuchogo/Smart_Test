@@ -14,9 +14,11 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 private var mInterstitialAd: InterstitialAd? = null
 
 fun loadInterstitialAd(context: Context) {
+
     val adRequest = AdRequest.Builder().build()
     InterstitialAd.load(context, INTERESTIAL_AD_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
         override fun onAdLoaded(interstitialAd: InterstitialAd) {
+            println("Ad shown -> interstitialAd has been loaded ")
             mInterstitialAd = interstitialAd
         }
         override fun onAdFailedToLoad(loadAdError: LoadAdError) {
