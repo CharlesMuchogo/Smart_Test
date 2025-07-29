@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel

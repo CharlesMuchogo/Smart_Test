@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AppLoginButtonContent(message: String = "Submitting...") {
+fun AppLoadingButtonContent(message: String = "Submitting...") {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize(),

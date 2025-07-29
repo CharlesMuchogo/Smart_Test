@@ -2,6 +2,7 @@
     <string name="app_name">Smart Test</string>
     <string name="forgot_password">"Umesahau Nenosiri?"</string>
     <string name="ResetPassword">Weka upya nenosiri</string>
+    <string name="Loading">Subiri…</string>
     <string name="Profile">Wasifu</string>
     <string name="History">Historia</string>
     <string name="Clinics">Kliniki</string>

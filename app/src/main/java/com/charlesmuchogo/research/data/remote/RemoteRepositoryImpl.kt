@@ -6,14 +6,17 @@ import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.ErrorDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
-import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
-import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
-import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
+import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
+import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginResponseDTO
+import com.charlesmuchogo.research.domain.dto.authentication.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.message.GetMessagesDTO
 import com.charlesmuchogo.research.domain.dto.message.SendMessageResponse
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
+import com.charlesmuchogo.research.domain.dto.setPassword.SetPasswordRequest
 import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
@@ -35,10 +38,8 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -61,6 +62,29 @@ class RemoteRepositoryImpl(
                 Results.error(apiResponse.data?.message ?: "Error logging in")
             } else {
                  apiHelper.safeApiCall(response.status) {
+                    response.body<LoginResponseDTO>()
+                }
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
+        }
+    }
+
+    override suspend fun setPassword(request: SetPasswordRequest): Results<LoginResponseDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.post("/api/update_password") {
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Error updating password")
+            } else {
+                apiHelper.safeApiCall(response.status) {
                     response.body<LoginResponseDTO>()
                 }
             }
@@ -95,6 +119,29 @@ class RemoteRepositoryImpl(
             } catch (e: Exception) {
                 emit(Results.error(decodeExceptionMessage(e)))
             }
+        }
+    }
+
+    override suspend fun forgotPassword(request: ForgotPasswordRequest): Results<ForgotPasswordResponse> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.post("/api/forgot_password") {
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Something went wrong. Try again")
+            } else {
+                apiHelper.safeApiCall(response.status) {
+                    response.body<ForgotPasswordResponse>()
+                }
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
         }
     }
 

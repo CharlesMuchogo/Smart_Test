@@ -47,7 +47,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.actions.UpdateProfileAction
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.EditProfileViewModel
@@ -55,7 +54,7 @@ import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
 import com.charlesmuchogo.research.presentation.common.AppImagePickerDialog
-import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
+import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
@@ -323,7 +322,7 @@ fun EditProfileScreen() {
                             Text("Save")
                         }
                         true -> {
-                            AppLoginButtonContent(message = "Saving...")
+                            AppLoadingButtonContent(message = "Saving...")
                         }
                     }
                 },

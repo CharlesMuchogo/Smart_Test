@@ -22,6 +22,11 @@ object RegistrationPage
 object MoreDetailsPage
 
 @Serializable
+data class SetPasswordPage(
+    val token: String
+)
+
+@Serializable
 object HomePage
 
 @Serializable

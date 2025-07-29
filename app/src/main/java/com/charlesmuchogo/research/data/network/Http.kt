@@ -63,7 +63,6 @@ class Http(
     }
 
     companion object {
-
         fun httpUrlBuilder(): String =  "https://smarttest.muchogoc.com"
     }
 }
