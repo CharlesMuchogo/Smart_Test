@@ -124,7 +124,7 @@ fun Navigation(navController: NavHostController) {
             composable<SetPasswordPage>(
                 deepLinks = listOf(
                     navDeepLink {
-                        uriPattern = "${httpUrlBuilder()}/api/reset_password/id={token}"
+                        uriPattern = "${httpUrlBuilder()}/api/reset_password?id={token}"
                     },
                 ),
             ) { backStackEntry ->

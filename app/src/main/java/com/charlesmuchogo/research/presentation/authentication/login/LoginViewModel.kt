@@ -58,7 +58,6 @@ constructor(
                 }
 
                 LoginAction.OnLogin -> {
-                    _state.update { it.copy(isLoggingIn = true) }
 
                     val emailError = if (_state.value.email.isBlank()) "Email is required" else null
 
