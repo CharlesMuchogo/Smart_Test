@@ -25,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -42,12 +41,9 @@ import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
-import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
+import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.navigation.ForgotPasswordPage
-import com.charlesmuchogo.research.navigation.HomePage
-import com.charlesmuchogo.research.navigation.LoginPage
-import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.common.NavigationIcon
 
@@ -226,7 +222,7 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
                     content = {
                         when (state.isLoggingIn) {
                             true -> {
-                                AppLoginButtonContent(message = "Authenticating...")
+                                AppLoadingButtonContent(message = "Authenticating...")
                             }
                             false -> {
                                 Text("Log in")

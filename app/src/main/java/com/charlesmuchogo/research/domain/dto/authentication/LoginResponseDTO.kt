@@ -1,4 +1,4 @@
-package com.charlesmuchogo.research.domain.dto.login
+package com.charlesmuchogo.research.domain.dto.authentication
 
 import com.charlesmuchogo.research.domain.models.User
 import kotlinx.serialization.Serializable

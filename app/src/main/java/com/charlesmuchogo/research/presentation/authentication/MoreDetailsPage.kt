@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.presentation.authentication
 
-import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,7 +38,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.models.TextFieldState
@@ -49,9 +46,8 @@ import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDatePickerDialog
 import com.charlesmuchogo.research.presentation.common.AppDropDown
-import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
+import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.navigation.HomePage
 import com.charlesmuchogo.research.navigation.MoreDetailsPage
 import com.charlesmuchogo.research.presentation.common.NavigationIcon
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -234,7 +230,7 @@ fun MoreDetailsScreen(modifier: Modifier = Modifier) {
                     content = {
                         when (completeRegistrationState.status == ResultStatus.LOADING) {
                             true -> {
-                                AppLoginButtonContent(message = "Submitting...")
+                                AppLoadingButtonContent(message = "Submitting...")
                             }
                             false -> {
                                 Text("Continue")

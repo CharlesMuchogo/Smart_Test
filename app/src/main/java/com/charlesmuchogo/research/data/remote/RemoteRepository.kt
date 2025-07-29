@@ -2,14 +2,17 @@ package com.charlesmuchogo.research.data.remote
 
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
-import com.charlesmuchogo.research.domain.dto.login.GetClinicsDTO
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
-import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
-import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
+import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
+import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginResponseDTO
+import com.charlesmuchogo.research.domain.dto.authentication.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.message.GetMessagesDTO
 import com.charlesmuchogo.research.domain.dto.message.SendMessageResponse
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsResponse
+import com.charlesmuchogo.research.domain.dto.setPassword.SetPasswordRequest
 import com.charlesmuchogo.research.domain.dto.updateUser.EditProfileDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
@@ -21,7 +24,11 @@ import kotlinx.coroutines.flow.Flow
 interface RemoteRepository {
     suspend fun login(loginRequestDTO: LoginRequestDTO): Results<LoginResponseDTO>
 
+    suspend fun setPassword(request: SetPasswordRequest): Results<LoginResponseDTO>
+
     suspend fun signUp(registrationRequestDTO: RegistrationRequestDTO): Flow<Results<LoginResponseDTO>>
+
+    suspend fun forgotPassword(request: ForgotPasswordRequest): Results<ForgotPasswordResponse>
 
     suspend fun completeRegistration(detailsDTO: UpdateUserDetailsDTO): Flow<Results<UpdateUserDetailsResponseDTO>>
 

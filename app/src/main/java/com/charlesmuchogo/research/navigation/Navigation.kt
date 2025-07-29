@@ -14,15 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
+import com.charlesmuchogo.research.data.network.Http.Companion.httpUrlBuilder
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.authentication.OnBoardingControllerScreen
-import com.charlesmuchogo.research.presentation.authentication.ForgotPasswordScreen
+import com.charlesmuchogo.research.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
+import com.charlesmuchogo.research.presentation.authentication.forgotPassword.ForgotPasswordRoot
 import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
+import com.charlesmuchogo.research.presentation.authentication.setPasswordScreen.SetPasswordRoot
 import com.charlesmuchogo.research.presentation.bottomBar.BottomBarRoot
-import com.charlesmuchogo.research.presentation.bottomBar.HomeScreen
 import com.charlesmuchogo.research.presentation.chat.ChatRoot
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
@@ -36,7 +39,6 @@ import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
 import com.charlesmuchogo.research.presentation.testpage.TestAuthBlocker
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
-import com.charlesmuchogo.research.presentation.testpage.TestScreen
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,6 +51,7 @@ fun Navigation(navController: NavHostController) {
         SnackBarViewModel.events.collect { snackBarItem ->
             snackBarHostState.showSnackbar(
                 message = snackBarItem.message,
+                actionLabel = if(snackBarItem.isError) "error" else null,
                 duration = SnackbarDuration.Short
             )
         }
@@ -70,6 +73,7 @@ fun Navigation(navController: NavHostController) {
             composable<AuthController> {
                 OnBoardingControllerScreen(navController = navController)
             }
+
             composable<OnBoardingScreen> {
                 OnboardingRoot()
             }
@@ -107,7 +111,7 @@ fun Navigation(navController: NavHostController) {
                     )
                 },
             ) {
-                ForgotPasswordScreen()
+                ForgotPasswordRoot()
             }
 
             composable<RegistrationPage> {
@@ -115,6 +119,17 @@ fun Navigation(navController: NavHostController) {
             }
             composable<MoreDetailsPage> {
                 MoreDetailsScreen()
+            }
+
+            composable<SetPasswordPage>(
+                deepLinks = listOf(
+                    navDeepLink {
+                        uriPattern = "${httpUrlBuilder()}/api/reset_password/id={token}"
+                    },
+                ),
+            ) { backStackEntry ->
+                val args = backStackEntry.toRoute<SetPasswordPage>()
+                SetPasswordRoot(token = args.token)
             }
 
             composable<HomePage> {
@@ -289,7 +304,6 @@ fun Navigation(navController: NavHostController) {
             }
         }
     }
-
 }
 
 const val ANIMATION_DURATION = 300

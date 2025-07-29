@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
@@ -44,17 +42,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.actions.LoginAction
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
-import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
+import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.navigation.MoreDetailsPage
-import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.common.NavigationIcon
 import com.charlesmuchogo.research.presentation.common.TopBarTitle
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -250,7 +244,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                     content = {
                         when (registrationStatus.status == ResultStatus.LOADING) {
                             true -> {
-                                AppLoginButtonContent(message = "Signing up ...")
+                                AppLoadingButtonContent(message = "Signing up ...")
                             }
                             false -> {
                                 Text("Sign up")

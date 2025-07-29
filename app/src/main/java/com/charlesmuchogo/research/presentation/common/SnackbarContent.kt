@@ -44,8 +44,7 @@ fun SnackBarContent(
             hostState = snackBarHostState,
             snackbar = {
                 val message = it.visuals.message
-                val isError = message.lowercase().contains("error") || message.lowercase()
-                    .contains("something") || message.lowercase().contains("invalid")
+                val isError = it.visuals.actionLabel != null
                 Card(
                     modifier =
                         Modifier
@@ -84,15 +83,13 @@ fun SnackBarContent(
                             modifier =
                                 Modifier
                                     .weight(1f),
-                            text = it.visuals.message,
+                            text = message,
                             style =
                                 MaterialTheme.typography.bodyMedium.copy(
                                     fontWeight = FontWeight.Normal,
                                     color = MaterialTheme.colorScheme.onBackground,
                                 ),
                         )
-
-
                     }
                 }
             },

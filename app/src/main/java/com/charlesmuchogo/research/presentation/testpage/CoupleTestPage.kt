@@ -39,7 +39,7 @@ import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppDropDown
-import com.charlesmuchogo.research.presentation.common.AppLoginButtonContent
+import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.TestProgress
 import com.charlesmuchogo.research.presentation.utils.ImagePicker
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
@@ -272,7 +272,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 }) {
                     when (uploadResultsStatus.status) {
                         ResultStatus.LOADING -> {
-                            AppLoginButtonContent(message = "Submitting...")
+                            AppLoadingButtonContent(message = "Submitting...")
                         }
 
                         ResultStatus.INITIAL,

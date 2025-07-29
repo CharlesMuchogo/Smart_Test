@@ -136,7 +136,6 @@ val genders = listOf(
     "Prefer not to say"
 )
 
-@RequiresApi(Build.VERSION_CODES.N)
 fun setAppLocale(context: Context, languageCode: String) {
     val locale = Locale(languageCode)
     Locale.setDefault(locale)

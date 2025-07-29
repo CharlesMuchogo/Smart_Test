@@ -45,6 +45,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.content.Intent
+import android.net.Uri
 
 @SuppressLint("StaticFieldLeak")
 lateinit var navController: NavHostController
@@ -63,15 +65,15 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge(
             statusBarStyle =
-            SystemBarStyle.light(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-            ),
+                SystemBarStyle.light(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
             navigationBarStyle =
-            SystemBarStyle.light(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-            ),
+                SystemBarStyle.light(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
         )
 
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
@@ -83,9 +85,7 @@ class MainActivity : ComponentActivity() {
             Log.e("PlayServices", "Google Play Services is not available!")
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setAppLocale(context = this, languageCode = "en")
-        }
+        setAppLocale(context = this, languageCode = "en")
 
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
@@ -107,6 +107,7 @@ class MainActivity : ComponentActivity() {
                 1 -> true
                 else -> isSystemInDarkTheme()
             }
+
             RequestPermissions()
             SmartTestTheme(
                 dynamicColor = false,
@@ -120,6 +121,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        // ATTENTION: This was auto-generated to handle app links.
+        val appLinkIntent: Intent = intent
+        val appLinkAction: String? = appLinkIntent.action
+        val appLinkData: Uri? = appLinkIntent.data
     }
 
     override fun onResume() {

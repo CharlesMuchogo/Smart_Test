@@ -1,6 +1,5 @@
 package com.charlesmuchogo.research.domain.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,26 +9,21 @@ import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.actions.LoginAction
-import com.charlesmuchogo.research.domain.dto.login.LoginRequestDTO
-import com.charlesmuchogo.research.domain.dto.login.LoginResponseDTO
-import com.charlesmuchogo.research.domain.dto.login.RegistrationRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
+import com.charlesmuchogo.research.domain.dto.authentication.LoginResponseDTO
+import com.charlesmuchogo.research.domain.dto.authentication.RegistrationRequestDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsDTO
 import com.charlesmuchogo.research.domain.dto.updateUser.UpdateUserDetailsResponseDTO
-import com.charlesmuchogo.research.domain.events.AuthenticationEvent
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.models.User
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.navController
-import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.Results
-import com.charlesmuchogo.research.presentation.utils.getFcmToken
 import com.charlesmuchogo.research.presentation.utils.isValidDate
 import com.charlesmuchogo.research.presentation.utils.isValidEmail
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
