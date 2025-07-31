@@ -15,6 +15,7 @@ data class LoginState(
     val isLoggingIn: Boolean = false,
     val hasLoggedIn: Boolean = false,
     val loggedInUser: User? = null,
+    val isLoadingGoogleUsers: Boolean = false,
     val message: String? = "",
 
     val age: String = "",

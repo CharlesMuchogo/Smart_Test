@@ -5,6 +5,7 @@ import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
 import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
+import com.charlesmuchogo.research.domain.dto.authentication.GoogleLoginRequest
 import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.authentication.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.authentication.RegistrationRequestDTO
@@ -23,6 +24,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface RemoteRepository {
     suspend fun login(loginRequestDTO: LoginRequestDTO): Results<LoginResponseDTO>
+
+    suspend fun googleLogin(request: GoogleLoginRequest): Results<LoginResponseDTO>
 
     suspend fun setPassword(request: SetPasswordRequest): Results<LoginResponseDTO>
 

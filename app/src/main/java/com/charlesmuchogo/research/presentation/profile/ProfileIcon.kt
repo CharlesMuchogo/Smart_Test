@@ -42,7 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.charlesmuchogo.research.data.network.Http.Companion.httpUrlBuilder
+import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.navigation.PhotoPage

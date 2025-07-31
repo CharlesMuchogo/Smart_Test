@@ -16,10 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
-import com.charlesmuchogo.research.data.network.Http.Companion.httpUrlBuilder
+import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.authentication.OnBoardingControllerScreen
-import com.charlesmuchogo.research.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
 import com.charlesmuchogo.research.presentation.authentication.forgotPassword.ForgotPasswordRoot

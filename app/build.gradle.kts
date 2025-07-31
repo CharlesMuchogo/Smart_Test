@@ -22,8 +22,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 20
-        versionName = "1.4.0"
+        versionCode = 21
+        versionName = "1.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -141,4 +141,9 @@ dependencies {
     implementation(libs.shimmer.compose)
 
     implementation(libs.play.services.ads)
+
+    // kmp Auth
+    implementation(libs.kmpauth.google)
+    implementation(libs.kmpauth.firebase)
+    implementation(libs.kmpauth.uihelper)
 }

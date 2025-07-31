@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
+import com.charlesmuchogo.research.domain.dto.authentication.GoogleLoginRequest
 import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.states.LoginState
@@ -57,6 +58,14 @@ constructor(
                     _state.update { it.copy(showPassword = action.showPassword) }
                 }
 
+                is LoginAction.OnGoogleErrorChange -> {
+                    snackBarViewModel.sendEvent(SnackBarItem(message = action.error, isError = true))
+                }
+
+                is LoginAction.OnGoogleLoadingChange -> {
+                    _state.update { it.copy(isLoadingGoogleUsers = action.loading) }
+                }
+
                 LoginAction.OnLogin -> {
 
                     val emailError = if (_state.value.email.isBlank()) "Email is required" else null
@@ -95,6 +104,31 @@ constructor(
                             _state.update { it.copy(isLoggingIn = false, hasLoggedIn = false) }
                         }
 
+                    }
+                }
+
+                is LoginAction.OnGoogleLogin -> {
+
+                    _state.update { it.copy(isLoggingIn = true) }
+                    val loginRequest = GoogleLoginRequest(
+                        token = action.token,
+                        device_id = getFcmToken(),
+                        country = state.value.country
+                    )
+
+                    val response = remoteRepository.googleLogin(loginRequest)
+
+                    response.data?.let { result ->
+                        database.userDao()
+                            .insertUser(user = result.user.copy(token = result.token))
+                        settingsRepository.saveAccessToken(result.token)
+                        _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true, loggedInUser = result.user) }
+                        navController.popBackStack(LoginPage, inclusive = true)
+                    }
+                    
+                    response.message?.let { msg ->
+                        snackBarViewModel.sendEvent(SnackBarItem(message = msg, isError = true))
+                        _state.update { it.copy(isLoggingIn = false, hasLoggedIn = false) }
                     }
                 }
             }

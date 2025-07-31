@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.datetime.Instant
@@ -210,6 +211,5 @@ fun Modifier.removeRipple(onClick: () -> Unit): Modifier {
 }
 
 const val ALMOST_BLUR_ALPHA = 0.95f
-
-const val PRIVACY_POLICY_URL = "https://smarttest.muchogoc.com/privacy_policy"
-const val TERMS_AND_CONDITIONS_URL = "https://smarttest.muchogoc.com/terms_and_conditions"
+val PRIVACY_POLICY_URL = httpUrlBuilder() + "/privacy_policy"
+val TERMS_AND_CONDITIONS_URL = httpUrlBuilder() + "/terms_and_conditions"

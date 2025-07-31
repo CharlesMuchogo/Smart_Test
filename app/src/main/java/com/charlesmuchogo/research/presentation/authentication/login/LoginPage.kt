@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,10 +26,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.text.input.ImeAction
@@ -40,19 +44,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.states.LoginState
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.ForgotPasswordPage
+import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
-import com.charlesmuchogo.research.navigation.ForgotPasswordPage
-import com.charlesmuchogo.research.navigation.RegistrationPage
 import com.charlesmuchogo.research.presentation.common.NavigationIcon
+import com.mmk.kmpauth.google.GoogleButtonUiContainer
+import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 
 @Composable
 fun LoginRoot() {
     val loginViewModel = hiltViewModel<LoginViewModel>()
-    val loginPageState = loginViewModel.state.collectAsStateWithLifecycle()
+    val loginPageState by loginViewModel.state.collectAsStateWithLifecycle()
     LoginScreen(
-        state = loginPageState.value,
+        state = loginPageState,
         onAction = loginViewModel::onAction
     )
 }
@@ -60,19 +66,6 @@ fun LoginRoot() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (LoginAction) -> Unit) {
-
-//    LaunchedEffect(state.hasLoggedIn) {
-//        if(state.hasLoggedIn){
-//            navController.navigate(
-//                route = if (state.loggedInUser?.educationLevel.isNullOrBlank()) MoreDetailsPage else HomePage
-//            ) {
-//                popUpTo(LoginPage) {
-//                    inclusive = true
-//                }
-//            }
-//        }
-//    }
-
 
 
     Scaffold(
@@ -93,7 +86,7 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ) {
+            ) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
@@ -105,9 +98,9 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
                         contentDescription = null,
                         contentScale = ContentScale.Fit,
                         modifier =
-                        Modifier
-                            .fillParentMaxHeight(0.23f)
-                            .padding(vertical = 24.dp),
+                            Modifier
+                                .fillParentMaxHeight(0.23f)
+                                .padding(vertical = 24.dp),
                     )
                 }
                 Text(
@@ -189,16 +182,16 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
                     Text(
                         "Forgot password?",
                         style =
-                        MaterialTheme.typography.labelLarge.copy(
-                            fontWeight = SemiBold,
-                            color = MaterialTheme.colorScheme.primary,
-                        ),
+                            MaterialTheme.typography.labelLarge.copy(
+                                fontWeight = SemiBold,
+                                color = MaterialTheme.colorScheme.primary,
+                            ),
                         modifier =
-                        Modifier
-                            .padding(top = 16.dp)
-                            .clickable {
-                                navController.navigate(ForgotPasswordPage)
-                            },
+                            Modifier
+                                .padding(top = 16.dp)
+                                .clickable {
+                                    navController.navigate(ForgotPasswordPage)
+                                },
                     )
                 }
             }
@@ -224,12 +217,53 @@ fun LoginScreen(modifier: Modifier = Modifier, state: LoginState, onAction: (Log
                             true -> {
                                 AppLoadingButtonContent(message = "Authenticating...")
                             }
+
                             false -> {
                                 Text("Log in")
                             }
                         }
                     },
                 )
+            }
+
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    HorizontalDivider(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "OR",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
+                        textAlign = TextAlign.Center,
+                    )
+                    HorizontalDivider(modifier = Modifier.weight(1f))
+                }
+            }
+
+            item {
+                GoogleButtonUiContainer(
+                     filterByAuthorizedAccounts = true,
+                    onGoogleSignInResult = { googleUser ->
+                        onAction(LoginAction.OnGoogleLoadingChange(false))
+
+                        if(googleUser == null){
+                            onAction(LoginAction.OnGoogleErrorChange("Something went wrong. Try again!"))
+                        }
+                        googleUser?.let {
+                            onAction(LoginAction.OnGoogleLogin(it.idToken))
+                        }
+                    }) {
+
+                    GoogleSignInButton(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        onClick = {
+                            onAction(LoginAction.OnGoogleLoadingChange(true))
+                            this.onClick()
+                        })
+                }
             }
 
             item {
