@@ -146,7 +146,9 @@ fun ProfileListView(
                     Modifier
                         .padding(bottom = 8.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.18f)
+                        .fillMaxHeight(0.18f).clickable {
+                            navController.navigate(EditProfilePage)
+                        }
             ) {
                 Row(
                     modifier =
@@ -232,7 +234,7 @@ fun ProfileListView(
 
                     ProfileCard(
                         modifier = Modifier,
-                        label = profile.phone,
+                        label = profile.phone.ifBlank { "N/A" },
                         prefixIcon = Icons.Default.Phone,
                         onClick = {},
                     )

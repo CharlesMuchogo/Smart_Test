@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="smarttest.muchogoc.com" />
+                <data android:host="smarttest.muchogoc.com"/>
                 <data android:pathPattern=".*" />
             </intent-filter>
 

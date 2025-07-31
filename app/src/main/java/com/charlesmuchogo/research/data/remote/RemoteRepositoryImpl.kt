@@ -9,6 +9,7 @@ import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
 import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
+import com.charlesmuchogo.research.domain.dto.authentication.GoogleLoginRequest
 import com.charlesmuchogo.research.domain.dto.authentication.LoginRequestDTO
 import com.charlesmuchogo.research.domain.dto.authentication.LoginResponseDTO
 import com.charlesmuchogo.research.domain.dto.authentication.RegistrationRequestDTO
@@ -62,6 +63,29 @@ class RemoteRepositoryImpl(
                 Results.error(apiResponse.data?.message ?: "Error logging in")
             } else {
                  apiHelper.safeApiCall(response.status) {
+                    response.body<LoginResponseDTO>()
+                }
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
+        }
+    }
+
+    override suspend fun googleLogin(request: GoogleLoginRequest): Results<LoginResponseDTO> {
+        return try {
+            val response =
+                Http(settingsRepository = settingsRepository).client.post("/api/google-login") {
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse = apiHelper.safeApiCall(response.status) {
+                    response.body<ErrorDTO>()
+                }
+                Results.error(apiResponse.data?.message ?: "Error logging in")
+            } else {
+                apiHelper.safeApiCall(response.status) {
                     response.body<LoginResponseDTO>()
                 }
             }

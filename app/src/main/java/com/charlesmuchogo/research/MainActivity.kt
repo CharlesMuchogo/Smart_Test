@@ -47,11 +47,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
+import com.mmk.kmpauth.google.GoogleAuthCredentials
+import com.mmk.kmpauth.google.GoogleAuthProvider
 
 @SuppressLint("StaticFieldLeak")
 lateinit var navController: NavHostController
 
- lateinit var analytics: FirebaseAnalytics
+lateinit var analytics: FirebaseAnalytics
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -61,7 +64,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analytics = Firebase.analytics
-
+        GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = PreferenceManager.SERVER_ID))
 
         enableEdgeToEdge(
             statusBarStyle =
@@ -133,7 +136,7 @@ class MainActivity : ComponentActivity() {
             if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateManager.startUpdateFlowForResult(
                     info,
-                    if (info.updatePriority() >= 4 ) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    if (info.updatePriority() >= 4) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
                     this,
                     123,
                 )
@@ -147,9 +150,9 @@ class MainActivity : ComponentActivity() {
             val isUpdateAllowed = info.isFlexibleUpdateAllowed
 
             if (isUpdateAllowed && isUpdateAvailable) {
-                appUpdateManager .startUpdateFlowForResult(
+                appUpdateManager.startUpdateFlowForResult(
                     info,
-                    if (info.updatePriority() >= 4 ) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    if (info.updatePriority() >= 4) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
                     this,
                     123,
                 )

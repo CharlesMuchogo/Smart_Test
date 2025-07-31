@@ -72,4 +72,5 @@
     <string name="welcome_to_smarttest">Welcome to Smarttest, we are glad to have you here! Login to proceed</string>
     <string name="appId" translatable="false">ca-app-pub-6323830758154106~7836828619</string>
     <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
+    <string name="somethingWentWrong">Something went wrong</string>
 </resources>
