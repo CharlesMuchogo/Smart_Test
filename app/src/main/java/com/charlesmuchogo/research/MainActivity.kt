@@ -39,8 +39,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +46,8 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
 import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 
