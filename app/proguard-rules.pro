@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.charlesmuchogo.research.domain.** { *; }
+
 -keep @kotlinx.serialization.Serializable class * {*;}
 # Keep all built-in serializers and related top-level functions in the kotlinx.serialization.builtins package
 -keep class kotlinx.serialization.builtins.** { *; }
@@ -36,3 +36,5 @@
 
 # Keep generated serializer classes (they usually have a $$serializer suffix)
 -keepclassmembers class **$$serializer { *; }
+
+-keepclassmembers class io.ktor.** { volatile <fields>; }
