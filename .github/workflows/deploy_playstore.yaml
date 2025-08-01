@@ -27,6 +27,18 @@ jobs:
       # Set Up Android SDK (Optional)
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
+        
+      # Decode and Save Keystore
+      - name: Decode Keystore
+        run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./gigzconnect.jks
+
+           # Create local.properties file
+      - name: Set up local.properties
+        run: |
+          echo "storeFile=./gigzconnect.jks" >> local.properties
+          echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" >> local.properties
+          echo "keyAlias=${{ secrets.ALIAS }}" >> local.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> local.properties
 
       # Grants execute permission
       - name: Grant rights to gradlew
