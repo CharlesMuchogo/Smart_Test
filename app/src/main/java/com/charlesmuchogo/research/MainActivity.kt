@@ -1,8 +1,9 @@
 package com.charlesmuchogo.research
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,13 +18,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.charlesmuchogo.research.ads.loadInterstitialAd
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.navigation.Navigation
 import com.charlesmuchogo.research.presentation.utils.RequestPermissions
@@ -38,18 +36,15 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.mmk.kmpauth.google.GoogleAuthCredentials
+import com.mmk.kmpauth.google.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.content.Intent
-import android.net.Uri
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.analytics
-import com.mmk.kmpauth.google.GoogleAuthCredentials
-import com.mmk.kmpauth.google.GoogleAuthProvider
 
 @SuppressLint("StaticFieldLeak")
 lateinit var navController: NavHostController
@@ -93,7 +88,6 @@ class MainActivity : ComponentActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
         }
-        loadInterstitialAd(this@MainActivity)
 
         setContent {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -136,7 +130,7 @@ class MainActivity : ComponentActivity() {
             if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 appUpdateManager.startUpdateFlowForResult(
                     info,
-                    if (info.updatePriority() >= 4) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    AppUpdateType.IMMEDIATE ,
                     this,
                     123,
                 )
@@ -152,7 +146,7 @@ class MainActivity : ComponentActivity() {
             if (isUpdateAllowed && isUpdateAvailable) {
                 appUpdateManager.startUpdateFlowForResult(
                     info,
-                    if (info.updatePriority() >= 4) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    AppUpdateType.IMMEDIATE ,
                     this,
                     123,
                 )

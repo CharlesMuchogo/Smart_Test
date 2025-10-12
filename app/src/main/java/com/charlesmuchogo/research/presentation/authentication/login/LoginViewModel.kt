@@ -131,6 +131,10 @@ constructor(
                         _state.update { it.copy(isLoggingIn = false, hasLoggedIn = false) }
                     }
                 }
+
+                is LoginAction.OnCountryChange -> {
+                    _state.update { it.copy(country = action.country) }
+                }
             }
         }
     }
