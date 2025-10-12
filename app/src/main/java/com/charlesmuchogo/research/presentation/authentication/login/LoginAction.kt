@@ -16,4 +16,7 @@ sealed interface LoginAction {
     data class OnGoogleLogin(val token: String) : LoginAction
 
     data class OnPasswordChange(val password: String) : LoginAction
+
+    data class OnCountryChange(val country: String) : LoginAction
+
 }

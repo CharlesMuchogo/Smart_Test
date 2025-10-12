@@ -26,10 +26,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +52,7 @@ import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.AppLoadingButtonContent
 import com.charlesmuchogo.research.presentation.common.AppTextField
 import com.charlesmuchogo.research.presentation.common.NavigationIcon
+import com.charlesmuchogo.research.presentation.utils.getDeviceCountry
 import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 
@@ -57,6 +60,13 @@ import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 fun LoginRoot() {
     val loginViewModel = hiltViewModel<LoginViewModel>()
     val loginPageState by loginViewModel.state.collectAsStateWithLifecycle()
+    val  context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val country = getDeviceCountry(context)
+        loginViewModel.onAction(LoginAction.OnCountryChange(country))
+    }
+
     LoginScreen(
         state = loginPageState,
         onAction = loginViewModel::onAction
