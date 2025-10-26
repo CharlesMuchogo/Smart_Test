@@ -470,7 +470,7 @@ class RemoteRepositoryImpl(
 
 
             val response =
-                Http(settingsRepository = settingsRepository).client.get("/api/post/getposts") {
+                Http(settingsRepository = settingsRepository).client.get("/api/blogs/getposts") {
                     contentType(ContentType.Application.Json)
                     parameter("page", page)
                     parameter("order", "desc")
@@ -504,7 +504,7 @@ class RemoteRepositoryImpl(
         return flow {
             try {
                 val response =
-                    Http(settingsRepository = settingsRepository).client.get(" /api/post/getposts") {
+                    Http(settingsRepository = settingsRepository).client.get("/api/blogs/getposts") {
                         contentType(ContentType.Application.Json)
                         parameter("searchTerm", searchTerm)
                     }

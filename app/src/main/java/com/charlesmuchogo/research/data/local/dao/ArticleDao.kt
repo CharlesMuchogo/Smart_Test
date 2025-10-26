@@ -22,6 +22,9 @@ interface ArticleDao {
     @Query("SELECT * FROM Article ORDER BY createdAt DESC")
     fun pagingSource(): PagingSource<Int, Article>
 
+    @Query("SELECT COUNT(*) FROM Article")
+    suspend fun count(): Int
+
     @Query("SELECT * FROM Article WHERE id = :id ORDER BY id ASC LIMIT 1")
     fun getArticle(id: String): Flow<Article?>
 

@@ -64,5 +64,7 @@ object ChatPage
 @Serializable
 data class PhotoPage(val image: String, val title: String = "Image")
 
+@Serializable
+data class ArticleDetailsPage(val id: String)
 
 

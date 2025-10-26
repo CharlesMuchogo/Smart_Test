@@ -1,15 +1,21 @@
 package com.charlesmuchogo.research.di
 
 import android.content.Context
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.RemoteMediator
 import androidx.room.Room
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepositoryImpl
 import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
+import com.charlesmuchogo.research.data.mediators.ArticleMediator
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
+import com.charlesmuchogo.research.domain.models.Article
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
@@ -29,18 +35,18 @@ object AppModule {
         @ApplicationContext context: Context,
     ): AppDatabase =
         Room
-            .databaseBuilder(
-                context,
-                AppDatabase::class.java,
-                "SmartApp_db",
-            ).fallbackToDestructiveMigration()
+                .databaseBuilder(
+                    context,
+                    AppDatabase::class.java,
+                    "SmartApp_db",
+                ).fallbackToDestructiveMigration(true)
             .build()
 
     @Provides
     @Singleton
     fun provideSharedPreferences(
         @ApplicationContext context: Context,
-    ): Settings =
+    ): Settings = 
         SharedPreferencesSettings( context.getSharedPreferences(
             PreferenceManager.DATASTORE_FILE_NAME,
             Context.MODE_PRIVATE,
@@ -76,4 +82,24 @@ object AppModule {
         apiHelper: ApiHelper,
         settingsRepository: MultiplatformSettingsRepository
     ): RemoteRepository = RemoteRepositoryImpl(apiHelper, settingsRepository)
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    fun provideArticlesPagingSourceFactory(remoteRepository: RemoteRepository, appDatabase: AppDatabase): RemoteMediator<Int, Article> {
+        return ArticleMediator(remoteRepository = remoteRepository, appDatabase = appDatabase)
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    fun provideArticlePager(appDatabase: AppDatabase, articleMediator: RemoteMediator<Int, Article>): Pager<Int, Article> {
+        return Pager(
+            config = PagingConfig(pageSize =50),
+            remoteMediator = articleMediator,
+            pagingSourceFactory = {
+                appDatabase.articleDao().pagingSource()
+            }
+        )
+    }
 }
