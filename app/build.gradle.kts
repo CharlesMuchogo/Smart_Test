@@ -159,4 +159,8 @@ dependencies {
     implementation(libs.kmpauth.google)
     implementation(libs.kmpauth.firebase)
     implementation(libs.kmpauth.uihelper)
+
+    // Paging
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation( libs.androidx.paging.compose)
 }
