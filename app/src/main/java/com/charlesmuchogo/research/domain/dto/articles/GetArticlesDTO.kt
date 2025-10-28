@@ -8,5 +8,5 @@ data class GetArticlesDTO(
     val lastMonthPosts: Long,
     val posts: List<Article>,
     val totalPosts: Long,
-    val lastPage: Long
+    val lastPage: Int
 )

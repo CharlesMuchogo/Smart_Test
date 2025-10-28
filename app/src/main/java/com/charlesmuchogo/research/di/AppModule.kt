@@ -95,7 +95,7 @@ object AppModule {
     @Singleton
     fun provideArticlePager(appDatabase: AppDatabase, articleMediator: RemoteMediator<Int, Article>): Pager<Int, Article> {
         return Pager(
-            config = PagingConfig(pageSize =50),
+            config = PagingConfig(pageSize = 25),
             remoteMediator = articleMediator,
             pagingSourceFactory = {
                 appDatabase.articleDao().pagingSource()

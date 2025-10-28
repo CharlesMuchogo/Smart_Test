@@ -8,7 +8,9 @@ import androidx.paging.RemoteMediator
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.domain.models.Article
+import kotlinx.coroutines.flow.first
 import java.io.IOException
+import kotlin.math.ceil
 
 @OptIn(ExperimentalPagingApi::class)
 class ArticleMediator(
@@ -27,8 +29,15 @@ class ArticleMediator(
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val page = (articleDao.count() / state.config.pageSize) + 1
-                    page
+
+                    val records = articleDao.getArticles().first()
+                    val lastItem = state.lastItemOrNull()
+                    if (lastItem == null) {
+                        1
+                    } else {
+                        val index = records.indexOfFirst { it.id == lastItem.id }
+                        (ceil(index.toDouble() / state.config.pageSize) + 1).toInt()
+                    }
                 }
             }
 
@@ -46,7 +55,7 @@ class ArticleMediator(
             articleDao.insertArticles(articles)
 
             MediatorResult.Success(
-                endOfPaginationReached = articles.isEmpty()
+                endOfPaginationReached = loadKey == (response.data?.lastPage ?: 1)
             )
         } catch (e: IOException) {
             MediatorResult.Error(e)
