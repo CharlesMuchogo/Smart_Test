@@ -32,9 +32,5 @@
 # Keep all classes in the kotlinx.serialization package
 -keep class kotlinx.serialization.** { *; }
 
--keep class io.ktor.** { *; }
-
 # Keep generated serializer classes (they usually have a $$serializer suffix)
 -keepclassmembers class **$$serializer { *; }
-
--keepclassmembers class io.ktor.** { volatile <fields>; }
