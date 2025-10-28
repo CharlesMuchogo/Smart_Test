@@ -2,6 +2,8 @@ package com.charlesmuchogo.research.navigation
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
@@ -18,6 +20,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
+import com.charlesmuchogo.research.presentation.articles.ArticleDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.OnBoardingControllerScreen
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
@@ -40,6 +43,7 @@ import com.charlesmuchogo.research.presentation.testpage.TestAuthBlocker
 import com.charlesmuchogo.research.presentation.testpage.TestInfoScreen
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -64,242 +68,253 @@ fun Navigation(navController: NavHostController) {
             )
         }
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = AuthController,
-        ) {
-
-            composable<AuthController> {
-                OnBoardingControllerScreen(navController = navController)
-            }
-
-            composable<OnBoardingScreen> {
-                OnboardingRoot()
-            }
-            composable<LoginPage> {
-                LoginRoot()
-            }
-
-            composable<ChatPage> {
-                ChatRoot()
-            }
-
-            composable<ForgotPasswordPage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
+        SharedTransitionLayout {
+            NavHost(
+                navController = navController,
+                startDestination = AuthController,
             ) {
-                ForgotPasswordRoot()
-            }
 
-            composable<RegistrationPage> {
-                RegistrationScreen(navController = navController)
-            }
-            composable<MoreDetailsPage> {
-                MoreDetailsScreen()
-            }
+                composable<AuthController> {
+                    OnBoardingControllerScreen(
+                        navController = navController,
+                        animatedVisibilityScope = this
+                    )
+                }
 
-            composable<SetPasswordPage>(
-                deepLinks = listOf(
-                    navDeepLink {
-                        uriPattern = "${httpUrlBuilder()}/api/reset_password?id={token}"
+                composable<OnBoardingScreen> {
+                    OnboardingRoot()
+                }
+                composable<LoginPage> {
+                    LoginRoot()
+                }
+
+                composable<ChatPage> {
+                    ChatRoot()
+                }
+
+                composable<ForgotPasswordPage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
                     },
-                ),
-            ) { backStackEntry ->
-                val args = backStackEntry.toRoute<SetPasswordPage>()
-                SetPasswordRoot(token = args.token)
-            }
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) {
+                    ForgotPasswordRoot()
+                }
 
-            composable<HomePage> {
-                BottomBarRoot()
-            }
+                composable<RegistrationPage> {
+                    RegistrationScreen(navController = navController)
+                }
+                composable<MoreDetailsPage> {
+                    MoreDetailsScreen()
+                }
 
-            composable<HistoryPage> {
-                HistoryScreen()
-            }
+                composable<SetPasswordPage>(
+                    deepLinks = listOf(
+                        navDeepLink {
+                            uriPattern = "${httpUrlBuilder()}/api/reset_password?id={token}"
+                        },
+                    ),
+                ) { backStackEntry ->
+                    val args = backStackEntry.toRoute<SetPasswordPage>()
+                    SetPasswordRoot(token = args.token)
+                }
 
-            composable<ProfilePage> {
-                ProfileScreen()
-            }
-            composable<PhotoPage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-            ) { backStackEntry ->
-                val args = backStackEntry.toRoute<PhotoPage>()
-                PictureScreen(
-                    url = args.image,
-                    title = args.title
-                )
-            }
+                composable<HomePage> {
+                    BottomBarRoot(animatedVisibilityScope = this)
+                }
 
-            composable<EditProfilePage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-            ) {
-                EditProfileScreen()
-            }
-            composable<ClinicsPage> {
-                ClinicsScreen()
-            }
-            composable<SearchClinicsPage> {
-                SearchClinicsScreen(navController = navController)
-            }
+                composable<HistoryPage> {
+                    HistoryScreen()
+                }
 
-            composable<TestPage> {
-                TestAuthBlocker()
-            }
+                composable<ProfilePage> {
+                    ProfileScreen()
+                }
 
-            composable<PendingTestPage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
+                composable<ArticleDetailsPage> { backStackEntry ->
+                    val args = backStackEntry.toRoute<ArticleDetailsPage>()
+                    ArticleDetailsScreen(id = args.id, animatedVisibilityScope = this)
+                }
+
+                composable<PhotoPage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) { backStackEntry ->
+                    val args = backStackEntry.toRoute<PhotoPage>()
+                    PictureScreen(
+                        url = args.image,
+                        title = args.title
                     )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-            ) {
-                PendingTestScreen(navController = navController)
-            }
-            composable<TestInfoPage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-            ) {
-                TestInfoScreen(navController = navController)
-            }
+                }
+
+                composable<EditProfilePage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) {
+                    EditProfileScreen()
+                }
+                composable<ClinicsPage> {
+                    ClinicsScreen()
+                }
+                composable<SearchClinicsPage> {
+                    SearchClinicsScreen(navController = navController)
+                }
+
+                composable<TestPage> {
+                    TestAuthBlocker()
+                }
+
+                composable<PendingTestPage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) {
+                    PendingTestScreen(navController = navController)
+                }
+                composable<TestInfoPage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) {
+                    TestInfoScreen(navController = navController)
+                }
 
 
-            composable<TestResultsPage>(
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popEnterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Down,
-                        animationSpec = tween(ANIMATION_DURATION),
-                    )
-                },
-            ) { backStackEntry ->
-                val args = backStackEntry.toRoute<TestResultsPage>()
-                ResultsRoot(id = args.id)
+                composable<TestResultsPage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) { backStackEntry ->
+                    val args = backStackEntry.toRoute<TestResultsPage>()
+                    ResultsRoot(id = args.id)
+                }
             }
         }
     }

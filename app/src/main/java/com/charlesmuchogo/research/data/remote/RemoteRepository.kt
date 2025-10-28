@@ -2,6 +2,7 @@ package com.charlesmuchogo.research.data.remote
 
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
+import com.charlesmuchogo.research.domain.dto.articles.GetArticlesDTO
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
 import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
@@ -48,4 +49,8 @@ interface RemoteRepository {
     suspend fun sendMessage(message: Message): Results<SendMessageResponse>
 
     suspend fun getMessages(): Results<GetMessagesDTO>
+
+    suspend fun fetchArticles(page: Int, pageCount: Int, category: String? = null): Results<GetArticlesDTO>
+
+    suspend fun searchArticles( searchTerm: String): Flow<Results<GetArticlesDTO>>
 }

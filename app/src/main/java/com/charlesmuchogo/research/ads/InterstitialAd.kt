@@ -49,11 +49,6 @@ suspend fun showInterstitialAd(context: Context, onShowAd: () -> Unit = {}) {
         override fun onAdDismissedFullScreenContent() {
             Log.d("Ad", "Interstitial ad dismissed.")
             mInterstitialAd = null
-
-            // Preload next ad in background
-            CoroutineScope(Dispatchers.Main).launch {
-                loadInterstitialAd(context)
-            }
         }
 
         override fun onAdFailedToShowFullScreenContent(p0: AdError) {

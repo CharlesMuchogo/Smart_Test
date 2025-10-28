@@ -6,6 +6,7 @@ import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.domain.dto.DeleteTestResultsDTO
 import com.charlesmuchogo.research.domain.dto.ErrorDTO
 import com.charlesmuchogo.research.domain.dto.GetTestResultsDTO
+import com.charlesmuchogo.research.domain.dto.articles.GetArticlesDTO
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordRequest
 import com.charlesmuchogo.research.domain.dto.authentication.ForgotPasswordResponse
 import com.charlesmuchogo.research.domain.dto.authentication.GetClinicsDTO
@@ -39,8 +40,10 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -455,5 +458,78 @@ class RemoteRepositoryImpl(
         } catch (e: Exception) {
             Results.error(decodeExceptionMessage(e))
         }
+    }
+
+
+    override suspend fun fetchArticles(
+        page: Int,
+        pageCount: Int,
+        category: String?
+    ): Results<GetArticlesDTO> {
+        return try {
+
+
+            val response =
+                Http(settingsRepository = settingsRepository).client.get("/api/blogs/getposts") {
+                    contentType(ContentType.Application.Json)
+                    parameter("page", page)
+                    parameter("order", "desc")
+                    parameter("limit", pageCount)
+                }
+
+            if (response.status != HttpStatusCode.OK) {
+                val apiResponse =
+                    apiHelper.safeApiCall(response.status) {
+                        response.body<ErrorDTO>()
+                    }
+
+
+                Results.error(
+                    apiResponse.data?.message ?: "Error getting articles. Try again"
+
+                )
+            } else {
+                val apiResponse =
+                    apiHelper.safeApiCall(response.status) {
+                        response.body<GetArticlesDTO>()
+                    }
+                apiResponse
+            }
+        } catch (e: Exception) {
+            Results.error(decodeExceptionMessage(e))
+        }
+    }
+
+    override suspend fun searchArticles(searchTerm: String): Flow<Results<GetArticlesDTO>> {
+        return flow {
+            try {
+                val response =
+                    Http(settingsRepository = settingsRepository).client.get("/api/blogs/getposts") {
+                        contentType(ContentType.Application.Json)
+                        parameter("searchTerm", searchTerm)
+                    }
+
+                if (response.status != HttpStatusCode.OK) {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<ErrorDTO>()
+                        }
+
+                    emit(
+                        Results.error(
+                            apiResponse.data?.message ?: "Error searching articles. Try again"
+                        )
+                    )
+                } else {
+                    val apiResponse =
+                        apiHelper.safeApiCall(response.status) {
+                            response.body<GetArticlesDTO>()
+                        }
+                    emit(apiResponse)
+                }
+            } catch (e: Exception) {
+                emit(Results.error(decodeExceptionMessage(e)))
+            }
+        }.flowOn(Dispatchers.Main)
     }
 }

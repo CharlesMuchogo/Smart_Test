@@ -25,8 +25,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 24
-        versionName = "1.5.1"
+        versionCode = 27
+        versionName = "1.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -121,6 +121,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 
     // coil
     implementation(libs.coil.core)
@@ -159,4 +160,12 @@ dependencies {
     implementation(libs.kmpauth.google)
     implementation(libs.kmpauth.firebase)
     implementation(libs.kmpauth.uihelper)
+
+    // Paging
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation( libs.androidx.paging.compose)
+
+    // Testing
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

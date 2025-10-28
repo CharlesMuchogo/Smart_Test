@@ -25,39 +25,4 @@ data class BottomNavigationItem(
     val screen: @Composable() () -> Unit,
     val authRequired: Boolean = false,
     val unselectedIcon: ImageVector,
-){
-    companion object{
-        val bottomNavigationItems = listOf(
-            BottomNavigationItem(
-                title = R.string.Instructions,
-                selectedIcon = Icons.Default.Info,
-                unselectedIcon = Icons.Outlined.Info,
-                screen = { InstructionsRoot() }
-            ),
-
-            BottomNavigationItem(
-                title = R.string.Clinics,
-                selectedIcon = Icons.Filled.MedicalServices,
-                unselectedIcon = Icons.Outlined.MedicalServices,
-                authRequired = true,
-                screen = { ClinicsScreen() }
-            ),
-
-            BottomNavigationItem(
-                title = R.string.History,
-                selectedIcon = Icons.Filled.Schedule,
-                authRequired = true,
-                unselectedIcon = Icons.Outlined.Schedule,
-                screen = { HistoryScreen() }
-            ),
-
-            BottomNavigationItem(
-                title = R.string.Profile,
-                selectedIcon = Icons.Filled.Person,
-                authRequired = true,
-                unselectedIcon = Icons.Outlined.Person,
-                screen = { ProfileScreen() }
-            ),
-        )
-    }
-}
+)

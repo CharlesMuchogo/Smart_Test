@@ -4,7 +4,7 @@ import com.charlesmuchogo.research.presentation.instructions.InstructionsAction
 
 sealed interface BottomBarAction {
 
-    data class OnUpdateSelectedItem(val item: BottomNavigationItem): BottomBarAction
+    data class OnUpdateSelectedItem(val item: Int): BottomBarAction
 
     data class OnUpdateSelectedLanguage(val isKiswahili: Boolean): BottomBarAction
 
