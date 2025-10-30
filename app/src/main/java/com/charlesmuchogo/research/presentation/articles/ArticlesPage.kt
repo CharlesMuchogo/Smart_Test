@@ -7,18 +7,27 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +48,7 @@ import com.charlesmuchogo.research.presentation.common.AppErrorScreen
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.HtmlText
 import com.charlesmuchogo.research.presentation.profile.ProfileIcon
+import com.charlesmuchogo.research.presentation.utils.timeAgo
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -168,10 +178,22 @@ fun SharedTransitionScope.ArticleCard(
             )
         },
         supportingContent = {
-            HtmlText(
-                htmlContent = article.content,
-                maxLines = 2,
-            )
+            Column(modifier = Modifier.fillMaxWidth()){
+                HtmlText(
+                    htmlContent = article.content,
+                    maxLines = 2,
+                )
+
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically){
+                    Text(timeAgo(article.createdAt), modifier = Modifier.weight(1f))
+
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "Back",
+                        modifier = Modifier.padding(horizontal = 8.dp).size(20.dp)
+                    )
+                }
+            }
         }
     )
 }

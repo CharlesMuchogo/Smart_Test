@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -208,6 +209,32 @@ fun Modifier.removeRipple(onClick: () -> Unit): Modifier {
         indication = null,
         onClick = onClick,
     )
+}
+
+fun timeAgo(timestamp: String): String {
+    val parsedTime = Instant.parse(timestamp)
+    val currentTime = Clock.System.now()
+
+    // Calculate the duration difference
+    val duration = currentTime - parsedTime
+    val totalSeconds = duration.inWholeSeconds
+
+    return when {
+        totalSeconds < 60 -> "just now"
+        totalSeconds < 3600 -> formatTime(totalSeconds / 60, "minute")
+        totalSeconds < 86400 -> formatTime(totalSeconds / 3_600L, "hour")
+        totalSeconds < 2592000 -> formatTime(totalSeconds / 86_400L, "day")
+        totalSeconds < 31536000 -> formatTime(totalSeconds / 2_592_000L, "month")
+        else -> formatTime(totalSeconds / 31_536_000L, "year")
+    }
+}
+
+private fun formatTime(
+    value: Long,
+    unit: String,
+): String {
+    val plural = if (value == 1L) unit else "${unit}s"
+    return "$value $plural ago"
 }
 
 const val ALMOST_BLUR_ALPHA = 0.95f
