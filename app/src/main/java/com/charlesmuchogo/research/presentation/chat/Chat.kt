@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.ads.showInterstitialAd
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.CHAT_AD_UNIT_ID
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
@@ -88,7 +89,7 @@ fun ChatScreen(
             delay(3_000L)
             showInterstitialAd(context, onShowAd = {
                 onAction(ChatAction.OnUpdateShowAd(false))
-            })
+            }, CHAT_AD_UNIT_ID)
         }
         onAction(ChatAction.FetchMessages)
     }

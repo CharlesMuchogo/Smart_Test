@@ -32,7 +32,11 @@ class PreferenceManager(private val settings: Settings) {
         const val USER_ID = "user_id_key"
         const val USER_PHONE_NUMBER = "user_phone_number_key"
         const val BANNER_AD_UNIT_ID = "ca-app-pub-6323830758154106/9756149016"
-        const val INTERESTIAL_AD_UNIT_ID = "ca-app-pub-6323830758154106/6808883055"
+        const val HOMEPAGE_AD_UNIT_ID = "ca-app-pub-6323830758154106/6808883055"
+        const val ARTICLES_AD_UNIT_ID = "ca-app-pub-6323830758154106/6100639990"
+        const val CHAT_AD_UNIT_ID = "ca-app-pub-6323830758154106/8535231644"
+        const val INSTRUCTIONS_AD_UNIT_ID = "ca-app-pub-6323830758154106/2349097247"
+
         const val CLIENT_ID = "463524975976-l5oluc7acvc99lh19cet6glfceuobiku.apps.googleusercontent.com"
         const val SERVER_ID = "463524975976-fpltqf6dqbfpjopie1tdpfv5a5a867dg.apps.googleusercontent.com"
     }

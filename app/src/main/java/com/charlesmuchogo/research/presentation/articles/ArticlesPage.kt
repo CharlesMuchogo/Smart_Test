@@ -32,14 +32,21 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.charlesmuchogo.research.ads.showInterstitialAd
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.ARTICLES_AD_UNIT_ID
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.INSTRUCTIONS_AD_UNIT_ID
 import com.charlesmuchogo.research.domain.models.Article
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.ArticleDetailsPage
@@ -47,8 +54,10 @@ import com.charlesmuchogo.research.presentation.common.AppEmptyScreen
 import com.charlesmuchogo.research.presentation.common.AppErrorScreen
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.HtmlText
+import com.charlesmuchogo.research.presentation.instructions.InstructionsAction
 import com.charlesmuchogo.research.presentation.profile.ProfileIcon
 import com.charlesmuchogo.research.presentation.utils.timeAgo
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -57,6 +66,17 @@ fun SharedTransitionScope.ArticlesScreen(animatedVisibilityScope: AnimatedVisibi
 
     val articlesViewModel = hiltViewModel<ArticlesViewModel>()
     val articlesFlow = articlesViewModel.articlesFlow.collectAsLazyPagingItems()
+    val state by articlesViewModel.state.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        if (state.showAd) {
+            delay(3_000L)
+            showInterstitialAd(context, onShowAd = {
+                articlesViewModel.onAction(ArticlesAction.OnHasShownAd)
+            }, ARTICLES_AD_UNIT_ID)
+        }
+    }
 
     Box(
         modifier = Modifier

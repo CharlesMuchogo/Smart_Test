@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.ads.showInterstitialAd
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.INSTRUCTIONS_AD_UNIT_ID
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.PendingTestPage
 import com.charlesmuchogo.research.navigation.TestPage
@@ -57,7 +58,7 @@ fun InstructionsScreen(
             delay(3_000L)
             showInterstitialAd(context, onShowAd = {
                 onAction(InstructionsAction.OnHasShownAd)
-            })
+            }, INSTRUCTIONS_AD_UNIT_ID)
         }
     }
 
