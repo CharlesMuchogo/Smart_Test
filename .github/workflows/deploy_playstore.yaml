@@ -27,7 +27,7 @@ jobs:
       # Set Up Android SDK (Optional)
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
-
+        
       # Decode and Save Keystore
       - name: Decode Keystore
         run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./gigzconnect.jks
