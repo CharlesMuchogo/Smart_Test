@@ -1,4 +1,4 @@
-package com.charlesmuchogo.research.presentation.articles
+package com.charlesmuchogo.research.presentation.articles.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

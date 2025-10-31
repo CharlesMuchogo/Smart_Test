@@ -229,6 +229,24 @@ fun timeAgo(timestamp: String): String {
     }
 }
 
+fun shareText(text: String, title:String, context: Context) {
+    try {
+
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, "Share $title")
+        context.startActivity(shareIntent)
+    } catch (e: Exception){
+        e.printStackTrace()
+        Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
+    }
+}
+
+
 private fun formatTime(
     value: Long,
     unit: String,

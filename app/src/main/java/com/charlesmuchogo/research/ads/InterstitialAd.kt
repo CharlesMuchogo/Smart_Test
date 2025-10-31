@@ -3,26 +3,23 @@ package com.charlesmuchogo.research.ads
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.INTERESTIAL_AD_UNIT_ID
+import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.HOMEPAGE_AD_UNIT_ID
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 private var mInterstitialAd: InterstitialAd? = null
 
 // Suspend until ad is loaded or fails
-private suspend fun loadInterstitialAd(context: Context): InterstitialAd? =
+private suspend fun loadInterstitialAd(context: Context, addUnit: String): InterstitialAd? =
     suspendCancellableCoroutine { continuation ->
         val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(context, INTERESTIAL_AD_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(context, addUnit, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
                 Log.d("Ad", "✅ Interstitial ad loaded successfully.")
                 mInterstitialAd = interstitialAd
@@ -37,8 +34,8 @@ private suspend fun loadInterstitialAd(context: Context): InterstitialAd? =
         })
     }
 
-suspend fun showInterstitialAd(context: Context, onShowAd: () -> Unit = {}) {
-    val interstitialAd = mInterstitialAd ?: loadInterstitialAd(context)
+suspend fun showInterstitialAd(context: Context, onShowAd: () -> Unit = {}, addUnit: String = HOMEPAGE_AD_UNIT_ID ) {
+    val interstitialAd = mInterstitialAd ?: loadInterstitialAd(context, addUnit)
 
     if (interstitialAd == null) {
         Log.d("Ad", "⚠️ Interstitial ad not ready to show.")

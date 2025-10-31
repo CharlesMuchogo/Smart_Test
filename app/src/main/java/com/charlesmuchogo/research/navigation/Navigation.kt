@@ -20,7 +20,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.charlesmuchogo.research.data.network.httpUrlBuilder
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
-import com.charlesmuchogo.research.presentation.articles.ArticleDetailsScreen
+import com.charlesmuchogo.research.presentation.articles.details.ArticleDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.OnBoardingControllerScreen
 import com.charlesmuchogo.research.presentation.authentication.MoreDetailsScreen
 import com.charlesmuchogo.research.presentation.authentication.RegistrationScreen
