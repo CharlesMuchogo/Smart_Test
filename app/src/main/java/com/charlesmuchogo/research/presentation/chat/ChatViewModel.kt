@@ -48,7 +48,7 @@ class ChatViewModel @Inject constructor(
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
     }
 
-    private val model = Firebase.ai(backend = GenerativeBackend.googleAI())
+    private val model = Firebase.ai(backend = GenerativeBackend.vertexAI())
         .generativeModel("gemini-2.0-flash")
 
     private val _state = MutableStateFlow(ChatState())
