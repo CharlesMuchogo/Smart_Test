@@ -1,6 +1,7 @@
 package com.charlesmuchogo.research.presentation.common
 
 import android.net.Uri
+import android.view.View
 import androidx.annotation.OptIn
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -55,6 +57,7 @@ fun ExoPlayerView() {
         MediaItem.fromUri(videoUri)
     }
 
+
     LaunchedEffect(mediaSource) {
         exoPlayer.setMediaItem(mediaSource)
         exoPlayer.setAudioAttributes(
@@ -68,26 +71,17 @@ fun ExoPlayerView() {
         exoPlayer.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(playing: Boolean) {
                 isPlaying = playing
-                if (playing) {
-                    showControls = false
-                }
             }
         })
     }
 
+
     LaunchedEffect(showControls, isPlaying) {
         if (showControls && isPlaying) {
-            delay(3000)
-            showControls = false
-        }
-    }
-
-    val playerView = remember {
-        PlayerView(context).apply {
-            useController = true
-            controllerHideOnTouch = true
-            controllerShowTimeoutMs = 2000
-            controllerAutoShow = false
+            delay(5000)
+            if (showControls) {
+                showControls = false
+            }
         }
     }
 
@@ -101,17 +95,25 @@ fun ExoPlayerView() {
         modifier = Modifier
             .fillMaxWidth()
             .height(240.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                showControls = !showControls
-            }
     ) {
-        AndroidView(
+    AndroidView(
             factory = { ctx ->
-                playerView.apply {
+                PlayerView(ctx).apply {
                     player = exoPlayer
+                    useController = true
+                    controllerHideOnTouch = true
+                    controllerShowTimeoutMs = 5000
+                    controllerAutoShow = false
+                    setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
+                        showControls = visibility == View.VISIBLE
+                    })
+                }
+            },
+            update = { view ->
+                if (showControls) {
+                    view.showController()
+                } else {
+                    view.hideController()
                 }
             },
             modifier = Modifier.fillMaxSize()
@@ -129,23 +131,25 @@ fun ExoPlayerView() {
                     .background(Color.Black.copy(alpha = 0.3f)),
                 contentAlignment = Alignment.Center
             ) {
-                if (!isPlaying) {
-                    Box(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                            .clickable {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                        .clickable {
+                            if (isPlaying) {
+                                exoPlayer.pause()
+                            } else {
                                 exoPlayer.play()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Play",
-                            tint = Color.White,
-                            modifier = Modifier.size(40.dp)
-                        )
-                    }
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        tint = Color.White,
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
             }
         }

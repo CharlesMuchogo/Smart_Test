@@ -25,7 +25,7 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 31
+        versionCode = 32
         versionName = "1.6.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
