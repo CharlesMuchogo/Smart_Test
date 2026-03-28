@@ -1,0 +1,11 @@
+<resources>
+    <string name="select_language">Seleccionar idioma</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
+    <string name="swahili">Suajili</string>
+    <string name="french">Francés</string>
+    <string name="united_states">Estados Unidos</string>
+    <string name="mexico">México</string>
+    <string name="kenya">Kenia</string>
+    <string name="france">Francia</string>
+</resources>

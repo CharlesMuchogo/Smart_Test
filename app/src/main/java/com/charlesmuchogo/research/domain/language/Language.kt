@@ -1,17 +1,20 @@
 package com.charlesmuchogo.research.domain.language
 
+import androidx.annotation.StringRes
+import com.charlesmuchogo.research.R
+
 data class Language(
-    val name: String,
-    val country: String ,
+    @StringRes val nameRes: Int,
+    @StringRes val countryRes: Int,
     val code: String,
 ){
     companion object
     {
         val languages = listOf(
-            Language("English", "United States", "en"),
-            Language("Spanish", "Mexico", "es"),
-            Language("Swahili", "Kenya", "sw"),
-            Language("French", "France", "fr"),
+            Language(R.string.english, R.string.united_states, "en"),
+            Language(R.string.spanish, R.string.mexico, "es"),
+            Language(R.string.swahili, R.string.kenya, "sw"),
+            Language(R.string.french, R.string.france, "fr"),
         )
     }
 }

@@ -74,4 +74,15 @@
     <string name="appId" translatable="false">ca-app-pub-6323830758154106~7836828619</string>
     <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
     <string name="somethingWentWrong">Something went wrong</string>
+
+    <!-- Languages -->
+    <string name="select_language">Select Language</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="swahili">Swahili</string>
+    <string name="french">French</string>
+    <string name="united_states">United States</string>
+    <string name="mexico">Mexico</string>
+    <string name="kenya">Kenya</string>
+    <string name="france">France</string>
 </resources>

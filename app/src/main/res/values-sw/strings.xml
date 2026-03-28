@@ -72,4 +72,16 @@
     <string name="login">Ingia</string>
     <string name="already_have_an_account">Tayari una akaunti?</string>
     <string name="welcome_to_smarttest">Karibu Smarttest, tunafurahi kukuona hapa! Ingia ili kuendelea</string>
+    <string name="somethingWentWrong">Kuna kitu kimeenda mrama</string>
+
+    <!-- Languages -->
+    <string name="select_language">Chagua Lugha</string>
+    <string name="english">Kiingereza</string>
+    <string name="spanish">Kihispania</string>
+    <string name="swahili">Kiswahili</string>
+    <string name="french">Kifaransa</string>
+    <string name="united_states">Marekani</string>
+    <string name="mexico">Meksiko</string>
+    <string name="kenya">Kenya</string>
+    <string name="france">Ufaransa</string>
 </resources>
