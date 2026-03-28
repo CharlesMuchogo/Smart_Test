@@ -29,8 +29,10 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -59,6 +61,7 @@ import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.navigation.EditProfilePage
+import com.charlesmuchogo.research.navigation.LanguagePage
 import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.navigation.ProfilePage
 import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
@@ -94,7 +97,6 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                 profileState.data?.let {
                     ProfileListView(
                         profile = it,
-                        navController = navController
                     )
                 }
             }
@@ -106,7 +108,6 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
 fun ProfileListView(
     profile: User,
     modifier: Modifier = Modifier,
-    navController: NavController
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     val authenticationViewModel = hiltViewModel<AuthenticationViewModel>()
@@ -304,6 +305,21 @@ fun ProfileListView(
                         prefixIcon = Icons.Default.Info,
                         onClick = {
                             openInAppBrowser(context = context, url = PRIVACY_POLICY_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = stringResource(R.string.language),
+                        prefixIcon = Icons.Default.Public,
+                        onClick = {
+                            navController.navigate(LanguagePage)
                         },
                         trailingIcon = {
                             Icon(

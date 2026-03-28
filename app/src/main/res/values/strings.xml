@@ -12,6 +12,7 @@
     <string name="darkTheme">Dark Theme</string>
     <string name="keepHistory">Keep Results History</string>
     <string name="privacyPolicy">Privacy policy</string>
+    <string name="language">Language</string>
     <string name="termsAndConditions">Terms and conditions</string>
     <string name="noResults">No results at the moment</string>
     <string name="deleteTest">Delete Test</string>

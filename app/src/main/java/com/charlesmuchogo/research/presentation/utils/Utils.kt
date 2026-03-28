@@ -35,7 +35,7 @@ import java.util.Locale
 
 const val PERMISSION_REQUEST_CODE = 123
 
-@SuppressLint("InlinedApi")
+@SuppressLint("InlinedApi", "ContextCastToActivity")
 @Composable
 fun RequestPermissions() {
     val context = LocalContext.current as Activity
