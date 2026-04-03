@@ -33,6 +33,7 @@ import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
+import com.charlesmuchogo.research.presentation.language.LanguageRoot
 import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.PictureScreen
@@ -314,6 +315,34 @@ fun Navigation(navController: NavHostController) {
                 ) { backStackEntry ->
                     val args = backStackEntry.toRoute<TestResultsPage>()
                     ResultsRoot(id = args.id)
+                }
+                composable<LanguagePage>(
+                    enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Down,
+                            animationSpec = tween(ANIMATION_DURATION),
+                        )
+                    },
+                ) {
+                    LanguageRoot()
                 }
             }
         }

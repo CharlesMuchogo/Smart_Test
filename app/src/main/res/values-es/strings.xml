@@ -1,0 +1,103 @@
+<!--<resources>-->
+<!--    <string name="select_language">Seleccionar idioma</string>-->
+<!--    <string name="english">Inglés</string>-->
+<!--    <string name="spanish">Español</string>-->
+<!--    <string name="swahili">Suajili</string>-->
+<!--    <string name="french">Francés</string>-->
+<!--    <string name="united_states">Estados Unidos</string>-->
+<!--    <string name="mexico">México</string>-->
+<!--    <string name="kenya">Kenia</string>-->
+<!--    <string name="france">Francia</string>-->
+<!--</resources>-->
+
+<resources>
+    <string name="app_name">Smart Test</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="ResetPassword">Restablecer contraseña</string>
+    <string name="Loading">Cargando…</string>
+    <string name="Profile">Perfil</string>
+    <string name="History">Historial</string>
+    <string name="Clinics">Clínicas</string>
+    <string name="Instructions">Instrucciones</string>
+    <string name="logOut">Cerrar sesión</string>
+    <string name="logOutDescription">Estás a punto de cerrar sesión</string>
+    <string name="darkTheme">Tema oscuro</string>
+    <string name="keepHistory">Mantener historial de resultados</string>
+    <string name="privacyPolicy">Política de privacidad</string>
+    <string name="language">Idioma</string>
+    <string name="termsAndConditions">Términos y condiciones</string>
+    <string name="noResults">No hay resultados por el momento</string>
+    <string name="deleteTest">Eliminar prueba</string>
+    <string name="shareTest">Compartir prueba</string>
+    <string name="cannotBeunDone">Esta acción no se puede deshacer</string>
+    <string name="confirm">Confirmar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="Delete">Eliminar\n</string>
+    <string name="noClinicsAtTheMoment">No hay opciones de atención disponibles en este momento.</string>
+    <string name="takeTest">Realizar una prueba</string>
+    <string name="testResults">Resultados de la prueba</string>
+    <string name="individualTest">Prueba personal</string>
+    <string name="couplesTest">Prueba en pareja</string>
+    <string name="testUnderReview">Tu prueba está en revisión</string>
+    <string name="waitForReview">¡Espera un momento! Estamos revisando tus resultados y te responderemos pronto.</string>
+    <string name="okay">Aceptar</string>
+    <string name="weAreReviewingYourTest">¡Estamos revisando tu prueba!</string>
+    <string name="positiveTestResult">📅 Si tu prueba resulta positiva, una revisión en una clínica te ayudará a obtener la orientación y el apoyo que necesitas.</string>
+    <string name="negativeTestResult">✅ ¡Un resultado negativo es una buena noticia! Si has tenido riesgos recientes, considera hacer otra prueba en 3 meses para estar seguro.</string>
+    <string name="chat">Chat (beta)</string>
+    <string name="almost_there">¡Ya casi terminamos!</string>
+    <string name="we_need_more_information">Para completar tu registro y desbloquear todas las funciones, solo necesitamos algunos datos más. ¡Solo toma un minuto!</string>
+
+    <!-- Instructions -->
+
+    <string name="first_heading">CÓMO USAR ORAQUICK®, PRUEBA DE VIH, USO PERSONAL</string>
+    <string name="sentence_1">DEBERÁS ESTIMAR LA DURACIÓN DE LA PRUEBA</string>
+    <string name="sentence_2">El paquete contiene: dispositivos de prueba, un soporte para la prueba y las instrucciones de uso</string>
+    <string name="sentence_3">DEJA EL DISPOSITIVO EN EL TUBO durante 20 MINUTOS antes de leer el resultado. NO LEAS el resultado después de 40 minutos.</string>
+
+    <string name="sentence_6">Retira el dispositivo del tubo, cúbrelo y luego desecha todo en la basura.</string>
+    <string name="sentence_7">RESULTADO POSITIVO</string>
+    <string name="sentence_8">Dos líneas completas, incluso si una es tenue, significa que puedes tener VIH y necesitas más pruebas.</string>
+    <string name="sentence_9">Visita un VCT o centro de salud cercano lo antes posible.</string>
+
+    <string name="sentence_12">RESULTADO NEGATIVO</string>
+    <string name="sentence_13">UNA LÍNEA en el área “C” y NINGUNA en el área “T” significa que tu resultado es negativo, no tienes VIH.&#10;Considera realizar pruebas regularmente. Si crees que estuviste expuesto recientemente al VIH, repite la prueba después de tres meses.</string>
+
+    <string name="sentence_15">RESULTADO INVÁLIDO</string>
+    <string name="sentence_16">No hay línea en el área “C” (aunque haya una en el área “T”), o si hay un color rojo que impide leer el resultado, la prueba es inválida y debe repetirse. Necesitarás un nuevo kit.&#10;La prueba no funcionó correctamente. Visita un VCT o centro de salud cercano para más pruebas.</string>
+
+    <string name="sentence_18">Si no conoces tu resultado o no estás seguro, visita un VCT o centro de salud cercano para pruebas adicionales.</string>
+    <string name="sentence_19">RESULTADO INCIERTO</string>
+    <string name="sentence_20">DESECHO</string>
+
+    <string name="sentence_21">Tu prueba de VIH tiene dos paquetes conectados.</string>
+    <string name="sentence_22">Rasga el paquete en el lado con la ilustración del tubo y luego retira el tubo.</string>
+    <string name="sentence_23">Retira la tapa del tubo. NO DERRAMES el líquido. NO LO BEBAS.</string>
+    <string name="sentence_24">Pasa el hisopo por la encía superior una vez, cubriendo toda la encía, luego haz lo mismo en la encía inferior.</string>
+    <string name="sentence_25">Inserta el dispositivo en el tubo hasta que el hisopo quede sumergido en el líquido.</string>
+    <string name="sentence_26">Abre el paquete que contiene el dispositivo de prueba y retíralo. NO TOQUES la almohadilla plana con los dedos. NO INGIERAS el conservante.</string>
+    <string name="sentence_27">No derrames el líquido. No lo bebas.</string>
+    <string name="sentence_28">Coloca el tubo en el soporte.</string>
+
+    <string name="sign_up_button_text">Registrarse</string>
+    <string name="or">O</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="already_have_an_account">¿Ya tienes una cuenta? </string>
+    <string name="welcome_to_smarttest">Bienvenido a Smarttest, ¡nos alegra tenerte aquí! Inicia sesión para continuar</string>
+    <string name="somethingWentWrong">Algo salió mal</string>
+
+    <!-- Languages -->
+    <string name="select_language">Seleccionar idioma</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
+    <string name="swahili">Suajili</string>
+    <string name="french">Francés</string>
+    <string name="united_states">Estados Unidos</string>
+    <string name="mexico">México</string>
+    <string name="kenya">Kenia</string>
+    <string name="france">Francia</string>
+    <string name="general">General</string>
+    <string name="preferences">Preferencias</string>
+    <string name="instructions">Instrucciones</string>
+    <string name="articles">Artículos</string>
+</resources>

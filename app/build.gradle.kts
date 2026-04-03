@@ -21,12 +21,18 @@ android {
     namespace = "com.charlesmuchogo.research"
     compileSdk = 36
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 32
-        versionName = "1.6.2"
+        versionCode = 33
+        versionName = "1.7.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -41,9 +47,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
     }
+
+
 
     packaging {
         resources {
@@ -98,6 +107,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.play.services.location)
     implementation(libs.play.services.auth)
+    implementation(libs.androidx.appcompat)
 
 
     //datetime

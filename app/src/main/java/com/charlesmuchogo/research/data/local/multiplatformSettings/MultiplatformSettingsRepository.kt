@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 interface MultiplatformSettingsRepository {
     fun saveAppVersion(version: String)
 
+    fun saveSelectedLanguage(code: String)
+
     fun saveCurrentLatitude(latitude: Double)
 
     fun saveCurrentLongitude(longitude: Double)
@@ -29,6 +31,7 @@ interface MultiplatformSettingsRepository {
 
     fun getAccessToken(): Flow<String?>
 
+    fun getSelectedLanguage(): Flow<String?>
     fun getAppVersion(): Flow<String?>
 
     fun getLoginType(): Flow<String?>

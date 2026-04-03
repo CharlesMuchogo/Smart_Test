@@ -22,6 +22,8 @@ class PreferenceManager(private val settings: Settings) {
         const val FIRST_TIME = "first_time_key"
 
         const val APP_VERSION = "app_version"
+
+        const val APP_LANGUAGE = "app_language"
         const val CURRENT_LATITUDE = "current_latitude_key"
         const val CURRENT_LONGITUDE = "current_longitude_key"
 

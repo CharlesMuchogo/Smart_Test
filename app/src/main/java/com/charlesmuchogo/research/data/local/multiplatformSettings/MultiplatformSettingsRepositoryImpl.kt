@@ -8,6 +8,10 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
         preferenceManager.setString(key = PreferenceManager.APP_VERSION, value = version)
     }
 
+    override fun saveSelectedLanguage(code: String) {
+        preferenceManager.setString(key = PreferenceManager.APP_LANGUAGE, value = code)
+    }
+
     override fun saveCurrentLatitude(latitude: Double) {
         preferenceManager.setDouble(key = PreferenceManager.CURRENT_LATITUDE, value = latitude)
     }
@@ -55,6 +59,10 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
 
     override fun getAccessToken(): Flow<String?> {
         return preferenceManager.getString(PreferenceManager.AUTHENTICATION_TOKEN)
+    }
+
+    override fun getSelectedLanguage(): Flow<String?> {
+        return preferenceManager.getString(PreferenceManager.APP_LANGUAGE)
     }
 
     override fun getAppVersion(): Flow<String?> {
