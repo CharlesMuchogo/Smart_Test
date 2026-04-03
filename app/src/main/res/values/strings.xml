@@ -85,4 +85,8 @@
     <string name="mexico">Mexico</string>
     <string name="kenya">Kenya</string>
     <string name="france">France</string>
+    <string name="general">General</string>
+    <string name="preferences">Preferences</string>
+    <string name="instructions">Instructions</string>
+    <string name="articles">Articles</string>
 </resources>

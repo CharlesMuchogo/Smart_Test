@@ -84,4 +84,8 @@
     <string name="mexico">Meksiko</string>
     <string name="kenya">Kenya</string>
     <string name="france">Ufaransa</string>
+    <string name="general">Jumla</string>
+    <string name="preferences">Mapendeleo</string>
+    <string name="instructions">Maelekezo</string>
+    <string name="articles">Makala</string>
 </resources>

@@ -147,7 +147,8 @@ fun ProfileListView(
                     Modifier
                         .padding(bottom = 8.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.18f).clickable {
+                        .fillMaxHeight(0.18f)
+                        .clickable {
                             navController.navigate(EditProfilePage)
                         }
             ) {
@@ -201,7 +202,7 @@ fun ProfileListView(
         item {
 
             Text(
-                "General",
+                stringResource(R.string.general),
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
@@ -252,7 +253,7 @@ fun ProfileListView(
 
         item {
             Text(
-                "Preferences",
+                stringResource(R.string.preferences),
                 style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)

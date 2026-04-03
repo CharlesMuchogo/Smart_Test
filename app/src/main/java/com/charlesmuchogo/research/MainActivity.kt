@@ -91,8 +91,6 @@ class MainActivity : AppCompatActivity() {
             Log.e("PlayServices", "Google Play Services is not available!")
         }
 
-        setAppLocale(context = this, languageCode = "en")
-
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
         }

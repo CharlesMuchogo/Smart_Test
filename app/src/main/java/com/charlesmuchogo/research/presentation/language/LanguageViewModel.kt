@@ -48,10 +48,10 @@ class LanguageViewModel @Inject constructor(
     fun onAction(action: LanguageAction) {
         when (action) {
             is LanguageAction.OnUpdateLanguage -> {
-                Log.d("LANG", "Setting locale: ${action.language.code}")
+//                Log.d("LANG", "Setting locale: ${action.language.code}")
 
                 val locales = AppCompatDelegate.getApplicationLocales()
-                Log.d("LANG", locales.toLanguageTags())
+//                Log.d("LANG", locales.toLanguageTags())
                 settingsRepository.saveSelectedLanguage(action.language.code)
                 _state.update { it.copy(selectedLanguage = action.language) }
             }

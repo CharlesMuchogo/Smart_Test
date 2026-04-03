@@ -76,7 +76,6 @@ fun LanguageScreen(
                                 )
                             )
                         }
-                        activity?.recreate()
                         onAction(LanguageAction.OnUpdateLanguage(it))
                                                     },
                     headlineContent = { Text(stringResource(it.nameRes), color = if(it == state.selectedLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground) },
