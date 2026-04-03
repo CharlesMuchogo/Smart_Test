@@ -21,6 +21,12 @@ android {
     namespace = "com.charlesmuchogo.research"
     compileSdk = 36
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
@@ -41,9 +47,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
     }
+
+
 
     packaging {
         resources {
@@ -98,6 +107,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.play.services.location)
     implementation(libs.play.services.auth)
+    implementation(libs.androidx.appcompat)
 
 
     //datetime

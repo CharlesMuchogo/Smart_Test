@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.language
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -34,8 +36,9 @@ class LanguageViewModel @Inject constructor(
     }
 
     private val _state = MutableStateFlow(LanguageState())
-    val state = combine(_state, settingsRepository.getSelectedLanguage()){ state, language ->
-        state.copy(selectedLanguage = Language.languages.firstOrNull{it.code == language} ?: state.selectedLanguage)
+    val state = combine(_state, settingsRepository.getSelectedLanguage()){
+        state, language ->
+        state.copy(selectedLanguage = Language.languages.firstOrNull { it.code == language } ?: state.selectedLanguage)
     }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
@@ -45,13 +48,11 @@ class LanguageViewModel @Inject constructor(
     fun onAction(action: LanguageAction) {
         when (action) {
             is LanguageAction.OnUpdateLanguage -> {
+                Log.d("LANG", "Setting locale: ${action.language.code}")
 
+                val locales = AppCompatDelegate.getApplicationLocales()
+                Log.d("LANG", locales.toLanguageTags())
                 settingsRepository.saveSelectedLanguage(action.language.code)
-
-                AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(action.language.code)
-                )
-
                 _state.update { it.copy(selectedLanguage = action.language) }
             }
         }

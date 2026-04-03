@@ -1,5 +1,11 @@
 package com.charlesmuchogo.research.presentation.language
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.LocaleManager
+import android.os.Build
+import android.os.LocaleList
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +19,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
@@ -22,6 +30,7 @@ import com.charlesmuchogo.research.presentation.common.TopBarTitle
 import com.charlesmuchogo.research.presentation.utils.removeRipple
 
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 fun LanguageRoot() {
 
@@ -40,6 +49,9 @@ fun LanguageScreen(
     state: LanguageState,
     onAction: (LanguageAction) -> Unit,
 ) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,7 +65,20 @@ fun LanguageScreen(
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)){
             items(state.languages){
                 ListItem(
-                    modifier = Modifier.removeRipple{onAction(LanguageAction.OnUpdateLanguage(it))},
+                    modifier = Modifier.removeRipple{
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            context.getSystemService(LocaleManager::class.java)
+                                .applicationLocales = LocaleList.forLanguageTags(it.code)
+                        } else {
+                            AppCompatDelegate.setApplicationLocales(
+                                LocaleListCompat.forLanguageTags(
+                                    it.code
+                                )
+                            )
+                        }
+                        activity?.recreate()
+                        onAction(LanguageAction.OnUpdateLanguage(it))
+                                                    },
                     headlineContent = { Text(stringResource(it.nameRes), color = if(it == state.selectedLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground) },
                     supportingContent = { Text(stringResource(it.countryRes), color = if(it == state.selectedLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground) },
                     trailingContent = { Text(it.code, color = if(it == state.selectedLanguage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground) },
