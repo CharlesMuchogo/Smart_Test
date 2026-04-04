@@ -29,11 +29,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
@@ -97,7 +99,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 TestProgress(
-                    content = if (timeSpent == 0L) "Click here to start a timer!" else convertMillisecondsToTimeTaken(
+                    content = if (timeSpent == 0L) stringResource(R.string.click_here_to_start_a_timer) else convertMillisecondsToTimeTaken(
                         milliseconds = totalTimeDuration - timeSpent
                     ),
                     counterColor = MaterialTheme.colorScheme.onBackground,
@@ -159,7 +161,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                         ) {
                             Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(text = "Take photo of my test")
+                            Text(text = stringResource(R.string.take_photo_of_my_test))
                         }
                     }
 
@@ -206,7 +208,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                             Icon(imageVector = Icons.Default.CloudUpload, contentDescription = null)
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Take photo of my partner test",
+                                text = stringResource(R.string.take_photo_of_my_partner_test),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -220,9 +222,9 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 clinicsStatus.data?.let { clinics ->
                     AppDropDown(
                         options = clinics,
-                        label = { Text(text = "Select a clinic") },
+                        label = { Text(text = stringResource(R.string.select_a_clinic)) },
                         selectedOption = TextFieldState(
-                            text = selectedClinic?.name ?: "Select a clinic ",
+                            text = selectedClinic?.name ?: stringResource(R.string.select_a_clinic),
                             isSelected = selectedClinic != null,
                             error = null
                         ),
@@ -231,7 +233,7 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                         }) {
                         Text(
                             "${it.name} - ${it.address}",
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 }
@@ -272,13 +274,13 @@ fun CoupleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 }) {
                     when (uploadResultsStatus.status) {
                         ResultStatus.LOADING -> {
-                            AppLoadingButtonContent(message = "Submitting...")
+                            AppLoadingButtonContent(message = stringResource(R.string.submitting))
                         }
 
                         ResultStatus.INITIAL,
                         ResultStatus.SUCCESS,
                         ResultStatus.ERROR -> {
-                            Text(text = "Submit results")
+                            Text(text = stringResource(R.string.submit))
                         }
                     }
                 }

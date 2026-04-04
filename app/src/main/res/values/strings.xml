@@ -6,6 +6,7 @@
     <string name="Profile">Profile</string>
     <string name="History">History</string>
     <string name="Clinics">Clinics</string>
+    <string name="Home">Home</string>">
     <string name="Instructions">Instructions</string>
     <string name="logOut">Log out</string>
     <string name="logOutDescription">You are about to log out</string>
@@ -32,7 +33,7 @@
     <string name="weAreReviewingYourTest">We are reviewing your test!</string>
     <string name="positiveTestResult">\\uD83D\\uDCC5 If your test comes back positive, a clinic checkup will help you get the guidance and support you need.</string>
     <string name="negativeTestResult">✅ A negative result is good news! If you’ve had recent risks, consider another test in 3 months to stay sure.</string>
-    <string name="chat">Chat (beta)</string>
+    <string name="chat">Chat</string>
     <string name="almost_there">We’re Almost There!</string>
     <string name="we_need_more_information">To complete your registration and unlock all features, we just need a few more details from you. It only takes a minute!</string>
 
@@ -75,7 +76,6 @@
     <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
     <string name="somethingWentWrong">Something went wrong</string>
 
-    <!-- Languages -->
     <string name="select_language">Select Language</string>
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
@@ -89,4 +89,10 @@
     <string name="preferences">Preferences</string>
     <string name="instructions">Instructions</string>
     <string name="articles">Articles</string>
+    <string name="click_here_to_start_a_timer">Click here to start a timer!</string>
+    <string name="take_photo_of_my_test">Take photo of my test</string>
+    <string name="take_photo_of_my_partner_test">Take photo of my partner test</string>
+    <string name="select_a_clinic">Select a clinic</string>
+    <string name="submit">Submit</string>
+    <string name="submitting">Submitting…</string>
 </resources>

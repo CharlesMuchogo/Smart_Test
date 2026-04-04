@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +40,7 @@ import androidx.navigation.NavController
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.charlesmuchogo.research.NotificationWorker
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.dto.results.UploadTestResultsDTO
 import com.charlesmuchogo.research.domain.models.TextFieldState
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
@@ -95,7 +97,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 TestProgress(
-                    content = if (timeSpent == 0L) "Click here to start a timer!" else convertMillisecondsToTimeTaken(
+                    content = if (timeSpent == 0L) stringResource(R.string.click_here_to_start_a_timer) else convertMillisecondsToTimeTaken(
                         totalTimeDuration - timeSpent
                     ),
                     counterColor = MaterialTheme.colorScheme.onBackground,
@@ -156,7 +158,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
-                                Text(text = "Take photo of the test")
+                                Text(text = stringResource(R.string.take_photo_of_my_test))
                             }
                         }
 
@@ -168,9 +170,9 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 clinicsStatus.data?.let { clinics ->
                     AppDropDown(
                         options = clinics,
-                        label = { Text(text = "Select a clinic") },
+                        label = { Text(text = stringResource(R.string.select_a_clinic)) },
                         selectedOption = TextFieldState(
-                            text = selectedClinic?.name ?: "Select a clinic",
+                            text = selectedClinic?.name ?: stringResource(R.string.select_a_clinic),
                             isSelected = selectedClinic != null,
                             error = null
                         ),
@@ -179,7 +181,7 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
                         }) {
                         Text(
                             "${it.name} - ${it.address}",
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 }
@@ -230,13 +232,13 @@ fun SingleTestScreen(modifier: Modifier = Modifier, navController: NavController
                 }) {
                     when (uploadResultsStatus.status) {
                         ResultStatus.LOADING -> {
-                            AppLoadingButtonContent(message = "Submitting...")
+                            AppLoadingButtonContent(message = stringResource(R.string.submitting))
                         }
 
                         ResultStatus.INITIAL,
                         ResultStatus.SUCCESS,
                         ResultStatus.ERROR -> {
-                            Text(text = "Submit results")
+                            Text(text = stringResource(R.string.submit))
                         }
                     }
                 }

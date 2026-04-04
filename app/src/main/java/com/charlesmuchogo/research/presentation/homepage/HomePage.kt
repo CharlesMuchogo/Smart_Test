@@ -19,12 +19,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
+import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.presentation.articles.ArticlesScreen
 import com.charlesmuchogo.research.presentation.instructions.InstructionsRoot
 import java.util.Locale
@@ -44,6 +48,16 @@ fun SharedTransitionScope.HomeScreen(animatedVisibilityScope: AnimatedVisibility
 
     val homePageViewModel = hiltViewModel<HomepageViewModel>()
     val currentTab = homePageViewModel.selectedTab.collectAsStateWithLifecycle().value
+    val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
+
+
+    LaunchedEffect(currentTab) {
+        pagerState.animateScrollToPage(currentTab)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        homePageViewModel.updateTab(tab = pagerState.currentPage)
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -76,21 +90,10 @@ fun SharedTransitionScope.HomeScreen(animatedVisibilityScope: AnimatedVisibility
                 }
             }
 
-            AnimatedContent(
-                targetState = currentTab,
-                transitionSpec = {
-                    slideIntoContainer(
-                                        animationSpec = tween(300, easing = EaseIn),
-                                        towards = Left
-                                    ).togetherWith(
-                        slideOutOfContainer(
-                                            animationSpec = tween(300, easing = EaseOut),
-                                            towards = Right
-                                        )
-                    )
-                }
-            ) { targetState ->
-                when (targetState) {
+            HorizontalPager(
+                state = pagerState,
+            ) { page ->
+                when (page) {
                     0 -> {
                         InstructionsRoot()
                     }
@@ -100,7 +103,6 @@ fun SharedTransitionScope.HomeScreen(animatedVisibilityScope: AnimatedVisibility
                     }
                 }
             }
-
         }
     }
 }

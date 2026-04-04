@@ -6,6 +6,7 @@
     <string name="Profile">Perfil</string>
     <string name="History">Historial</string>
     <string name="Clinics">Clínicas</string>
+    <string name="Home">Maison</string>">
     <string name="Instructions">Instrucciones</string>
     <string name="logOut">Cerrar sesión</string>
     <string name="logOutDescription">Estás a punto de cerrar sesión</string>
@@ -32,7 +33,7 @@
     <string name="weAreReviewingYourTest">¡Estamos revisando tu prueba!</string>
     <string name="positiveTestResult">📅 Si tu prueba resulta positiva, una revisión en una clínica te ayudará a obtener la orientación y el apoyo que necesitas.</string>
     <string name="negativeTestResult">✅ ¡Un resultado negativo es una buena noticia! Si has tenido riesgos recientes, considera hacer otra prueba en 3 meses para estar seguro.</string>
-    <string name="chat">Chat (beta)</string>
+    <string name="chat">Chat</string>
     <string name="almost_there">¡Ya casi terminamos!</string>
     <string name="we_need_more_information">Para completar tu registro y desbloquear todas las funciones, solo necesitamos algunos datos más. ¡Solo toma un minuto!</string>
 
@@ -88,4 +89,10 @@
     <string name="preferences">Préférences</string>
     <string name="instructions">Instructions</string>
     <string name="articles">Articles</string>
+    <string name="click_here_to_start_a_timer">Cliquez ici pour démarrer un chronomètre !</string>
+    <string name="take_photo_of_my_test">Prendre une photo de mon test</string>
+    <string name="take_photo_of_my_partner_test">Prendre une photo du test de mon partenaire</string>
+    <string name="select_a_clinic">Sélectionnez une clinique</string>
+    <string name="submit">Soumettre</string>
+    <string name="submitting">Soumission…</string>
 </resources>

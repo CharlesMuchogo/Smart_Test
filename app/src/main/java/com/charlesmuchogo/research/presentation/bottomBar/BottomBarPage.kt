@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.material.icons.outlined.Person
@@ -91,9 +93,9 @@ fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (Bott
 
     val bottomNavigationItems = listOf(
         BottomNavigationItem(
-            title = R.string.Instructions,
-            selectedIcon = Icons.Default.Info,
-            unselectedIcon = Icons.Outlined.Info,
+            title = R.string.Home,
+            selectedIcon = Icons.Default.Home,
+            unselectedIcon = Icons.Outlined.Home,
             screen = { HomeScreen(animatedVisibilityScope) }
         ),
 
