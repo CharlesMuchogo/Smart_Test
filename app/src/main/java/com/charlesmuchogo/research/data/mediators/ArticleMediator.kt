@@ -46,7 +46,7 @@ class ArticleMediator(
                 pageCount = state.config.pageSize
             )
 
-            val articles = response.data?.posts ?: emptyList()
+            val articles = response.data?.blogs ?: emptyList()
 
             if (loadType == LoadType.REFRESH) {
                 articleDao.deleteArticles()
@@ -55,7 +55,7 @@ class ArticleMediator(
             articleDao.insertArticles(articles)
 
             MediatorResult.Success(
-                endOfPaginationReached = loadKey == (response.data?.lastPage ?: 1)
+                endOfPaginationReached = articles.isEmpty() || loadKey == 1
             )
         } catch (e: IOException) {
             MediatorResult.Error(e)
