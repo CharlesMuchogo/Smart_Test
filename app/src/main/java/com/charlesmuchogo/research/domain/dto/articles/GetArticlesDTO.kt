@@ -5,8 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetArticlesDTO(
-    val lastMonthPosts: Long,
-    val posts: List<Article>,
-    val totalPosts: Long,
-    val lastPage: Int
+    val blogs: List<Article>,
 )

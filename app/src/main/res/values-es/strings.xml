@@ -1,14 +1,3 @@
-<!--<resources>-->
-<!--    <string name="select_language">Seleccionar idioma</string>-->
-<!--    <string name="english">Inglés</string>-->
-<!--    <string name="spanish">Español</string>-->
-<!--    <string name="swahili">Suajili</string>-->
-<!--    <string name="french">Francés</string>-->
-<!--    <string name="united_states">Estados Unidos</string>-->
-<!--    <string name="mexico">México</string>-->
-<!--    <string name="kenya">Kenia</string>-->
-<!--    <string name="france">Francia</string>-->
-<!--</resources>-->
 
 <resources>
     <string name="app_name">Smart Test</string>
@@ -18,6 +7,7 @@
     <string name="Profile">Perfil</string>
     <string name="History">Historial</string>
     <string name="Clinics">Clínicas</string>
+    <string name="Home">Hogar</string>">
     <string name="Instructions">Instrucciones</string>
     <string name="logOut">Cerrar sesión</string>
     <string name="logOutDescription">Estás a punto de cerrar sesión</string>
@@ -44,7 +34,7 @@
     <string name="weAreReviewingYourTest">¡Estamos revisando tu prueba!</string>
     <string name="positiveTestResult">📅 Si tu prueba resulta positiva, una revisión en una clínica te ayudará a obtener la orientación y el apoyo que necesitas.</string>
     <string name="negativeTestResult">✅ ¡Un resultado negativo es una buena noticia! Si has tenido riesgos recientes, considera hacer otra prueba en 3 meses para estar seguro.</string>
-    <string name="chat">Chat (beta)</string>
+    <string name="chat">Chat</string>
     <string name="almost_there">¡Ya casi terminamos!</string>
     <string name="we_need_more_information">Para completar tu registro y desbloquear todas las funciones, solo necesitamos algunos datos más. ¡Solo toma un minuto!</string>
 
@@ -100,4 +90,10 @@
     <string name="preferences">Preferencias</string>
     <string name="instructions">Instrucciones</string>
     <string name="articles">Artículos</string>
+    <string name="click_here_to_start_a_timer">¡Haga clic aquí para iniciar un cronómetro!</string>
+    <string name="take_photo_of_my_test">Tomar foto de mi prueba.</string>
+    <string name="take_photo_of_my_partner_test">Tomar foto de prueba de mi compañero</string>
+    <string name="select_a_clinic">Seleccione una clínica</string>
+    <string name="submit">Entregar</string>
+    <string name="submitting">Sumisión…</string>
 </resources>

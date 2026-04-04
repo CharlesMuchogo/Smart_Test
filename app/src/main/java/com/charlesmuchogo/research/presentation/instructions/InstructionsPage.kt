@@ -51,20 +51,12 @@ fun InstructionsRoot() {
     InstructionsScreen(state = state, onAction = viewModel::onAction)
 }
 
-/**
- * Wraps any composable content with a scroll-triggered fade + slide-up animation.
- *
- * @param index        The item's position in the list — used to stagger delays.
- * @param listState    The [LazyListState] of the parent LazyColumn.
- * @param content      The composable to animate.
- */
 @Composable
 private fun AnimatedListItem(
     index: Int,
     listState: androidx.compose.foundation.lazy.LazyListState,
     content: @Composable () -> Unit
 ) {
-    // Become visible once the item is laid out inside the viewport.
     val isVisible = remember(listState) {
         derivedStateOf {
             val visibleItems = listState.layoutInfo.visibleItemsInfo
@@ -374,12 +366,18 @@ fun InstructionsScreen(
             item {
                 AnimatedListItem(index = 36, listState = listState) {
                     HeaderText(text = stringResource(R.string.sentence_20))
-                    RegularBodyText(text = stringResource(R.string.sentence_6))
                 }
             }
 
             item {
                 AnimatedListItem(index = 37, listState = listState) {
+
+                    RegularBodyText(text = stringResource(R.string.sentence_6))
+                }
+            }
+
+            item {
+                AnimatedListItem(index = 38, listState = listState) {
                     AppButton(onClick = {
                         when (state.hasPendingResults) {
                             true -> navController.navigate(PendingTestPage)

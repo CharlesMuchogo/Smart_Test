@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity(tableName = "Article")
 data class Article(
-    @SerialName("_id")
     @PrimaryKey
     val  id: String,
+    @SerialName("categoryId")
     val category: String,
     val content: String,
     val createdAt: String,

@@ -17,7 +17,7 @@ import com.charlesmuchogo.research.domain.models.TestProgress
 import com.charlesmuchogo.research.domain.models.TestResult
 import com.charlesmuchogo.research.domain.models.User
 
-@Database(entities = [User::class, TestResult::class, Clinic::class, TestProgress::class, Message::class, Article::class, FavoriteArticle::class], version = 8, exportSchema = false)
+@Database(entities = [User::class, TestResult::class, Clinic::class, TestProgress::class, Message::class, Article::class, FavoriteArticle::class], version = 9, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun clinicsDao(): ClinicsDao

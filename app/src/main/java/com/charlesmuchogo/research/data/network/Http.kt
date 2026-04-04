@@ -61,8 +61,43 @@ class Http(
             }
         }
     }
+    val articlesClient by lazy {
+        HttpClient(OkHttp.create {}) {
+            install(Logging) {
+                logger =
+                    object : Logger {
+                        override fun log(message: String) {
+                            println(message)
+                        }
+                    }
+                level = LogLevel.ALL
+            }
+
+            install(HttpTimeout) {
+                requestTimeoutMillis = 30_000L
+                socketTimeoutMillis = 30_000L
+                connectTimeoutMillis = 30_000L
+            }
+
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
+
+
+            defaultRequest {
+                url(articlesHttpUrlBuilder())
+            }
+        }
+    }
 
 }
 
 /*fun httpUrlBuilder(): String =  "http://192.168.100.59:9000"*/
 fun httpUrlBuilder(): String =  "https://smarttest.muchogoc.com"
+fun articlesHttpUrlBuilder(): String =  "https://nutrinotes.muchogoc.com"
