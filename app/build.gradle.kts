@@ -108,6 +108,8 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.auth)
     implementation(libs.androidx.appcompat)
+    implementation(libs.compose.markdown)
+
 
 
     //datetime

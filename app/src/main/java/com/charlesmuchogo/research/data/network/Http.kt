@@ -9,6 +9,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.firstOrNull
@@ -18,13 +19,6 @@ import kotlinx.serialization.json.Json
 class Http(
     private val settingsRepository: MultiplatformSettingsRepository
 ) {
-    private var token: String? = null
-
-    init {
-        runBlocking {
-            token = settingsRepository.getAccessToken().firstOrNull()
-        }
-    }
 
     val client by lazy {
         HttpClient(OkHttp.create {}) {
@@ -57,7 +51,10 @@ class Http(
 
             defaultRequest {
                 url(httpUrlBuilder())
-                token?.let { header("Authorization", token) }
+                val currentToken = runBlocking {
+                    settingsRepository.getAccessToken().firstOrNull()
+                }
+                currentToken?.let { header("Authorization", it) }
             }
         }
     }
@@ -96,8 +93,42 @@ class Http(
         }
     }
 
+    val wsClient by lazy {
+
+        HttpClient(OkHttp.create {}) {
+            install(Logging) {
+                logger =
+                    object : Logger {
+                        override fun log(message: String) {
+                            println(message)
+                        }
+                    }
+                level = LogLevel.NONE
+            }
+
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
+
+            defaultRequest {
+                url(wsUrlBuilder())
+            }
+
+            WebSockets {
+
+            }
+        }
+    }
+
 }
 
 /*fun httpUrlBuilder(): String =  "http://192.168.100.59:9000"*/
 fun httpUrlBuilder(): String =  "https://smarttest.muchogoc.com"
+fun wsUrlBuilder(): String =  "wss://smarttest.muchogoc.com"
 fun articlesHttpUrlBuilder(): String =  "https://nutrinotes.muchogoc.com"

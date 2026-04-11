@@ -15,6 +15,8 @@ import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
+import com.charlesmuchogo.research.data.remote.WebsocketRepository
+import com.charlesmuchogo.research.data.remote.WebsocketRepositoryImpl
 import com.charlesmuchogo.research.domain.models.Article
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.russhwolf.settings.Settings
@@ -100,6 +102,20 @@ object AppModule {
             pagingSourceFactory = {
                 appDatabase.articleDao().pagingSource()
             }
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideWebsocketsRepository(
+        appDatabase: AppDatabase,
+        settingsRepository: MultiplatformSettingsRepository,
+        http: Http
+    ): WebsocketRepository {
+        return WebsocketRepositoryImpl(
+            dataSource = appDatabase,
+            settingsRepository = settingsRepository,
+            http = http
         )
     }
 }
