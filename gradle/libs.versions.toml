@@ -42,6 +42,7 @@ kmpauth = "2.4.0-alpha05"
 pagingRuntimeKtx = "3.4.2"
 mockitoKotlin = "5.2.1"
 kotlinxCoroutines = "1.8.0"
+composeMarkdown = "0.6.0"
 
 
 [libraries]
@@ -66,6 +67,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
 
 
 kotlinX-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }

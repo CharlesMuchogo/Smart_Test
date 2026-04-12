@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">Smart Test</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
+    <string name="ResetPassword">Redefinir senha</string>
+    <string name="Loading">Carregando…</string>
+    <string name="Profile">Perfil</string>
+    <string name="History">Histórico</string>
+    <string name="Clinics">Clínicas</string>
+    <string name="Home">Início</string>
+    <string name="Instructions">Instruções</string>
+    <string name="logOut">Sair</string>
+    <string name="logOutDescription">Você está prestes a sair</string>
+    <string name="darkTheme">Tema escuro</string>
+    <string name="keepHistory">Manter histórico de resultados</string>
+    <string name="privacyPolicy">Política de privacidade</string>
+    <string name="language">Idioma</string>
+    <string name="termsAndConditions">Termos e condições</string>
+    <string name="noResults">Sem resultados no momento</string>
+    <string name="deleteTest">Excluir teste</string>
+    <string name="shareTest">Compartilhar teste</string>
+    <string name="cannotBeunDone">Esta ação não pode ser desfeita</string>
+    <string name="confirm">Confirmar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="Delete">Excluir\n</string>
+    <string name="noClinicsAtTheMoment">Nenhuma opção de atendimento disponível no momento.</string>
+    <string name="takeTest">Fazer teste</string>
+    <string name="testResults">Resultados do teste</string>
+    <string name="individualTest">Teste individual</string>
+    <string name="couplesTest">Teste em casal</string>
+    <string name="testUnderReview">Seu teste está em análise</string>
+    <string name="waitForReview">Aguarde! Estamos analisando seus resultados e entraremos em contato em breve.</string>
+    <string name="okay">Ok</string>
+    <string name="weAreReviewingYourTest">Estamos analisando seu teste!</string>
+    <string name="positiveTestResult">\uD83D\uDCC5 Se o seu teste der positivo, uma consulta em uma clínica ajudará você a obter orientação e suporte.</string>
+    <string name="negativeTestResult">✅ Um resultado negativo é uma boa notícia! Se você teve riscos recentes, considere fazer outro teste em 3 meses.</string>
+    <string name="chat">Chat</string>
+    <string name="almost_there">Estamos quase lá!</string>
+    <string name="we_need_more_information">Para concluir seu cadastro e desbloquear todos os recursos, precisamos de mais algumas informações. Leva apenas um minuto!</string>
+
+    <!-- Instructions -->
+
+    <string name="first_heading">COMO USAR O TESTE DE HIV ORAQUICK®, USO PESSOAL</string>
+    <string name="sentence_1">VOCÊ PRECISARÁ ESTIMAR A DURAÇÃO DO TESTE</string>
+    <string name="sentence_2">A embalagem contém: dispositivos de teste, um suporte para teste e instruções de uso</string>
+    <string name="sentence_3">DEIXE O DISPOSITIVO NO TUBO por 20 MINUTOS antes de ler o resultado. NÃO LEIA o resultado após 40 minutos.</string>
+
+    <string name="sentence_6">Remova o dispositivo do tubo, feche o tubo e descarte tudo no lixo.</string>
+    <string name="sentence_7">RESULTADO POSITIVO</string>
+    <string name="sentence_8">Duas linhas completas, mesmo que fracas, significam que você pode ter HIV e precisa de testes adicionais.</string>
+    <string name="sentence_9">Visite um VCT ou centro de saúde próximo o mais rápido possível</string>
+
+    <string name="sentence_12">RESULTADO NEGATIVO</string>
+    <string name="sentence_13">UMA LINHA na área “C” e NENHUMA linha na área “T”, seu resultado é negativo, você não tem HIV.&#10;Considere fazer testes regularmente. Se você acha que foi exposto recentemente ao HIV, refaça o teste após três meses.</string>
+
+    <string name="sentence_15">RESULTADO INVÁLIDO</string>
+    <string name="sentence_16">Nenhuma linha na área “C” (mesmo que haja uma linha na área “T”), ou se houver uma cor vermelha que impeça a leitura, o teste é inválido e deve ser repetido. Você precisará de um novo kit.&#10;O teste não funcionou corretamente. Visite um VCT ou centro de saúde próximo para testes adicionais.</string>
+
+    <string name="sentence_18">Se você não souber ou tiver dúvidas sobre seu resultado, visite um VCT ou centro de saúde próximo para testes adicionais.</string>
+    <string name="sentence_19">RESULTADO INCERTO</string>
+    <string name="sentence_20">DESCARTE</string>
+
+    <string name="sentence_21">Seu teste de HIV possui dois compartimentos conectados.</string>
+    <string name="sentence_22">Rasgue a embalagem no lado com a ilustração do tubo e remova o tubo.</string>
+    <string name="sentence_23">Remova a tampa do tubo. NÃO DERRAME o líquido. NÃO BEBA.</string>
+    <string name="sentence_24">Passe o cotonete na gengiva superior uma vez, cobrindo toda a área, depois na gengiva inferior.</string>
+    <string name="sentence_25">Insira o dispositivo no tubo até que o cotonete fique submerso no líquido.</string>
+    <string name="sentence_26">Abra a embalagem do dispositivo de teste e remova-o. NÃO TOQUE na parte plana com os dedos. NÃO INGIRA o conservante.</string>
+    <string name="sentence_27">Não derrame o líquido. Não beba.</string>
+    <string name="sentence_28">Coloque o tubo no suporte.</string>
+
+    <string name="sign_up_button_text">Criar conta</string>
+    <string name="or">Ou</string>
+    <string name="login">Entrar</string>
+    <string name="already_have_an_account">Já tem uma conta?</string>
+    <string name="welcome_to_smarttest">Bem-vindo ao SmartTest, estamos felizes em tê-lo aqui! Faça login para continuar</string>
+    <string name="appId" translatable="false">ca-app-pub-6323830758154106~7836828619</string>
+    <string name="interstitialId" translatable="false">ca-app-pub-6323830758154106/6808883055</string>
+    <string name="somethingWentWrong">Algo deu errado</string>
+
+    <string name="select_language">Selecionar idioma</string>
+    <string name="english">Inglês</string>
+    <string name="spanish">Espanhol</string>
+    <string name="swahili">Suaíli</string>
+    <string name="french">Francês</string>
+    <string name="united_states">Estados Unidos</string>
+    <string name="mexico">México</string>
+    <string name="kenya">Quênia</string>
+    <string name="france">França</string>
+    <string name="general">Geral</string>
+    <string name="preferences">Preferências</string>
+    <string name="instructions">Instruções</string>
+    <string name="articles">Artigos</string>
+    <string name="click_here_to_start_a_timer">Clique aqui para iniciar um temporizador!</string>
+    <string name="take_photo_of_my_test">Tirar foto do meu teste</string>
+    <string name="take_photo_of_my_partner_test">Tirar foto do teste do meu parceiro</string>
+    <string name="select_a_clinic">Selecionar uma clínica</string>
+    <string name="submit">Enviar</string>
+    <string name="submitting">Enviando…</string>
+</resources>

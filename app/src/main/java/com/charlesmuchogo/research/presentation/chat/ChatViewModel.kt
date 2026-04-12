@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.analytics
 import com.charlesmuchogo.research.data.local.AppDatabase
 import com.charlesmuchogo.research.data.remote.RemoteRepository
+import com.charlesmuchogo.research.data.remote.WebsocketRepository
 import com.charlesmuchogo.research.domain.models.Message
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
@@ -34,22 +35,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val database: AppDatabase,
-
+    private val websocketRepository: WebsocketRepository,
     private val remoteRepository: RemoteRepository
 ) : ViewModel() {
 
     init {
-        FirebaseAuth.getInstance().signInAnonymously()
-
-        val bundle = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ITEM_NAME, "Chat page visit")
+        viewModelScope.launch {
+            websocketRepository.connectWebSocket()
         }
-
-        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
     }
 
-    private val model = Firebase.ai(backend = GenerativeBackend.vertexAI())
-        .generativeModel("gemini-2.0-flash")
 
     private val _state = MutableStateFlow(ChatState())
     val state = _state.combine(database.messagesDao().getMessages()) { currentState, messages ->
@@ -89,31 +84,15 @@ class ChatViewModel @Inject constructor(
 
                     try {
                         if (state.value.message.isNotBlank()) {
-
                             val prompt = state.value.message
-
+                            val timeNow = Clock.System.now().toEpochMilliseconds()
                             val message = Message(
+                                id = timeNow,
                                 message = prompt,
                                 sender = MessageSender.ME.name,
-                                timestamp = Clock.System.now().toEpochMilliseconds()
+                                timestamp = timeNow
                             )
-
                             database.messagesDao().insertMessage(message = message)
-
-                            sendMessage(message)
-
-                            val response = model.generateContent(prompt)
-
-                            response.text?.let { text ->
-                                _state.update { it.copy(isGeneratingContent = false) }
-                                val message = Message(
-                                    message = text,
-                                    sender = MessageSender.AI.name,
-                                    timestamp = Clock.System.now().toEpochMilliseconds()
-                                )
-                                database.messagesDao().insertMessage(message = message)
-                                sendMessage(message)
-                            }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -150,15 +129,6 @@ class ChatViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private suspend fun sendMessage(
-        message: Message
-    ) {
-        val response = remoteRepository.sendMessage(message)
-        response.data?.let {
-            database.messagesDao().insertMessage(message)
         }
     }
 }

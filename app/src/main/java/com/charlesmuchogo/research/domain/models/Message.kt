@@ -5,6 +5,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import org.checkerframework.common.aliasing.qual.Unique
 
 @Serializable
 
@@ -15,5 +16,6 @@ data class Message(
     val id: Long? = null,
     val message: String,
     val sender: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val synced: Boolean = false,
 )

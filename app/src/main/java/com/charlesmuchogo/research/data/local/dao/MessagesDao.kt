@@ -21,6 +21,9 @@ interface MessagesDao {
     @Query("SELECT * FROM Messages ORDER BY timestamp DESC")
     fun getMessages(): Flow<List<Message>>
 
+    @Query("SELECT * FROM Messages WHERE synced = 0 ORDER BY timestamp DESC")
+    fun getUnsentMessages(): Flow<List<Message>>
+
 
     @Query("SELECT * FROM Messages WHERE message LIKE '%' || :searchTerm || '%'  ORDER BY timestamp DESC")
     fun searchMessages(searchTerm: String): Flow<List<Message>>

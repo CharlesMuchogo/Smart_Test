@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import com.charlesmuchogo.research.domain.models.Message
 import com.charlesmuchogo.research.presentation.chat.MessageSender
 import com.charlesmuchogo.research.presentation.utils.convertTimestampToTime
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.datetime.Clock
 
 
@@ -95,21 +96,13 @@ fun ChatItem(
                 horizontalAlignment = Alignment.End,
             ) {
 
-                ClickableText(
+                MarkdownText(
                     modifier = modifier
                         .padding(
                             bottom = 4.dp,
                             end = if (isUserMessage) 28.dp else 20.dp,
                         ),
-                    text = annotatedText,
-                    softWrap = true,
-                    overflow = TextOverflow.Clip,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onBackground,
-                    ),
-                    onClick = { offset ->
-
-                    }
+                    markdown = message.message,
                 )
 
                 Row(

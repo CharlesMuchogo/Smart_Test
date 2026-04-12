@@ -31,8 +31,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 34
-        versionName = "1.7.0"
+        versionCode = 35
+        versionName = "1.7.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -108,6 +108,8 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.auth)
     implementation(libs.androidx.appcompat)
+    implementation(libs.compose.markdown)
+
 
 
     //datetime
