@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockOpen
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Public
@@ -64,6 +65,7 @@ import com.charlesmuchogo.research.navigation.EditProfilePage
 import com.charlesmuchogo.research.navigation.LanguagePage
 import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.navigation.ProfilePage
+import com.charlesmuchogo.research.navigation.SubscribePage
 import com.charlesmuchogo.research.presentation.utils.PRIVACY_POLICY_URL
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 import com.charlesmuchogo.research.presentation.utils.TERMS_AND_CONDITIONS_URL
@@ -306,6 +308,21 @@ fun ProfileListView(
                         prefixIcon = Icons.Default.Info,
                         onClick = {
                             openInAppBrowser(context = context, url = PRIVACY_POLICY_URL)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = stringResource(R.string.subscribe),
+                        prefixIcon = Icons.Default.Payments,
+                        onClick = {
+                            navController.navigate(SubscribePage)
                         },
                         trailingIcon = {
                             Icon(

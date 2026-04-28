@@ -36,6 +36,7 @@ firebaseCrashlytics = "20.0.4"
 googleFirebaseCrashlytics = "3.0.6"
 ksp = "2.1.20-1.0.32"
 appUpdate = "2.1.0"
+billing = "7.1.1"
 firebaseAi = "17.10.1"
 firebaseAnalytics = "23.2.0"
 kmpauth = "2.4.0-alpha05"
@@ -115,6 +116,7 @@ shimmer-compose = { module = "com.valentinilk.shimmer:compose-shimmer", version.
 #Android playstore update
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
+billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 firebase-ai = { group = "com.google.firebase", name = "firebase-ai", version.ref = "firebaseAi" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
