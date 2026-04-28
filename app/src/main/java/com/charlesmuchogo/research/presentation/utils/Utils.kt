@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -253,6 +254,15 @@ private fun formatTime(
 ): String {
     val plural = if (value == 1L) unit else "${unit}s"
     return "$value $plural ago"
+}
+
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    return null
 }
 
 const val ALMOST_BLUR_ALPHA = 0.95f

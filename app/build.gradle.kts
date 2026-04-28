@@ -162,6 +162,7 @@ dependencies {
 
     implementation(libs.app.update)
     implementation(libs.app.update.ktx)
+    implementation(libs.billing.ktx)
 
     // shimmer
     implementation(libs.shimmer.compose)

@@ -95,4 +95,13 @@
     <string name="select_a_clinic">Select a clinic</string>
     <string name="submit">Submit</string>
     <string name="submitting">Submitting…</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="subscribe_description">Unlock premium features with a subscription</string>
+    <string name="subscribe_now">Subscribe Now</string>
+    <string name="subscription_plans">Subscription Plans</string>
+    <string name="monthly_plan">Monthly Plan</string>
+    <string name="yearly_plan">Yearly Plan</string>
+    <string name="google_pay">Google Pay</string>
+    <string name="subscription_success">Subscription successful!</string>
+    <string name="subscription_failed">Subscription failed. Please try again.</string>
 </resources>

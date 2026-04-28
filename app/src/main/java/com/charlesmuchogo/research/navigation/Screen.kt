@@ -47,6 +47,9 @@ object EditProfilePage
 object HistoryPage
 
 @Serializable
+object SubscribePage
+
+@Serializable
 object ClinicsPage
 
 @Serializable
