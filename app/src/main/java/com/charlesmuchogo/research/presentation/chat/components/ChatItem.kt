@@ -54,14 +54,7 @@ fun ChatItem(
     message: Message,
     selected: Boolean = false,
 ) {
-
-
-    val annotatedText = remember(message.message) {
-        buildAnnotatedStringWithLinks(message.message)
-    }
-
     val isUserMessage = message.sender == MessageSender.ME.name
-
 
     Column(
         modifier = modifier

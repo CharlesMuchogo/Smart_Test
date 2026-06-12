@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.jetbrains.kotlin.android)
-
+    // alias(libs.plugins.hotswan.compiler)
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.google.gms.google.services)
@@ -31,8 +31,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 36
-        versionCode = 36
-        versionName = "1.7.1"
+        versionCode = 37
+        versionName = "1.7.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

@@ -171,6 +171,7 @@ suspend fun getFcmToken(): String {
             if (task.isSuccessful) {
                 val fcmToken = task.result
                 Log.d("FCM Token", "FcmToken: $fcmToken")
+                FirebaseMessaging.getInstance().subscribeToTopic("updates")
                 deferred.complete(fcmToken ?: "")
             } else {
                 Log.e("FCM Token", "Failed to get token: ${task.exception}")

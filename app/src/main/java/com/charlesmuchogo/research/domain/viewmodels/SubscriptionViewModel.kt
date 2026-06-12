@@ -23,8 +23,14 @@ class SubscriptionViewModel @Inject constructor(
 
     private val billingClient = BillingClient.newBuilder(context)
         .setListener(this)
-        .enablePendingPurchases()
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .build()
+        )
+        .enableAutoServiceReconnection()
         .build()
+
 
     private val _isBillingClientReady = MutableStateFlow(false)
     val isBillingClientReady = _isBillingClientReady.asStateFlow()
@@ -46,6 +52,7 @@ class SubscriptionViewModel @Inject constructor(
             }
 
             override fun onBillingServiceDisconnected() {
+                println("_isBillingClientReady disconnected")
                 _isBillingClientReady.value = false
             }
         })
@@ -54,13 +61,9 @@ class SubscriptionViewModel @Inject constructor(
     private fun queryProducts() {
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
-                .setProductId("monthly_subscription")
+                .setProductId("com.charles.research.monthly_sub")
                 .setProductType(BillingClient.ProductType.SUBS)
                 .build(),
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId("yearly_subscription")
-                .setProductType(BillingClient.ProductType.SUBS)
-                .build()
         )
 
         val params = QueryProductDetailsParams.newBuilder()
@@ -69,22 +72,26 @@ class SubscriptionViewModel @Inject constructor(
 
         billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                _products.value = productDetailsList
+                println("products are -> ${productDetailsList.productDetailsList}")
+                _products.value = productDetailsList.productDetailsList
             }
         }
     }
 
+
     fun buySubscription(activity: Activity, productId: String) {
+        println("productId $productId, ${products.value}")
+
         val productDetails = _products.value.find { it.productId == productId }
         if (productDetails == null) {
             viewModelScope.launch {
-                SnackBarViewModel.sendEvent(SnackBarItem("Product not found"))
+                SnackBarViewModel.sendEvent(SnackBarItem("Product not found", isError = true))
             }
             return
         }
 
         val offerToken = productDetails.subscriptionOfferDetails?.firstOrNull()?.offerToken ?: ""
-        
+
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
                 .setProductDetails(productDetails)
