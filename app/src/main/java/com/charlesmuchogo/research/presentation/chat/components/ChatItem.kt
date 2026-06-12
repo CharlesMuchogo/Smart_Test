@@ -56,10 +56,6 @@ fun ChatItem(
 ) {
 
 
-    val annotatedText = remember(message.message) {
-        buildAnnotatedStringWithLinks(message.message)
-    }
-
     val isUserMessage = message.sender == MessageSender.ME.name
 
 
