@@ -20,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.domain.viewmodels.SubscriptionViewModel
 import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.presentation.common.NavigationIcon
+import com.charlesmuchogo.research.presentation.common.TopBarTitle
 import com.charlesmuchogo.research.presentation.utils.findActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,14 +36,9 @@ fun SubscriptionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.subscribe)) },
+                title = { TopBarTitle(stringResource(R.string.subscribe)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
+                    NavigationIcon()
                 }
             )
         }
@@ -82,7 +79,7 @@ fun SubscriptionScreen(
                     icon = Icons.Default.Payments,
                     onClick = {
                         activity?.let {
-                            viewModel.buySubscription(it, "monthly_subscription")
+                            viewModel.buySubscription(it, "com.charles.research.monthly_sub")
                         }
                     }
                 )
@@ -96,7 +93,7 @@ fun SubscriptionScreen(
                     icon = Icons.Default.Payments,
                     onClick = {
                         activity?.let {
-                            viewModel.buySubscription(it, "yearly_subscription")
+                            viewModel.buySubscription(it, "com.charles.research.monthly_subscription")
                         }
                     }
                 )

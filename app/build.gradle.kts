@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.jetbrains.kotlin.android)
-
+    // alias(libs.plugins.hotswan.compiler)
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.google.gms.google.services)
