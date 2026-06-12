@@ -54,10 +54,7 @@ fun ChatItem(
     message: Message,
     selected: Boolean = false,
 ) {
-
-
     val isUserMessage = message.sender == MessageSender.ME.name
-
 
     Column(
         modifier = modifier
