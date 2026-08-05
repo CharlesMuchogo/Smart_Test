@@ -95,4 +95,13 @@
     <string name="select_a_clinic">Sélectionnez une clinique</string>
     <string name="submit">Soumettre</string>
     <string name="submitting">Soumission…</string>
+    <string name="subscribe">S\'abonner</string>
+    <string name="subscribe_description">Débloquez des fonctionnalités premium avec un abonnement</string>
+    <string name="subscribe_now">S\'abonner maintenant</string>
+    <string name="subscription_plans">Formules d\'abonnement</string>
+    <string name="monthly_plan">Formule mensuelle</string>
+    <string name="yearly_plan">Formule annuelle</string>
+    <string name="google_pay">Google Pay</string>
+    <string name="subscription_success">Abonnement réussi !</string>
+    <string name="subscription_failed">Échec de l\'abonnement. Veuillez réessayer.</string>
 </resources>

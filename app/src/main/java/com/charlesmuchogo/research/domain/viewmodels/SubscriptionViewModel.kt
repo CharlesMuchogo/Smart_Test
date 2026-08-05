@@ -64,6 +64,10 @@ class SubscriptionViewModel @Inject constructor(
                 .setProductId("com.charles.research.monthly_sub")
                 .setProductType(BillingClient.ProductType.SUBS)
                 .build(),
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId("com.charles.research.yearly_sub")
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
         )
 
         val params = QueryProductDetailsParams.newBuilder()

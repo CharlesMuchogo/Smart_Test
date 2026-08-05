@@ -95,4 +95,13 @@
     <string name="select_a_clinic">Chagua kliniki</string>
     <string name="submit">Wasilisha</string>
     <string name="submitting">Inawasilisha…</string>
+    <string name="subscribe">Jiandikishe</string>
+    <string name="subscribe_description">Fungua vipengele vya premium kwa usajili</string>
+    <string name="subscribe_now">Jiandikishe Sasa</string>
+    <string name="subscription_plans">Mipango ya Usajili</string>
+    <string name="monthly_plan">Mpango wa Kila Mwezi</string>
+    <string name="yearly_plan">Mpango wa Kila Mwaka</string>
+    <string name="google_pay">Google Pay</string>
+    <string name="subscription_success">Usajili umefanikiwa!</string>
+    <string name="subscription_failed">Usajili umeshindwa. Tafadhali jaribu tena.</string>
 </resources>

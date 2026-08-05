@@ -19,7 +19,7 @@ plugins {
 
 android {
     namespace = "com.charlesmuchogo.research"
-    compileSdk = 36
+    compileSdk = 37
 
     bundle {
         language {
@@ -30,9 +30,9 @@ android {
     defaultConfig {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 38
-        versionName = "1.7.3"
+        targetSdk = 37
+        versionCode = 39
+        versionName = "1.7.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
