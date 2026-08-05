@@ -74,7 +74,7 @@ fun SubscriptionScreen(
             item {
                 SubscriptionPlanCard(
                     title = stringResource(R.string.monthly_plan),
-                    price = "$4.99 / month",
+                    price = "$1.99 / month",
                     features = listOf("Ad-free experience", "Unlimited articles", "Priority support"),
                     icon = Icons.Default.Payments,
                     onClick = {
@@ -88,12 +88,12 @@ fun SubscriptionScreen(
             item {
                 SubscriptionPlanCard(
                     title = stringResource(R.string.yearly_plan),
-                    price = "$49.99 / year",
+                    price = "$19.99 / year",
                     features = listOf("All monthly features", "Save 16%", "Exclusive content"),
                     icon = Icons.Default.Payments,
                     onClick = {
                         activity?.let {
-                            viewModel.buySubscription(it, "com.charles.research.monthly_subscription")
+                            viewModel.buySubscription(it, "com.charles.research.yearly_sub")
                         }
                     }
                 )
