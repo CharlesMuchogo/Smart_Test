@@ -55,6 +55,7 @@ import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ChatRoot() {
@@ -86,7 +87,7 @@ fun ChatScreen(
 
     LaunchedEffect(Unit) {
         if (state.showAd) {
-            delay(3_000L)
+            delay(3_000L.milliseconds)
             showInterstitialAd(context, onShowAd = {
                 onAction(ChatAction.OnUpdateShowAd(false))
             }, CHAT_AD_UNIT_ID)
