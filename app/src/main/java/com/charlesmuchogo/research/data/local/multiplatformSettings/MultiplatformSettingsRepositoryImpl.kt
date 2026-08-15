@@ -49,6 +49,14 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
         preferenceManager.setBoolean(key = PreferenceManager.FIRST_TIME, value = firstTime)
     }
 
+    override fun saveSubscriptionStatus(active: Boolean) {
+        preferenceManager.setBoolean(key = PreferenceManager.SUBSCRIPTION_ACTIVE, value = active)
+    }
+
+    override fun saveSubscriptionUpsellShown(shown: Boolean) {
+        preferenceManager.setBoolean(key = PreferenceManager.SUBSCRIPTION_UPSELL_SHOWN, value = shown)
+    }
+
     override fun saveUserEmail(email: String) {
         preferenceManager.setString(key = PreferenceManager.USER_EMAIL, value = email)
     }
@@ -84,6 +92,14 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
     override fun getFirstTime(): Flow<Boolean?> {
         return preferenceManager.getBoolean(key = PreferenceManager.FIRST_TIME)
 
+    }
+
+    override fun getSubscriptionStatus(): Flow<Boolean?> {
+        return preferenceManager.getBoolean(key = PreferenceManager.SUBSCRIPTION_ACTIVE)
+    }
+
+    override fun getSubscriptionUpsellShown(): Flow<Boolean?> {
+        return preferenceManager.getBoolean(key = PreferenceManager.SUBSCRIPTION_UPSELL_SHOWN)
     }
 
     override fun getAppTheme(): Flow<Int?> {

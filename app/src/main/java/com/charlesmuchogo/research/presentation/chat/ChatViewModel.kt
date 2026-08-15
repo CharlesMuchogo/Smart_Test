@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.charlesmuchogo.research.analytics
 import com.charlesmuchogo.research.data.local.AppDatabase
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.WebsocketRepository
 import com.charlesmuchogo.research.domain.models.Message
@@ -36,7 +37,8 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val database: AppDatabase,
     private val websocketRepository: WebsocketRepository,
-    private val remoteRepository: RemoteRepository
+    private val remoteRepository: RemoteRepository,
+    private val settingsRepository: MultiplatformSettingsRepository,
 ) : ViewModel() {
 
     init {
@@ -47,7 +49,11 @@ class ChatViewModel @Inject constructor(
 
 
     private val _state = MutableStateFlow(ChatState())
-    val state = _state.combine(database.messagesDao().getMessages()) { currentState, messages ->
+    val state = combine(
+        _state,
+        database.messagesDao().getMessages(),
+        settingsRepository.getSubscriptionStatus(),
+    ) { currentState, messages, subscribed ->
         val dateMessages =
             messages.groupBy { message ->
                 val instant = Instant.fromEpochMilliseconds(message.timestamp)
@@ -62,9 +68,13 @@ class ChatViewModel @Inject constructor(
                 }
             }
 
+        val sentToday = dateMessages["Today"]?.count { it.sender == MessageSender.ME.name } ?: 0
+
         currentState.copy(
             messages = dateMessages,
-            isLoading = false
+            isLoading = false,
+            isSubscribed = subscribed == true,
+            dailyMessageCount = sentToday,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -80,6 +90,17 @@ class ChatViewModel @Inject constructor(
                 }
 
                 ChatAction.OnSubmitMessage -> {
+                    val currentState = state.value
+                    if (!currentState.isSubscribed && currentState.dailyMessageCount >= currentState.dailyMessageLimit) {
+                        SnackBarViewModel.sendEvent(
+                            SnackBarItem(
+                                message = "You've reached today's free message limit. Subscribe for unlimited chat.",
+                                isError = true
+                            )
+                        )
+                        return@launch
+                    }
+
                     _state.update { it.copy(message = "", isGeneratingContent = true) }
 
                     try {

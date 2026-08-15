@@ -11,19 +11,19 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.MedicalServices
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -57,7 +57,6 @@ import com.charlesmuchogo.research.navigation.SearchClinicsPage
 import com.charlesmuchogo.research.presentation.articles.ArticlesScreen
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
-import com.charlesmuchogo.research.presentation.history.HistoryScreen
 import com.charlesmuchogo.research.presentation.homepage.HomeScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.utils.ALMOST_BLUR_ALPHA
@@ -96,7 +95,14 @@ fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (Bott
             title = R.string.Home,
             selectedIcon = Icons.Default.Home,
             unselectedIcon = Icons.Outlined.Home,
-            screen = { HomeScreen(animatedVisibilityScope) }
+            screen = { HomeScreen() }
+        ),
+
+        BottomNavigationItem(
+            title = R.string.articles,
+            selectedIcon = Icons.AutoMirrored.Filled.Article,
+            unselectedIcon = Icons.AutoMirrored.Outlined.Article,
+            screen = { ArticlesScreen(animatedVisibilityScope) }
         ),
 
         BottomNavigationItem(
@@ -105,14 +111,6 @@ fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (Bott
             unselectedIcon = Icons.Outlined.MedicalServices,
             authRequired = true,
             screen = { ClinicsScreen() }
-        ),
-
-        BottomNavigationItem(
-            title = R.string.History,
-            selectedIcon = Icons.Filled.Schedule,
-            authRequired = true,
-            unselectedIcon = Icons.Outlined.Schedule,
-            screen = { HistoryScreen() }
         ),
 
         BottomNavigationItem(
@@ -169,7 +167,7 @@ fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (Bott
                             }
                         }
 
-                        if (state.selectedBottomBarItem == 1) {
+                        if (state.selectedBottomBarItem == 2) {
                             IconButton(onClick = {
                                 navController.navigate(SearchClinicsPage)
                             }) {

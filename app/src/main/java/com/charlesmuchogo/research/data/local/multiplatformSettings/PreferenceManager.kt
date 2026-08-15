@@ -20,6 +20,8 @@ class PreferenceManager(private val settings: Settings) {
         const val APP_THEME = "app_theme_key"
         const val LOGIN_TYPE = "login_type_key"
         const val FIRST_TIME = "first_time_key"
+        const val SUBSCRIPTION_ACTIVE = "subscription_active_key"
+        const val SUBSCRIPTION_UPSELL_SHOWN = "subscription_upsell_shown_key"
 
         const val APP_VERSION = "app_version"
 

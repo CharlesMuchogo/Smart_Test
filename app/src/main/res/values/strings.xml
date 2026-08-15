@@ -104,4 +104,12 @@
     <string name="google_pay">Google Pay</string>
     <string name="subscription_success">Subscription successful!</string>
     <string name="subscription_failed">Subscription failed. Please try again.</string>
+    <string name="upsell_title">Go Premium</string>
+    <string name="upsell_benefit_ad_free">Ad-free experience</string>
+    <string name="upsell_benefit_chat">Unlimited chat messages</string>
+    <string name="upsell_benefit_support">Priority support</string>
+    <string name="upsell_see_plans">See Plans</string>
+    <string name="upsell_not_now">Not now</string>
+    <string name="chat_daily_limit_reached">You\'ve reached today\'s free message limit. Subscribe for unlimited chat.</string>
+    <string name="chat_messages_remaining_today">%1$d free messages left today</string>
 </resources>

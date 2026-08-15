@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,8 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.presentation.chat.ChatAction
 import com.charlesmuchogo.research.presentation.chat.ChatState
 
@@ -59,8 +62,27 @@ fun ChatBox(
      }*/
 
 
+    val limitReached = !state.isSubscribed && state.dailyMessageCount >= state.dailyMessageLimit
+
+    Column(modifier = modifier) {
+        if (!state.isSubscribed) {
+            Text(
+                text = if (limitReached) {
+                    stringResource(R.string.chat_daily_limit_reached)
+                } else {
+                    stringResource(
+                        R.string.chat_messages_remaining_today,
+                        state.dailyMessageLimit - state.dailyMessageCount
+                    )
+                },
+                style = MaterialTheme.typography.labelSmall,
+                color = if (limitReached) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            )
+        }
+
     Row(
-        modifier = modifier
+        modifier = Modifier
             .padding(vertical = 4.dp)
             .fillMaxWidth()
             .background(Color.Transparent),
@@ -133,13 +155,20 @@ fun ChatBox(
         )
 
         IconButton(
+            enabled = !limitReached,
             onClick = {
                 onAction(ChatAction.OnSubmitMessage)
             },
             modifier =
                 Modifier
                     .clip(CircleShape)
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(
+                        color = if (limitReached) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        }
+                    )
                     .align(Alignment.CenterVertically),
         ) {
             Icon(
@@ -149,6 +178,7 @@ fun ChatBox(
                 modifier = Modifier,
             )
         }
+    }
     }
 }
 
