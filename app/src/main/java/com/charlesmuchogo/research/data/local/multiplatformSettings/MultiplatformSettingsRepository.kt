@@ -25,6 +25,10 @@ interface MultiplatformSettingsRepository {
 
     fun saveFirstTimeUse(firstTime: Boolean)
 
+    fun saveSubscriptionStatus(active: Boolean)
+
+    fun saveSubscriptionUpsellShown(shown: Boolean)
+
     fun saveUserEmail(email: String)
 
     fun saveUserPhoneNumber(phone: String)
@@ -41,6 +45,10 @@ interface MultiplatformSettingsRepository {
     fun getUserEmail(): Flow<String?>
 
     fun getFirstTime(): Flow<Boolean?>
+
+    fun getSubscriptionStatus(): Flow<Boolean?>
+
+    fun getSubscriptionUpsellShown(): Flow<Boolean?>
 
     fun getAppTheme(): Flow<Int?>
 

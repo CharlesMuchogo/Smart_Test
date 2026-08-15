@@ -4,17 +4,26 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,6 +40,7 @@ import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier) {
@@ -42,42 +52,65 @@ fun HistoryScreen(modifier: Modifier = Modifier) {
     val user = authenticationViewModel.profileStatus.collectAsStateWithLifecycle().value
     val hideResults = user.data?.hideResults != false
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-    ) {
-        when (testResultsStatus.status) {
-            ResultStatus.INITIAL,
-            ResultStatus.LOADING -> {
-                CenteredColumn(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
-                   AppListLoading()
-                }
-            }
-
-            ResultStatus.SUCCESS -> {
-                if (testResultsStatus.data.isNullOrEmpty() || hideResults) {
-                    CenteredColumn(modifier = Modifier.weight(1f)) {
-                        Text(text = stringResource(R.string.noResults))
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = "Back"
+                        )
                     }
-                } else {
-                    TestResultsListView(modifier = Modifier.weight(1f), results = testResultsStatus.data)
+                },
+                title = {
+                    Text(
+                        text = stringResource(R.string.testResults),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
+                    )
                 }
-            }
-
-            ResultStatus.ERROR -> {
-                CenteredColumn(modifier = Modifier.weight(1f)) {
-                    Text(text = testResultsStatus.message.toString())
-                }
-            }
-        }
-
-
-        Box(modifier = modifier.fillMaxWidth()) {
-            BannerAd(
-                modifier = Modifier,
-                adUnitId = BANNER_AD_UNIT_ID
             )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+        ) {
+            when (testResultsStatus.status) {
+                ResultStatus.INITIAL,
+                ResultStatus.LOADING -> {
+                    CenteredColumn(modifier = Modifier.weight(1f).padding(horizontal = 12.dp)) {
+                       AppListLoading()
+                    }
+                }
+
+                ResultStatus.SUCCESS -> {
+                    if (testResultsStatus.data.isNullOrEmpty() || hideResults) {
+                        CenteredColumn(modifier = Modifier.weight(1f)) {
+                            Text(text = stringResource(R.string.noResults))
+                        }
+                    } else {
+                        TestResultsListView(modifier = Modifier.weight(1f), results = testResultsStatus.data)
+                    }
+                }
+
+                ResultStatus.ERROR -> {
+                    CenteredColumn(modifier = Modifier.weight(1f)) {
+                        Text(text = testResultsStatus.message.toString())
+                    }
+                }
+            }
+
+
+            Box(modifier = modifier.fillMaxWidth()) {
+                BannerAd(
+                    modifier = Modifier,
+                    adUnitId = BANNER_AD_UNIT_ID
+                )
+            }
         }
     }
 }

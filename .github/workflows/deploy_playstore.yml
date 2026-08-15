@@ -122,7 +122,8 @@ jobs:
           whatsNewDirectory: release-notes
           inAppUpdatePriority: 4
           mappingFile: app/build/outputs/mapping/release/mapping.txt
-          track: internal
+          track: production
+
 
       - name: Slack Notification
         uses: act10ns/slack@v1

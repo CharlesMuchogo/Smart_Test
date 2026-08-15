@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.*
+import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscriptionViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val settingsRepository: MultiplatformSettingsRepository,
 ) : ViewModel(), PurchasesUpdatedListener {
 
     private val billingClient = BillingClient.newBuilder(context)
@@ -48,6 +50,7 @@ class SubscriptionViewModel @Inject constructor(
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     _isBillingClientReady.value = true
                     queryProducts()
+                    restorePurchases()
                 }
             }
 
@@ -82,6 +85,21 @@ class SubscriptionViewModel @Inject constructor(
         }
     }
 
+
+    private fun restorePurchases() {
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
+
+        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                val hasActiveSubscription = purchases.any { purchase ->
+                    purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                }
+                settingsRepository.saveSubscriptionStatus(hasActiveSubscription)
+            }
+        }
+    }
 
     fun buySubscription(activity: Activity, productId: String) {
         println("productId $productId, ${products.value}")
@@ -128,6 +146,8 @@ class SubscriptionViewModel @Inject constructor(
 
     private fun handlePurchase(purchase: Purchase) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            settingsRepository.saveSubscriptionStatus(true)
+
             if (!purchase.isAcknowledged) {
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
@@ -137,7 +157,6 @@ class SubscriptionViewModel @Inject constructor(
                         viewModelScope.launch {
                             SnackBarViewModel.sendEvent(SnackBarItem("Subscription successful!"))
                         }
-                        // Here you would typically update the user's subscription status on your backend
                     }
                 }
             }

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Translate
@@ -62,6 +63,7 @@ import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.navigation.EditProfilePage
+import com.charlesmuchogo.research.navigation.HistoryPage
 import com.charlesmuchogo.research.navigation.LanguagePage
 import com.charlesmuchogo.research.navigation.LoginPage
 import com.charlesmuchogo.research.navigation.ProfilePage
@@ -299,6 +301,21 @@ fun ProfileListView(
                             Switch(checked = !hideResults, onCheckedChange = {
                                 authenticationViewModel.updateUser(profile.copy(hideResults = !hideResults))
                             })
+                        },
+                    )
+
+                    ProfileCard(
+                        modifier = Modifier,
+                        label = stringResource(R.string.testResults),
+                        prefixIcon = Icons.Default.Schedule,
+                        onClick = {
+                            navController.navigate(HistoryPage)
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowForwardIos,
+                                contentDescription = null,
+                            )
                         },
                     )
 

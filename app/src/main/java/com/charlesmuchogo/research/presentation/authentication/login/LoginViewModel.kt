@@ -94,6 +94,7 @@ constructor(
                             database.userDao()
                                 .insertUser(user = result.user.copy(token = result.token))
                             settingsRepository.saveAccessToken(result.token)
+                            settingsRepository.saveSubscriptionUpsellShown(false)
                             _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true, loggedInUser = result.user) }
                             navController.popBackStack(LoginPage, inclusive = true)
                         }
@@ -122,6 +123,7 @@ constructor(
                         database.userDao()
                             .insertUser(user = result.user.copy(token = result.token))
                         settingsRepository.saveAccessToken(result.token)
+                        settingsRepository.saveSubscriptionUpsellShown(false)
                         _state.update { it.copy(isLoggingIn = false, hasLoggedIn = true, loggedInUser = result.user) }
                         navController.popBackStack(LoginPage, inclusive = true)
                     }

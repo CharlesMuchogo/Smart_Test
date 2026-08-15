@@ -8,5 +8,8 @@ data class ChatState(
     val selectedMessages: List<Message> = listOf(),
     val isGeneratingContent: Boolean = false,
     val isLoading: Boolean = true,
-    val showAd: Boolean = true
+    val showAd: Boolean = true,
+    val isSubscribed: Boolean = false,
+    val dailyMessageCount: Int = 0,
+    val dailyMessageLimit: Int = 5,
 )

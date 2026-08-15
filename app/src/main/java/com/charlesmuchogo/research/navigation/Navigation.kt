@@ -39,6 +39,7 @@ import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
 import com.charlesmuchogo.research.presentation.profile.PictureScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.subscription.SubscriptionScreen
+import com.charlesmuchogo.research.presentation.subscription.SubscriptionUpsellController
 import com.charlesmuchogo.research.presentation.results.ResultsRoot
 import com.charlesmuchogo.research.presentation.testpage.PendingTestScreen
 import com.charlesmuchogo.research.presentation.testpage.TestAuthBlocker
@@ -61,6 +62,8 @@ fun Navigation(navController: NavHostController) {
             )
         }
     }
+
+    SubscriptionUpsellController()
 
     Scaffold(
         snackbarHost = {
