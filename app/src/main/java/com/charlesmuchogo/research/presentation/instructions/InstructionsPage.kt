@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ import com.charlesmuchogo.research.navigation.PendingTestPage
 import com.charlesmuchogo.research.navigation.TestPage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import androidx.compose.runtime.derivedStateOf
 
@@ -117,15 +118,7 @@ fun InstructionsScreen(
 ) {
     val context = LocalContext.current
     val listState = rememberLazyListState()
-
-    LaunchedEffect(Unit) {
-        if (state.showAd) {
-            delay(3_000L)
-            showInterstitialAd(context, onShowAd = {
-                onAction(InstructionsAction.OnHasShownAd)
-            }, INSTRUCTIONS_AD_UNIT_ID)
-        }
-    }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -379,6 +372,13 @@ fun InstructionsScreen(
             item {
                 AnimatedListItem(index = 38, listState = listState) {
                     AppButton(onClick = {
+                        if (state.showAd) {
+                            scope.launch {
+                                showInterstitialAd(context, onShowAd = {
+                                    onAction(InstructionsAction.OnHasShownAd)
+                                }, INSTRUCTIONS_AD_UNIT_ID)
+                            }
+                        }
                         when (state.hasPendingResults) {
                             true -> navController.navigate(PendingTestPage)
                             false -> navController.navigate(TestPage)

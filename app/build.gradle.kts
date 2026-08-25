@@ -11,8 +11,8 @@ plugins {
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.jetbrains.kotlin.android)
     // alias(libs.plugins.hotswan.compiler)
-    id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.android.ksp)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
 }
@@ -31,8 +31,8 @@ android {
         applicationId = "com.charlesmuchogo.research"
         minSdk = 24
         targetSdk = 37
-        versionCode = 40
-        versionName = "1.8.0"
+        versionCode = 41
+        versionName = "1.8.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -62,7 +62,9 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = rootProject.file(localProperties.getProperty("storeFile"))
+            localProperties.getProperty("storeFile")?.let {
+                storeFile = rootProject.file(it)
+            }
             storePassword = localProperties.getProperty("storePassword")
             keyAlias = localProperties.getProperty("keyAlias")
             keyPassword = localProperties.getProperty("keyPassword")

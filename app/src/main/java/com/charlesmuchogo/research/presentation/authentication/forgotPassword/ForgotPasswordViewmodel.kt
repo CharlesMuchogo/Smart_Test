@@ -9,8 +9,7 @@ import com.charlesmuchogo.research.domain.viewmodels.SnackBarViewModel
 import com.charlesmuchogo.research.presentation.utils.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,11 +22,7 @@ class ForgotPasswordViewmodel @Inject constructor(
 
     private val _state = MutableStateFlow(ForgotPasswordState())
 
-    val state = _state.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = ForgotPasswordState()
-    )
+    val state = _state.asStateFlow()
 
 
     fun onAction(action: ForgotPasswordAction) {

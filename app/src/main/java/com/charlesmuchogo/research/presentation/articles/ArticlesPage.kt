@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,14 +76,7 @@ fun SharedTransitionScope.ArticlesScreen(animatedVisibilityScope: AnimatedVisibi
     val state by articlesViewModel.state.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        if (state.showAd) {
-            delay(3_000L)
-            showInterstitialAd(context, onShowAd = {
-                articlesViewModel.onAction(ArticlesAction.OnHasShownAd)
-            }, ARTICLES_AD_UNIT_ID)
-        }
-    }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -132,7 +126,16 @@ fun SharedTransitionScope.ArticlesScreen(animatedVisibilityScope: AnimatedVisibi
                                     translationY = offsetYAnim.value.dp.toPx()
                                 },
                                 article = article,
-                                animatedVisibilityScope = animatedVisibilityScope
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                onOpen = {
+                                    if (state.showAd) {
+                                        scope.launch {
+                                            showInterstitialAd(context, onShowAd = {
+                                                articlesViewModel.onAction(ArticlesAction.OnHasShownAd)
+                                            }, ARTICLES_AD_UNIT_ID)
+                                        }
+                                    }
+                                }
                             )
                         }
                     }
@@ -181,10 +184,12 @@ fun SharedTransitionScope.ArticlesListVIew(
 fun SharedTransitionScope.ArticleCard(
     modifier: Modifier = Modifier,
     article: Article,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    onOpen: () -> Unit = {}
 ) {
     ListItem(
         modifier = modifier.clickable {
+           onOpen()
            navController.navigate(ArticleDetailsPage(id = article.id))
         },
         leadingContent = {

@@ -12,4 +12,5 @@ data class ChatState(
     val isSubscribed: Boolean = false,
     val dailyMessageCount: Int = 0,
     val dailyMessageLimit: Int = 5,
+    val messagesSubmittedThisSession: Int = 0,
 )

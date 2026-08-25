@@ -54,8 +54,6 @@ import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
-import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ChatRoot() {
@@ -86,13 +84,17 @@ fun ChatScreen(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        if (state.showAd) {
-            delay(3_000L.milliseconds)
+        onAction(ChatAction.FetchMessages)
+    }
+
+    // Ties the interstitial to an explicit user action (sending a message)
+    // instead of a launch timer, per AdMob's ad-placement policy.
+    LaunchedEffect(state.messagesSubmittedThisSession) {
+        if (state.messagesSubmittedThisSession > 0 && state.showAd) {
             showInterstitialAd(context, onShowAd = {
                 onAction(ChatAction.OnUpdateShowAd(false))
             }, CHAT_AD_UNIT_ID)
         }
-        onAction(ChatAction.FetchMessages)
     }
 
     Scaffold(

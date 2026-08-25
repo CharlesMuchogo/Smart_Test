@@ -37,9 +37,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +60,7 @@ import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
 import com.charlesmuchogo.research.presentation.homepage.HomeScreen
 import com.charlesmuchogo.research.presentation.profile.ProfileScreen
 import com.charlesmuchogo.research.presentation.utils.ALMOST_BLUR_ALPHA
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -80,15 +80,7 @@ fun SharedTransitionScope.BottomBarRoot(animatedVisibilityScope: AnimatedVisibil
 fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (BottomBarAction) -> Unit, animatedVisibilityScope: AnimatedVisibilityScope) {
 
     val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (state.showAd) {
-            delay(5_000L)
-            showInterstitialAd(context, onShowAd = {
-                onAction(BottomBarAction.OnHasShownAd)
-            })
-        }
-    }
+    val scope = rememberCoroutineScope()
 
     val bottomNavigationItems = listOf(
         BottomNavigationItem(
@@ -209,7 +201,16 @@ fun SharedTransitionScope.BottomBarScreen(state: BottomBarState, onAction: (Bott
                         interactionSource = remember { MutableInteractionSource() },
                         selected = bottomNavigationItems[state.selectedBottomBarItem]  == item,
                         onClick = {
-                            onAction(BottomBarAction.OnUpdateSelectedItem(index))
+                            if (index != state.selectedBottomBarItem) {
+                                onAction(BottomBarAction.OnUpdateSelectedItem(index))
+                                if (state.showAd) {
+                                    scope.launch {
+                                        showInterstitialAd(context, onShowAd = {
+                                            onAction(BottomBarAction.OnHasShownAd)
+                                        })
+                                    }
+                                }
+                            }
                         },
                         label = {
                             Text(

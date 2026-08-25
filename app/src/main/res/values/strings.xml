@@ -105,10 +105,16 @@
     <string name="subscription_success">Subscription successful!</string>
     <string name="subscription_failed">Subscription failed. Please try again.</string>
     <string name="upsell_title">Go Premium</string>
+    <string name="upsell_subtitle">Unlock the full experience — no interruptions, no limits.</string>
     <string name="upsell_benefit_ad_free">Ad-free experience</string>
+    <string name="upsell_benefit_ad_free_desc">Browse and learn without a single interruption</string>
     <string name="upsell_benefit_chat">Unlimited chat messages</string>
+    <string name="upsell_benefit_chat_desc">Ask as many questions as you need, any time</string>
     <string name="upsell_benefit_support">Priority support</string>
+    <string name="upsell_benefit_support_desc">Get help from our team, faster</string>
+    <string name="upsell_price_teaser">From $1.99/month · Save 16% yearly</string>
     <string name="upsell_see_plans">See Plans</string>
+    <string name="upsell_trust">Cancel anytime · Secure checkout</string>
     <string name="upsell_not_now">Not now</string>
     <string name="chat_daily_limit_reached">You\'ve reached today\'s free message limit. Subscribe for unlimited chat.</string>
     <string name="chat_messages_remaining_today">%1$d free messages left today</string>

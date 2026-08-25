@@ -39,9 +39,10 @@ class ForgotPasswordViewmodelTest {
     }
 
     @Test
-    fun `onAction(OnUpdateEmail) should update email in state`() {
+    fun `onAction(OnUpdateEmail) should update email in state`() = runTest {
         val newEmail = "test@example.com"
         viewModel.onAction(ForgotPasswordAction.OnUpdateEmail(newEmail))
+        testScheduler.advanceUntilIdle()
         assert(viewModel.state.value.email == newEmail)
     }
 
@@ -49,6 +50,7 @@ class ForgotPasswordViewmodelTest {
     fun `onAction(OnSubmit) with invalid email should show email error`() = runTest {
         viewModel.onAction(ForgotPasswordAction.OnUpdateEmail("invalid-email"))
         viewModel.onAction(ForgotPasswordAction.OnSubmit)
+        testScheduler.advanceUntilIdle()
         assert(viewModel.state.value.emailError != null)
     }
 

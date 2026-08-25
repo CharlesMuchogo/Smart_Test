@@ -3,10 +3,9 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("com.google.dagger.hilt.android") version "2.52" apply false
+    alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
     alias(libs.plugins.android.ksp) apply false
     // alias(libs.plugins.hotswan.compiler) apply false
-
 }

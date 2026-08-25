@@ -101,7 +101,13 @@ class ChatViewModel @Inject constructor(
                         return@launch
                     }
 
-                    _state.update { it.copy(message = "", isGeneratingContent = true) }
+                    _state.update {
+                        it.copy(
+                            message = "",
+                            isGeneratingContent = true,
+                            messagesSubmittedThisSession = it.messagesSubmittedThisSession + 1,
+                        )
+                    }
 
                     try {
                         if (state.value.message.isNotBlank()) {
