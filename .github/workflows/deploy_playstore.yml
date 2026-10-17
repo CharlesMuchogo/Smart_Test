@@ -23,6 +23,14 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          log-accepted-android-sdk-licenses: true
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
+
+      - name: Accept Android licenses & install required packages
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Decode Keystore
         run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./keystore.jks
