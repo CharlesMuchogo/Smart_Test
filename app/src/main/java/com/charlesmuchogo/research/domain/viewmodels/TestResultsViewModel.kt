@@ -175,6 +175,16 @@ constructor(
         }
     }
 
+    fun retryClinics() {
+        getClinics()
+        fetchClinics()
+    }
+
+    fun retryTestResults() {
+        getTestResults()
+        fetchTestResults()
+    }
+
     fun fetchTestResults() {
         viewModelScope.launch {
             remoteRepository.fetchTestResults().collect {

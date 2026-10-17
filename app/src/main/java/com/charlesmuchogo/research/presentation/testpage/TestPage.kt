@@ -1,7 +1,6 @@
 package com.charlesmuchogo.research.presentation.testpage
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -14,12 +13,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,11 +26,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.domain.models.TabRowItem
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.TestInfoPage
 import com.charlesmuchogo.research.navigation.TestPage
+import com.charlesmuchogo.research.navigation.InstructionsPage
+import com.charlesmuchogo.research.presentation.messages.components.SegmentedTabs
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +40,7 @@ fun TestScreen(modifier: Modifier = Modifier) {
     val testResultsViewModel = hiltViewModel<TestResultsViewModel>()
     val currentTab = testResultsViewModel.currentTab.collectAsStateWithLifecycle().value
     val uploadTestState = testResultsViewModel.uploadResultsStatus.collectAsStateWithLifecycle().value
-    val pagerState = rememberPagerState(initialPage = currentTab) { TabRowItem.testItems.size }
+    val pagerState = rememberPagerState(initialPage = currentTab) { 2 }
 
 
     LaunchedEffect(key1 = Unit) {
@@ -65,63 +64,37 @@ fun TestScreen(modifier: Modifier = Modifier) {
 
     Scaffold(
         modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
         CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
+                    Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.back))
                 }
             },
-            title = { Text(text = stringResource(R.string.takeTest)) },
+            title = {
+                Text(
+                    text = stringResource(R.string.takeTest),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                )
+            },
+            actions = {
+                IconButton(onClick = { navController.navigate(InstructionsPage) }) {
+                    Icon(imageVector = Icons.Outlined.Info, contentDescription = stringResource(R.string.how_it_works))
+                }
+            },
         )
     }) { values ->
         Column(modifier = Modifier
             .padding(values)
             .fillMaxSize()) {
-            TabRow(
-                selectedTabIndex = currentTab,
-            ) {
-                TabRowItem.testItems.forEachIndexed { index, item ->
-                    Tab(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        selected = index == currentTab,
-                        onClick = { testResultsViewModel.updateCurrentTab(tab = index) },
-                        text = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = if (currentTab == index) item.selectedIcon else item.unSelectedIcon,
-                                    tint =
-                                    if (currentTab ==
-                                        index
-                                    ) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onBackground
-                                    },
-                                    contentDescription = stringResource(item.title) ,
-                                )
-
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 8.dp),
-                                    text = stringResource(item.title),
-                                    style =
-                                    MaterialTheme.typography.bodyMedium.copy(
-                                        fontWeight = FontWeight.SemiBold,
-                                        color =
-                                        if (currentTab ==
-                                            index
-                                        ) {
-                                            MaterialTheme.colorScheme.primary
-                                        } else {
-                                            MaterialTheme.colorScheme.onBackground
-                                        },
-                                    ),
-                                )
-                            }
-                        },
-                    )
-                }
-            }
+            SegmentedTabs(
+                labels = listOf(stringResource(R.string.just_me), stringResource(R.string.with_my_partner)),
+                selectedIndex = currentTab,
+                onSelect = { testResultsViewModel.updateCurrentTab(tab = it) },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+            )
 
             HorizontalPager(
                 state = pagerState,

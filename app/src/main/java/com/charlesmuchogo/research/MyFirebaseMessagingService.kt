@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.charlesmuchogo.research.navigation.DeepLinks
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -19,37 +20,40 @@ import com.google.firebase.messaging.RemoteMessage
 class MyFirebaseMessagingService: FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        println("From: ${remoteMessage.from}")
+        val notification = remoteMessage.notification ?: return
+        val link = remoteMessage.data[DeepLinks.LINK_EXTRA]
+        val conversationId = remoteMessage.data[DeepLinks.CONVERSATION_ID_EXTRA]
+        val key = link ?: conversationId ?: notification.title.orEmpty()
 
-        println("Message data payload: ${remoteMessage.data}")
+        val intent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            link?.let { putExtra(DeepLinks.LINK_EXTRA, it) }
+            conversationId?.let { putExtra(DeepLinks.CONVERSATION_ID_EXTRA, it) }
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this, key.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        remoteMessage.notification?.let {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-            )
+        val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
+            .setSmallIcon(R.drawable.notification)
+            .setContentTitle(notification.title ?: getString(R.string.app_name))
+            .setContentText(notification.body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(notification.body))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
-            val notificationBuilder = NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(R.drawable.notification)
-                .setContentTitle(remoteMessage.notification?.title ?: "Hello")
-                .setContentText(remoteMessage.notification?.body ?: "How are you today?")
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
+        createNotificationChannel()
 
-            createNotificationChannel()
-
-            with(NotificationManagerCompat.from(this)) {
-                if (ActivityCompat.checkSelfPermission(
-                        applicationContext,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return
-                }
-                notify(1, notificationBuilder.build())
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
             }
+            notify(key.hashCode(), notificationBuilder.build())
         }
     }
 

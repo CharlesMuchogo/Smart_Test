@@ -18,6 +18,7 @@ hiltAndroidCompiler = "2.55"
 hiltCompiler = "1.2.0"
 coil = "2.7.0"
 playServicesAds = "25.1.0"
+userMessagingPlatform = "4.0.0"
 playServicesAuth = "21.5.1"
 playServicesLocation = "21.3.0"
 slf4jNop = "2.0.17"
@@ -99,6 +100,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "userMessagingPlatform" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 

@@ -288,7 +288,7 @@ constructor(
         }
     }
 
-    private fun getCurrentUser() {
+    fun getCurrentUser() {
         viewModelScope.launch {
             profileStatus.value = Results.loading()
             database

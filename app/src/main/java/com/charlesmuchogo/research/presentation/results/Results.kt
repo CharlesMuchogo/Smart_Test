@@ -1,5 +1,8 @@
 package com.charlesmuchogo.research.presentation.results
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocalHospital
 import androidx.compose.material.icons.filled.MoreVert
@@ -36,11 +40,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
@@ -49,6 +56,7 @@ import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.presentation.common.AppAlertDialog
 import com.charlesmuchogo.research.presentation.common.AppLoadingDialog
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
+import java.io.File
 import ui.theme.lightGreen
 import ui.theme.lightYellow
 
@@ -57,9 +65,18 @@ fun ResultsRoot(id: Long) {
 
     val viewModel = hiltViewModel<ResultsViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(id) {
         viewModel.onAction(ResultsAction.OnLoadResult(id))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is ResultsEvent.OpenPdf -> openResultsPdf(context, event.file, event.share)
+            }
+        }
     }
 
     ResultsScreen(
@@ -121,6 +138,20 @@ fun ResultsScreen(
                     )
                 },
                 actions = {
+                    if (state.result != null) {
+                        if (state.isExportingPdf) {
+                            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
+                            }
+                        } else {
+                            IconButton(onClick = { onAction(ResultsAction.OnExportPdf(share = false)) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Download,
+                                    contentDescription = stringResource(R.string.download_pdf),
+                                )
+                            }
+                        }
+                    }
                     Box(
                         modifier = Modifier
                             .padding(4.dp)
@@ -158,8 +189,21 @@ fun ResultsScreen(
                                     Icon(imageVector = Icons.Default.Share, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onBackground, contentDescription = "Share")
                                 },
                                 text = { Text(stringResource(R.string.shareTest), style = MaterialTheme.typography.labelMedium) },
+                                enabled = !state.isExportingPdf,
                                 onClick = {
                                     onAction(ResultsAction.OnShowMoreChange(!state.showMore))
+                                    onAction(ResultsAction.OnExportPdf(share = true))
+                                }
+                            )
+                            DropdownMenuItem(
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Download, modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onBackground, contentDescription = null)
+                                },
+                                text = { Text(stringResource(R.string.download_pdf), style = MaterialTheme.typography.labelMedium) },
+                                enabled = !state.isExportingPdf,
+                                onClick = {
+                                    onAction(ResultsAction.OnShowMoreChange(!state.showMore))
+                                    onAction(ResultsAction.OnExportPdf(share = false))
                                 }
                             )
                         }
@@ -286,6 +330,29 @@ fun ResultsScreenPreview() {
     }
 }
 
+private fun openResultsPdf(context: Context, file: File, share: Boolean) {
+    val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+    val shareIntent = Intent.createChooser(
+        Intent(Intent.ACTION_SEND).apply {
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        },
+        context.getString(R.string.shareTest),
+    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
+    if (share) {
+        context.startActivity(shareIntent)
+        return
+    }
 
-
+    val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/pdf")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    try {
+        context.startActivity(viewIntent)
+    } catch (_: ActivityNotFoundException) {
+        context.startActivity(shareIntent)
+    }
+}

@@ -3,7 +3,6 @@ package com.charlesmuchogo.research
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -29,11 +28,12 @@ import androidx.navigation.compose.rememberNavController
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
 import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager
 import com.charlesmuchogo.research.domain.viewmodels.AuthenticationViewModel
+import com.charlesmuchogo.research.ads.AdsManager
 import com.charlesmuchogo.research.navigation.Navigation
+import com.charlesmuchogo.research.navigation.PendingNavigation
 import com.charlesmuchogo.research.presentation.utils.RequestPermissions
 import com.charlesmuchogo.research.presentation.utils.setAppLocale
 import com.charlesmuchogo.research.ui.theme.SmartTestTheme
-import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -47,10 +47,7 @@ import com.google.firebase.analytics.analytics
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
@@ -62,6 +59,9 @@ lateinit var analytics: FirebaseAnalytics
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appUpdateManager: AppUpdateManager
+
+    @Inject
+    lateinit var adsManager: AdsManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +82,8 @@ class MainActivity : AppCompatActivity() {
                 ),
         )
 
+        PendingNavigation.consume(intent)
+
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         checkForUpdate()
 
@@ -91,9 +93,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("PlayServices", "Google Play Services is not available!")
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            MobileAds.initialize(this@MainActivity) {}
-        }
+        adsManager.start(this)
 
         setContent {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 else -> isSystemInDarkTheme()
             }
 
-            RequestPermissions()
+
             SmartTestTheme(
                 dynamicColor = false,
                 darkTheme = darkTheme
@@ -124,10 +124,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        // ATTENTION: This was auto-generated to handle app links.
-        val appLinkIntent: Intent = intent
-        val appLinkAction: String? = appLinkIntent.action
-        val appLinkData: Uri? = appLinkIntent.data
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        PendingNavigation.consume(intent)
     }
 
     override fun onResume() {

@@ -47,11 +47,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.charlesmuchogo.research.domain.models.Article
+import com.charlesmuchogo.research.ads.InterstitialPlacement
+import com.charlesmuchogo.research.ads.rememberExitWithInterstitial
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.PhotoPage
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.HtmlText
 import com.charlesmuchogo.research.presentation.utils.ResultStatus
+
+private const val ARTICLE_MIN_READ_MS = 20_000L
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -65,6 +69,10 @@ fun SharedTransitionScope.ArticleDetailsScreen(
     val articleState by articleDetailsViewModel.articleState.collectAsStateWithLifecycle()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val closeArticle = rememberExitWithInterstitial(
+        placement = InterstitialPlacement.ARTICLE_EXIT,
+        minimumVisibleMs = ARTICLE_MIN_READ_MS,
+    )
 
 
 
@@ -88,7 +96,7 @@ fun SharedTransitionScope.ArticleDetailsScreen(
                             containerColor = MaterialTheme.colorScheme.background,
                             contentColor = MaterialTheme.colorScheme.onBackground
                         ),
-                        onClick = { navController.popBackStack() }
+                        onClick = closeArticle
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,

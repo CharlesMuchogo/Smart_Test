@@ -28,7 +28,6 @@ constructor(
 
     private fun getCurrentUser() {
         viewModelScope.launch {
-
             database
                 .userDao()
                 .getUser()

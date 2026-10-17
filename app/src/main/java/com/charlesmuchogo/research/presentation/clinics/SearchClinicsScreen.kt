@@ -24,7 +24,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.charlesmuchogo.research.ads.BannerAd
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.BANNER_AD_UNIT_ID
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
 import com.charlesmuchogo.research.presentation.common.SearchBar
@@ -104,10 +103,7 @@ fun SearchClinicsScreen(modifier: Modifier = Modifier, navController: NavControl
             }
 
             Box(modifier = modifier.fillMaxWidth()) {
-                BannerAd(
-                    modifier = Modifier,
-                    adUnitId = BANNER_AD_UNIT_ID
-                )
+                BannerAd()
             }
         }
     }

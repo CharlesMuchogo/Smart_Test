@@ -5,4 +5,5 @@ sealed interface ResultsAction {
     data class OnShowMoreChange(val show: Boolean) : ResultsAction
     data class OnShowDeleteDialog(val show: Boolean) : ResultsAction
     data object OnDeleteResults : ResultsAction
+    data class OnExportPdf(val share: Boolean) : ResultsAction
 }

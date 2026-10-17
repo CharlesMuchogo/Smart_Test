@@ -29,6 +29,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.SmartTest"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
@@ -62,6 +63,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">

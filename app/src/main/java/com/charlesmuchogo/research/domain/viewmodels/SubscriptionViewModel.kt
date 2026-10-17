@@ -6,12 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.*
 import com.charlesmuchogo.research.data.local.multiplatformSettings.MultiplatformSettingsRepository
+import com.charlesmuchogo.research.data.remote.AccountRepository
+import com.charlesmuchogo.research.domain.dto.account.SaveSubscriptionRequest
 import com.charlesmuchogo.research.domain.models.SnackBarItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,6 +28,7 @@ import javax.inject.Inject
 class SubscriptionViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val settingsRepository: MultiplatformSettingsRepository,
+    private val accountRepository: AccountRepository,
 ) : ViewModel(), PurchasesUpdatedListener {
 
     private val billingClient = BillingClient.newBuilder(context)
@@ -40,8 +48,32 @@ class SubscriptionViewModel @Inject constructor(
     private val _products = MutableStateFlow<List<ProductDetails>>(emptyList())
     val products = _products.asStateFlow()
 
+    private val playActive = MutableStateFlow<Boolean?>(null)
+    private val backendActive = MutableStateFlow(false)
+
     init {
         startBillingConnection()
+        viewModelScope.launch {
+            settingsRepository.getAccessToken()
+                .map { !it.isNullOrBlank() }
+                .distinctUntilChanged()
+                .collect { signedIn ->
+                    backendActive.value = signedIn && fetchBackendStatus()
+                }
+        }
+        viewModelScope.launch {
+            combine(playActive, backendActive) { play, backend ->
+                if (play == null && !backend) null else play == true || backend
+            }
+                .filterNotNull()
+                .distinctUntilChanged()
+                .collect { settingsRepository.saveSubscriptionStatus(it) }
+        }
+    }
+
+    private suspend fun fetchBackendStatus(): Boolean {
+        val result = accountRepository.getSubscription()
+        return result.data?.subscribed == true
     }
 
     private fun startBillingConnection() {
@@ -93,10 +125,11 @@ class SubscriptionViewModel @Inject constructor(
 
         billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val hasActiveSubscription = purchases.any { purchase ->
+                val active = purchases.filter { purchase ->
                     purchase.purchaseState == Purchase.PurchaseState.PURCHASED
                 }
-                settingsRepository.saveSubscriptionStatus(hasActiveSubscription)
+                playActive.value = active.isNotEmpty()
+                active.forEach { syncWithBackend(it) }
             }
         }
     }
@@ -146,20 +179,43 @@ class SubscriptionViewModel @Inject constructor(
 
     private fun handlePurchase(purchase: Purchase) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-            settingsRepository.saveSubscriptionStatus(true)
+            playActive.value = true
 
             if (!purchase.isAcknowledged) {
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
                     .build()
                 billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
-                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    val acknowledged = billingResult.responseCode == BillingClient.BillingResponseCode.OK
+                    syncWithBackend(purchase, acknowledged = acknowledged)
+                    if (acknowledged) {
                         viewModelScope.launch {
                             SnackBarViewModel.sendEvent(SnackBarItem("Subscription successful!"))
                         }
                     }
                 }
+            } else {
+                syncWithBackend(purchase)
             }
+        }
+    }
+
+    private fun syncWithBackend(purchase: Purchase, acknowledged: Boolean = purchase.isAcknowledged) {
+        val productId = purchase.products.firstOrNull() ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val token = settingsRepository.getAccessToken().firstOrNull()
+            if (token.isNullOrBlank()) return@launch
+            val result = accountRepository.saveSubscription(
+                SaveSubscriptionRequest(
+                    productId = productId,
+                    purchaseToken = purchase.purchaseToken,
+                    orderId = purchase.orderId.orEmpty(),
+                    purchaseTime = purchase.purchaseTime,
+                    autoRenewing = purchase.isAutoRenewing,
+                    acknowledged = acknowledged,
+                )
+            )
+            result.message?.let { println("saving subscription failed: $it") }
         }
     }
 

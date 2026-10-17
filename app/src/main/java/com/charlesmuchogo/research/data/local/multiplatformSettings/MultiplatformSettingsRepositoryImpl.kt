@@ -98,6 +98,19 @@ class MultiplatformSettingsRepositoryImpl(private val preferenceManager: Prefere
         return preferenceManager.getBoolean(key = PreferenceManager.SUBSCRIPTION_ACTIVE)
     }
 
+    override fun saveChatBonus(date: String, messages: Int) {
+        preferenceManager.setString(key = PreferenceManager.CHAT_BONUS_DATE, value = date)
+        preferenceManager.setInt(key = PreferenceManager.CHAT_BONUS_MESSAGES, value = messages)
+    }
+
+    override fun getChatBonusDate(): Flow<String?> {
+        return preferenceManager.getString(PreferenceManager.CHAT_BONUS_DATE)
+    }
+
+    override fun getChatBonusMessages(): Flow<Int> {
+        return preferenceManager.getIntFlow(PreferenceManager.CHAT_BONUS_MESSAGES)
+    }
+
     override fun getSubscriptionUpsellShown(): Flow<Boolean?> {
         return preferenceManager.getBoolean(key = PreferenceManager.SUBSCRIPTION_UPSELL_SHOWN)
     }

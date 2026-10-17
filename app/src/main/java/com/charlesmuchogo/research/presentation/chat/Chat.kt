@@ -34,10 +34,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,15 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.ads.showInterstitialAd
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.CHAT_AD_UNIT_ID
-import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.ads.InterstitialPlacement
+import com.charlesmuchogo.research.ads.rememberExitWithInterstitial
 import com.charlesmuchogo.research.presentation.authentication.AuthControllerScreen
 import com.charlesmuchogo.research.presentation.chat.components.ChatBox
 import com.charlesmuchogo.research.presentation.chat.components.ChatItem
 import com.charlesmuchogo.research.presentation.chat.components.TypingBubble
 import com.charlesmuchogo.research.presentation.common.AppListLoading
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
+
+private const val MESSAGES_BEFORE_EXIT_AD = 2
 
 @Composable
 fun ChatRoot() {
@@ -81,27 +82,22 @@ fun ChatScreen(
     onAction: (ChatAction) -> Unit,
 ) {
 
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         onAction(ChatAction.FetchMessages)
     }
 
-    // Ties the interstitial to an explicit user action (sending a message)
-    // instead of a launch timer, per AdMob's ad-placement policy.
-    LaunchedEffect(state.messagesSubmittedThisSession) {
-        if (state.messagesSubmittedThisSession > 0 && state.showAd) {
-            showInterstitialAd(context, onShowAd = {
-                onAction(ChatAction.OnUpdateShowAd(false))
-            }, CHAT_AD_UNIT_ID)
-        }
-    }
+    val sentThisSession by rememberUpdatedState(state.messagesSubmittedThisSession)
+    val exitChat = rememberExitWithInterstitial(
+        placement = InterstitialPlacement.ASSISTANT_EXIT,
+        eligible = { sentThisSession >= MESSAGES_BEFORE_EXIT_AD },
+    )
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = exitChat) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,
                             contentDescription = "Exit"

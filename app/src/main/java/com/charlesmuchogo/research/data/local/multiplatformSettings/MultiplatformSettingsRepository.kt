@@ -48,6 +48,12 @@ interface MultiplatformSettingsRepository {
 
     fun getSubscriptionStatus(): Flow<Boolean?>
 
+    fun saveChatBonus(date: String, messages: Int)
+
+    fun getChatBonusDate(): Flow<String?>
+
+    fun getChatBonusMessages(): Flow<Int>
+
     fun getSubscriptionUpsellShown(): Flow<Boolean?>
 
     fun getAppTheme(): Flow<Int?>

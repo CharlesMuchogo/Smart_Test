@@ -13,6 +13,10 @@ import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceMa
 import com.charlesmuchogo.research.data.mediators.ArticleMediator
 import com.charlesmuchogo.research.data.network.ApiHelper
 import com.charlesmuchogo.research.data.network.Http
+import com.charlesmuchogo.research.data.remote.AccountRepository
+import com.charlesmuchogo.research.data.remote.AccountRepositoryImpl
+import com.charlesmuchogo.research.data.remote.ChatRepository
+import com.charlesmuchogo.research.data.remote.ChatRepositoryImpl
 import com.charlesmuchogo.research.data.remote.RemoteRepository
 import com.charlesmuchogo.research.data.remote.RemoteRepositoryImpl
 import com.charlesmuchogo.research.data.remote.WebsocketRepository
@@ -118,4 +122,26 @@ object AppModule {
             http = http
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideChatRepository(
+        http: Http,
+        apiHelper: ApiHelper,
+        settingsRepository: MultiplatformSettingsRepository,
+    ): ChatRepository = ChatRepositoryImpl(
+        http = http,
+        apiHelper = apiHelper,
+        settingsRepository = settingsRepository,
+    )
+
+    @Provides
+    @Singleton
+    fun provideAccountRepository(
+        http: Http,
+        apiHelper: ApiHelper,
+    ): AccountRepository = AccountRepositoryImpl(
+        http = http,
+        apiHelper = apiHelper,
+    )
 }

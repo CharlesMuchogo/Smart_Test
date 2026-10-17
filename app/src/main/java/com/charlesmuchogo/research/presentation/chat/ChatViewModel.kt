@@ -53,7 +53,9 @@ class ChatViewModel @Inject constructor(
         _state,
         database.messagesDao().getMessages(),
         settingsRepository.getSubscriptionStatus(),
-    ) { currentState, messages, subscribed ->
+        settingsRepository.getChatBonusDate(),
+        settingsRepository.getChatBonusMessages(),
+    ) { currentState, messages, subscribed, bonusDate, bonusMessages ->
         val dateMessages =
             messages.groupBy { message ->
                 val instant = Instant.fromEpochMilliseconds(message.timestamp)
@@ -75,6 +77,8 @@ class ChatViewModel @Inject constructor(
             isLoading = false,
             isSubscribed = subscribed == true,
             dailyMessageCount = sentToday,
+            bonusMessages = if (bonusDate == todayKey()) bonusMessages else 0,
+            dailyMessageLimit = FREE_DAILY_MESSAGES + if (bonusDate == todayKey()) bonusMessages else 0,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -145,8 +149,9 @@ class ChatViewModel @Inject constructor(
                     SnackBarViewModel.sendEvent(SnackBarItem(message = "We'll look into these messages"))
                 }
 
-                is ChatAction.OnUpdateShowAd -> {
-                    _state.update { it.copy(showAd = action.show) }
+                ChatAction.OnRewardEarned -> {
+                    val current = state.value
+                    settingsRepository.saveChatBonus(todayKey(), current.bonusMessages + REWARDED_BONUS_MESSAGES)
                 }
 
                 is ChatAction.FetchMessages -> {
@@ -158,6 +163,9 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
+
+    private fun todayKey(): String =
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
 }
 
 enum class MessageSender {

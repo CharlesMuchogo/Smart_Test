@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.charlesmuchogo.research.navigation.DeepLinks
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 
@@ -30,15 +31,16 @@ class NotificationWorker(private val context: Context, params: WorkerParameters)
     ) {
         val intent =
             Intent(context, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 putExtra("SOURCE", "Local Notifications")
+                putExtra(DeepLinks.LINK_EXTRA, DeepLinks.link("test"))
             }
         val pendingIntent =
             PendingIntent.getActivity(
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

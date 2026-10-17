@@ -19,12 +19,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,14 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.charlesmuchogo.research.R
-import com.charlesmuchogo.research.ads.showInterstitialAd
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.INSTRUCTIONS_AD_UNIT_ID
 import com.charlesmuchogo.research.navController
 import com.charlesmuchogo.research.navigation.PendingTestPage
 import com.charlesmuchogo.research.navigation.TestPage
 import com.charlesmuchogo.research.presentation.common.AppButton
 import com.charlesmuchogo.research.presentation.common.ExoPlayerView
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import androidx.compose.runtime.derivedStateOf
 
@@ -49,7 +44,7 @@ import androidx.compose.runtime.derivedStateOf
 fun InstructionsRoot() {
     val viewModel = hiltViewModel<InstructionsScreenViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    InstructionsScreen(state = state, onAction = viewModel::onAction)
+    InstructionsScreen(state = state)
 }
 
 @Composable
@@ -114,11 +109,8 @@ private fun LazyListScope_AnimatedItem(
 fun InstructionsScreen(
     modifier: Modifier = Modifier,
     state: InstructionsState,
-    onAction: (InstructionsAction) -> Unit
 ) {
-    val context = LocalContext.current
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -372,13 +364,6 @@ fun InstructionsScreen(
             item {
                 AnimatedListItem(index = 38, listState = listState) {
                     AppButton(onClick = {
-                        if (state.showAd) {
-                            scope.launch {
-                                showInterstitialAd(context, onShowAd = {
-                                    onAction(InstructionsAction.OnHasShownAd)
-                                }, INSTRUCTIONS_AD_UNIT_ID)
-                            }
-                        }
                         when (state.hasPendingResults) {
                             true -> navController.navigate(PendingTestPage)
                             false -> navController.navigate(TestPage)

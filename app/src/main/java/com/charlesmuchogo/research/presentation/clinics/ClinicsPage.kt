@@ -1,5 +1,6 @@
 package com.charlesmuchogo.research.presentation.clinics
 
+import com.charlesmuchogo.research.presentation.common.AppErrorScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.util.TableInfo
 import com.charlesmuchogo.research.R
 import com.charlesmuchogo.research.ads.BannerAd
-import com.charlesmuchogo.research.data.local.multiplatformSettings.PreferenceManager.Companion.BANNER_AD_UNIT_ID
 import com.charlesmuchogo.research.domain.models.Clinic
 import com.charlesmuchogo.research.domain.viewmodels.TestResultsViewModel
 import com.charlesmuchogo.research.presentation.common.CenteredColumn
@@ -52,17 +52,16 @@ fun ClinicsScreen(modifier: Modifier = Modifier) {
                 }
             }
             ResultStatus.ERROR -> {
-                CenteredColumn(modifier = Modifier.weight(1f)) {
-                    Text(text = clinicsState.message.toString())
-                }
+                AppErrorScreen(
+                    modifier = Modifier.weight(1f),
+                    errorDescription = clinicsState.message,
+                    onRetry = { testResultsViewModel.retryClinics() },
+                )
             }
         }
 
         Box(modifier = modifier.fillMaxWidth()) {
-            BannerAd(
-                modifier = Modifier,
-                adUnitId = BANNER_AD_UNIT_ID
-            )
+            BannerAd()
         }
     }
 

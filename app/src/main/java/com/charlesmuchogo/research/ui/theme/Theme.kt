@@ -8,7 +8,11 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Shapes
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -53,6 +57,8 @@ import ui.theme.OnSurfaceVariantDark
 import ui.theme.OnSurfaceVariantLight
 import ui.theme.OutlineDark
 import ui.theme.OutlineLight
+import ui.theme.OutlineVariantDark
+import ui.theme.OutlineVariantLight
 import ui.theme.SurfaceDark
 import ui.theme.SurfaceLight
 import ui.theme.SurfaceVariantDark
@@ -83,6 +89,7 @@ val DarkColorScheme = darkColorScheme(
     errorContainer = ErrorContainerDark,
     onErrorContainer = lightGray,
     outline = OutlineDark,
+    outlineVariant = OutlineVariantDark,
 )
 
 val LightColorScheme = lightColorScheme(
@@ -109,6 +116,15 @@ val LightColorScheme = lightColorScheme(
     errorContainer = ErrorContainerLight,
     onErrorContainer = lightGray,
     outline = OutlineLight,
+    outlineVariant = OutlineVariantLight,
+)
+
+val AppShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(20.dp),
+    extraLarge = RoundedCornerShape(28.dp),
 )
 
 @Composable
@@ -139,9 +155,12 @@ fun SmartTestTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = ChirpTypography(),
-        content = content
-    )
+    CompositionLocalProvider(LocalExtendedColors provides if (darkTheme) DarkExtendedColors else LightExtendedColors) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = ChirpTypography(),
+            shapes = AppShapes,
+            content = content
+        )
+    }
 }

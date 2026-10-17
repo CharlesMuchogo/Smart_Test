@@ -15,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.charlesmuchogo.research.domain.viewmodels.SubscriptionViewModel
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
@@ -29,10 +31,15 @@ import com.charlesmuchogo.research.presentation.authentication.login.LoginRoot
 import com.charlesmuchogo.research.presentation.authentication.setPasswordScreen.SetPasswordRoot
 import com.charlesmuchogo.research.presentation.bottomBar.BottomBarRoot
 import com.charlesmuchogo.research.presentation.chat.ChatRoot
-import com.charlesmuchogo.research.presentation.clinics.ClinicsScreen
+import com.charlesmuchogo.research.presentation.clinics.ClinicsRoot
 import com.charlesmuchogo.research.presentation.clinics.SearchClinicsScreen
 import com.charlesmuchogo.research.presentation.common.SnackBarContent
 import com.charlesmuchogo.research.presentation.history.HistoryScreen
+import com.charlesmuchogo.research.presentation.instructions.HowItWorksScreen
+import com.charlesmuchogo.research.presentation.messages.BlockedUsersRoot
+import com.charlesmuchogo.research.presentation.messages.CommunityRoot
+import com.charlesmuchogo.research.presentation.messages.ConversationRoot
+import com.charlesmuchogo.research.presentation.messages.DoctorsRoot
 import com.charlesmuchogo.research.presentation.language.LanguageRoot
 import com.charlesmuchogo.research.presentation.onboarding.OnboardingRoot
 import com.charlesmuchogo.research.presentation.profile.EditProfileScreen
@@ -63,6 +70,7 @@ fun Navigation(navController: NavHostController) {
         }
     }
 
+    hiltViewModel<SubscriptionViewModel>()
     SubscriptionUpsellController()
 
     Scaffold(
@@ -95,6 +103,26 @@ fun Navigation(navController: NavHostController) {
 
                 composable<ChatPage> {
                     ChatRoot()
+                }
+
+                composable<DoctorsPage> {
+                    DoctorsRoot()
+                }
+
+                composable<CommunityPage> {
+                    CommunityRoot()
+                }
+
+                composable<ConversationPage> {
+                    ConversationRoot()
+                }
+
+                composable<InstructionsPage> {
+                    HowItWorksScreen()
+                }
+
+                composable<BlockedUsersPage> {
+                    BlockedUsersRoot()
                 }
 
                 composable<ForgotPasswordPage>(
@@ -227,7 +255,7 @@ fun Navigation(navController: NavHostController) {
                     EditProfileScreen()
                 }
                 composable<ClinicsPage> {
-                    ClinicsScreen()
+                    ClinicsRoot()
                 }
                 composable<SearchClinicsPage> {
                     SearchClinicsScreen(navController = navController)

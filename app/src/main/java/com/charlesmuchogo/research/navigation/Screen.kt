@@ -72,3 +72,18 @@ data class ArticleDetailsPage(val id: String)
 
 @Serializable
 data object LanguagePage
+
+@Serializable
+data object DoctorsPage
+
+@Serializable
+data object CommunityPage
+
+@Serializable
+data object InstructionsPage
+
+@Serializable
+data object BlockedUsersPage
+
+@Serializable
+data class ConversationPage(val id: Long)

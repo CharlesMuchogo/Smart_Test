@@ -28,6 +28,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.charlesmuchogo.research.R
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.outlined.OndemandVideo
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.charlesmuchogo.research.ads.rememberAdsManager
+import com.charlesmuchogo.research.navController
+import com.charlesmuchogo.research.navigation.SubscribePage
+import com.charlesmuchogo.research.presentation.chat.REWARDED_BONUS_MESSAGES
+import com.charlesmuchogo.research.presentation.utils.findActivity
 import com.charlesmuchogo.research.presentation.chat.ChatAction
 import com.charlesmuchogo.research.presentation.chat.ChatState
 
@@ -79,6 +93,9 @@ fun ChatBox(
                 color = if (limitReached) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 8.dp),
             )
+            if (limitReached) {
+                ChatLimitActions(onRewardEarned = { onAction(ChatAction.OnRewardEarned) })
+            }
         }
 
     Row(
@@ -193,5 +210,43 @@ fun ChatBoxPreview() {
             state = ChatState(),
             onAction = {},
         )
+    }
+}
+
+@Composable
+private fun ChatLimitActions(onRewardEarned: () -> Unit) {
+    val adsManager = rememberAdsManager()
+    val context = LocalContext.current
+    val rewardedReady by adsManager.rewardedReady.collectAsStateWithLifecycle()
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (adsManager.rewardedSupported && rewardedReady) {
+            OutlinedButton(
+                onClick = {
+                    context.findActivity()?.let { activity ->
+                        adsManager.showRewarded(activity, onRewarded = onRewardEarned)
+                    }
+                },
+                modifier = Modifier.heightIn(min = 44.dp),
+            ) {
+                Icon(Icons.Outlined.OndemandVideo, contentDescription = null, modifier = Modifier.size(18.dp))
+                Text(
+                    text = stringResource(R.string.watch_ad_for_messages, REWARDED_BONUS_MESSAGES),
+                    modifier = Modifier.padding(start = 6.dp),
+                )
+            }
+        }
+        TextButton(
+            onClick = { navController.navigate(SubscribePage) },
+            modifier = Modifier.heightIn(min = 44.dp),
+        ) {
+            Text(stringResource(R.string.go_unlimited), fontWeight = FontWeight.Bold)
+        }
     }
 }
